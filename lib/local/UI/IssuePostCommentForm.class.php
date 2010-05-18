@@ -1,6 +1,5 @@
 <?php
 
-
 class UI_IssuePostCommentForm extends Output_HTML_Form
 {
     private $issue;
@@ -15,7 +14,7 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
         parent::__construct(
             array(
                 'post' => array('display' => 'Comment', 'type' => 'textarea',
-                    'regcheck' => '/^.{3,}$/',
+                    'regcheck' => '/^.{3,}$/s',
                     'onerror' => 'You cannot add an empty comment'),
                 'new-status' => array('display' => 'Status', 'type' => 'dropbox', 'optionlist' => $stats,
                     'value' => $this->issue->status)
@@ -49,3 +48,5 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
         }
     }
 }
+
+?>

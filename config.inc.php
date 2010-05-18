@@ -7,7 +7,7 @@ Config::set('db.user', 'root');
 
 Config::set('db.pass', 'root');
 
-Config::set('db.schema', 'issue-tracker');
+Config::set('db.schema', 'issues');
 
 Config::set('site.title', 'IssueTracker');
 

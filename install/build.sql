@@ -124,6 +124,10 @@ INSERT INTO `issue_actions` (`issue_id`, `type`, `actor`, `date`) values
     (3, 'tag_change', 'sque', NOW()),
     (3, 'tag_change', 'sque', NOW());
 
+INSERT INTO `issue_tags` (`issue_id`, `tag`) values 
+    (1, 'uber'),
+    (3, 'dead');
+    
 INSERT INTO `issue_action_comments` (`id`, `post`) values
     (1, 'Ou uo dou apo pantoy'),
     (2, 'Egw lew pws lew malakies!'),
@@ -136,7 +140,7 @@ INSERT INTO `issue_action_status_changes` (`id`, `old_status`, `new_status`) val
     (7, 'open', 'closed');
 
 INSERT INTO `issue_action_tag_changes` (`id`, `operation`, `tag`) values
-    (5, 'add', 'closed'),
-    (9, 'add', 'closed'),
-    (10, 'remove', 'closed'),
-    (11, 'remove', 'main-stream');
+    (5, 'add', 'uber'),
+    (9, 'add', 'alive'),
+    (10, 'remove', 'alive'),
+    (11, 'add', 'dead');

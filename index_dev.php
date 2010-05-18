@@ -66,7 +66,7 @@ function show_source_slice($file, $line)
 function show_backtrace_interface($exception = null)
 {
     if ($exception)
-    $db = $exception->getTrace();
+        $db = $exception->getTrace();
     else
     {
         $db = debug_backtrace();

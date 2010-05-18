@@ -44,6 +44,9 @@ require_once dirname(__FILE__) . '/lib/vendor/phplibs/Output/html.lib.php';
 // Load models 
 require_once dirname(__FILE__) . '/lib/models.lib.php';
 
+// Load urls
+require_once(dirname(__FILE__) . '/lib/urls.lib.php');
+
 // Load configuration file
 require_once dirname(__FILE__) . '/config.inc.php';
 

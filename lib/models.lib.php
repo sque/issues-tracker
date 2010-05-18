@@ -61,12 +61,58 @@ class Issue extends DB_Record
         return $action;
     }
 
-    public function action_add_tag($tag)
+    public function action_add_tag($actor, $date, $tag)
     {
+        // Log action
+        $create_args = array(
+            'actor' => $actor,
+            'date' => $date,
+            'issue_id' => $this->id,
+            'type' => 'tag_change');
+
+        $action = IssueAction::create($create_args);
+        $create_args = array(
+            'id' => $action->id,
+            'operation' => 'add',
+            'tag' => $tag);
+        DB_Record::create($create_args, 'IssueActionTagChange');
+
+        // Add tag
+        $create_tag = array('issue_id' => $this->id, 'tag' => $tag);
+        IssueTag::create($create_tag);
+        return $action;
     }
 
-    public function remove_tag($tag)
+    public function action_remove_tag($actor, $date, $tag)
     {
+        // Log action
+        $create_args = array(
+            'actor' => $actor,
+            'date' => $date,
+            'issue_id' => $this->id,
+            'type' => 'tag_change');
+
+        $action = IssueAction::create($create_args);
+        $create_args = array(
+            'id' => $action->id,
+            'operation' => 'remove',
+            'tag' => $tag);
+        DB_Record::create($create_args, 'IssueActionTagChange');
+
+        // Add tag
+        $t = IssueTag::open(array('issue_id' => $this->id, 'tag' => $tag));
+        $t->delete();
+        return $action;
+    }
+    
+    public function tag_names()
+    {
+        $tags = array();
+        foreach(IssueTag::open_query()
+            ->where('issue_id = ?')
+            ->execute($this->id) as $t)
+        $tags[] = $t->tag;
+        return $tags;
     }
 }
 
@@ -162,5 +208,5 @@ class IssueActionTagChange extends DB_Record
 
 Project::one_to_many('Issue', 'project', 'issues');
 Issue::one_to_many('IssueAction', 'issue', 'actions');
-
+Issue::one_to_many('IssueTag', 'issue', 'tags');
 ?>
