@@ -11,16 +11,17 @@ class UI_IssueCreateForm extends Output_HTML_Form
             
         parent::__construct(
             array(
-                'title' => array('display' => 'Title', 'recheck' => '/^.{3,}$/'),
+                'title' => array('display' => 'Title', 'regcheck' => '/^.{3,}$/'),
                 'description' => array('display' => 'Description', 'type' => 'textarea',
                     'onerror' => 'You must add description on issue.'
                  ),
                 'tags' => array('display' => 'Tags',
-                    'regcheck' => '/^(\w+(?:(?:\s(?!$))?))+$/',
+                    'regcheck' => '/^([\w\-]+(?:(?:\s(?!$))?))*$/',
                     'onerror' => 'Tags must be seperated with a space',
                     'hint' => 'Add tags seperated by a space')
             ),
             array(
+                'title' => 'Create a new issue',
                 'buttons' => array(
                     'Post' => array(),
                     'Cancel' => array('type' => 'button', 'onclick' => 
@@ -32,7 +33,7 @@ class UI_IssueCreateForm extends Output_HTML_Form
     
     public function on_valid($values)
     {
-        $values['poster'] = Auth_Realm::get_identity();
+        $values['poster'] = Auth_Realm::get_identity()->id();
         $values['project_name'] = $this->project->name;
         $values['created'] = new DateTime();
         
@@ -44,7 +45,7 @@ class UI_IssueCreateForm extends Output_HTML_Form
         }
         
         // Add tags
-        $tags = explode(' ', $values['tags']);
+        $tags = array_unique(explode(' ', $values['tags']));
         foreach($tags as $t)
             if (!empty($t))
                 IssueTag::create(array('issue_id' => $i->id, 'tag' => $t));

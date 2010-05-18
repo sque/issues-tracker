@@ -47,6 +47,8 @@ class UI_InstallationForm extends Output_HTML_Form
             'other' => array('type' => 'custom', 'value' => '<h4>Other Options</h4>'),
 			'site-ga' => array('display' => 'Google Analytics Web Property ID',
 			    'hint' => 'If you want to track this site with google analytics add your id here.'),
+			'loggerhead-url' => array('display' => 'Bazaar web interface address',
+			    'hint' => 'Add here the url that points to bazaar web interface.'),
         ),
         array('title' => '', 'css' => array('ui-form', 'ui-installation'),
 		    'buttons' => array(
@@ -79,7 +81,8 @@ class UI_InstallationForm extends Output_HTML_Form
         Config::set('db.pass', $values['db-pass']);
         Config::set('db.schema', $values['db-schema']);
         Config::set('site.google_analytics', $values['site-ga']);
-        
+        Config::set('loggerhead.url', $values['loggerhead-url']);
+
         $data = "<?php\n// File generated with install.php\n";
         	
         foreach(Config::get_all() as $name => $value)

@@ -29,13 +29,13 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
     public function on_valid($values)
     {
         $action = $this->issue->action_comment(
-            Auth_Realm::get_identity(),
+            Auth_Realm::get_identity()->id(),
             new DateTime(),
             $values['post']);
 
         if ($values['new-status'] != $this->issue->status)
             $this->issue->action_change_status(
-                Auth_Realm::get_identity(),
+                Auth_Realm::get_identity()->id(),
                 new DateTime(),
                 $values['new-status']);
 

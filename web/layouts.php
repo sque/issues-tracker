@@ -30,7 +30,8 @@ $dl->get_document()->title = Config::get('site.title');
 $dl->get_document()->add_ref_css(surl('/static/css/default.css'));
 etag('div id="wrapper"')->push_parent();
 etag('div id="header"',
-    tag('div id="main-menu"')
+    tag('div id="main-menu"'),
+    tag('div id="breadcrumb"')
 );
 etag('div id="main"',
     $def_content = tag('div id="content"'),
@@ -58,9 +59,9 @@ $dl->menu = new SmartMenu(array('class' => 'menu'));
 $dl->events()->connect('pre-flush',
 create_function('$event', '$layout = $event->arguments["layout"];
     $layout->get_document()->get_body()->getElementById("main-menu")->append($layout->menu->render());'));
-$dl->menu->create_link('Home', '/')->set_autoselect_mode('equal');
-$dl->menu->create_link('Projects', '/p');
-$dl->menu->create_link('Section 2', '/section2');
+$dl->menu->create_link('Home', url('/'))->set_autoselect_mode('equal');
+$dl->menu->create_link('Projects', url('/p'));
+$dl->menu->create_link('Branches', url('/branch'));
 $dl->deactivate();
 
 // SubMenu for default layout
@@ -76,4 +77,12 @@ create_function('$event', '$layout = $event->arguments["layout"];
         );'
 ));
 
+// BreadCrumb for default layout
+$dl->breadcrumb = new SmartMenu(array('class' => 'breadcrumb'));
+$dl->events()->connect('pre-flush',
+create_function('$event', '$layout = $event->arguments["layout"];
+        $layout->get_document()->get_body()->getElementById("breadcrumb")->append(
+            $layout->breadcrumb->render()
+        );'
+));
 ?>

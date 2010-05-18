@@ -22,7 +22,8 @@ class Issue extends DB_Record
         'description',
         'status',
         'project_name' => array('fk' => 'Project'),
-        'created' => array('type' => 'datetime')
+        'created' => array('type' => 'datetime'),
+        'poster'
     );
 
     public function action_change_status($actor, $date, $status)
@@ -46,6 +47,34 @@ class Issue extends DB_Record
         $this->save();
         return $action;
         
+    }
+
+    public function action_edit($actor, $date, $new_title, $new_description)
+    {
+        if (($new_description == $this->description) &&
+                ($new_title == $this->title))
+            return false;
+
+        $create_args = array(
+            'actor' => $actor,
+            'date' => $date,
+            'issue_id' => $this->id,
+            'type' => 'details_change');
+
+        $action = IssueAction::create($create_args);
+        $create_args = array(
+            'id' => $action->id,
+            'old_title' => $this->title,
+            'new_title' => $new_title,
+            'old_description' => $this->description,
+            'new_description' => $new_description
+        );
+        DB_Record::create($create_args, 'IssueActionDetailsChange');
+        
+        $this->title = $new_title;
+        $this->description = $new_description;
+        $this->save();
+        return $action;
     }
 
     public function action_comment($actor, $date, $post)
@@ -156,6 +185,8 @@ class IssueAction extends DB_Record
             return IssueActionStatusChange::open($this->id);
         else if ($this->type === 'tag_change')
             return IssueActionTagChange::open($this->id);
+        else if ($this->type === 'details_change')
+            return IssueActionDetailsChange::open($this->id);
     }
 }
 
@@ -198,6 +229,24 @@ class IssueActionTagChange extends DB_Record
         'id' => array('pk' => true),
         'operation',
         'tag'
+    );
+
+    public function get_action()
+    {
+        return IssueAction::open($this->id);
+    }
+}
+
+class IssueActionDetailsChange extends DB_Record
+{
+    public static $table = 'issue_action_details_changes';
+
+    public static $fields = array(
+        'id' => array('pk' => true),
+        'old_title',
+        'new_title',
+        'old_description',
+        'new_description'
     );
 
     public function get_action()

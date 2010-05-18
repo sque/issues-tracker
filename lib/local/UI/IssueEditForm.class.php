@@ -21,7 +21,7 @@ class UI_IssueEditForm extends Output_HTML_Form
                     'value' => $this->issue->description
                  ),
                 'tags' => array('display' => 'Tags', 'hint' => 'Add tags seperated by a space',
-                    'regcheck' => '/^([\w\-]+(?:(?:\s(?!$))?))+$/',
+                    'regcheck' => '/^([\w\-]+(?:(?:\s(?!$))?))*$/',
                     'onerror' => 'Tags must be seperated with a space',
                     'hint' => 'Add tags seperated by a space',
                     'value' => implode(' ' , $this->issue->tag_names()))
@@ -38,25 +38,22 @@ class UI_IssueEditForm extends Output_HTML_Form
     
     public function on_valid($values)
     {
-        $this->issue->title = $values['title'];
-        $this->issue->description = $values['description'];
-        $this->issue->save();
+        // Detail changes
+        $this->issue->action_edit(Auth_Realm::get_identity()->id(),
+            new DateTime(), $values['title'], $values['description']);        
         
-        
-        // Add tags
-        $tags = explode(' ', $values['tags']);
+        // Tag Changes
+        $tags = array_unique(explode(' ', $values['tags']));
         
         $added_tags = array_diff($tags, $this->issue->tag_names());
         $removed_tags = array_diff($this->issue->tag_names(), $tags);
-        var_dump('Adding ', $added_tags);
-        var_dump('Removed ', $removed_tags);
         
         foreach($added_tags as $t)
-            $this->issue->action_add_tag(Auth_Realm::get_identity(), new DateTime(), $t);
+            $this->issue->action_add_tag(Auth_Realm::get_identity()->id(), new DateTime(), $t);
 
         foreach($removed_tags as $t)
-            $this->issue->action_remove_tag(Auth_Realm::get_identity(), new DateTime(), $t);
-        UrlFactory::open('issue.view')->redirect();
+            $this->issue->action_remove_tag(Auth_Realm::get_identity()->id(), new DateTime(), $t);
+        UrlFactory::craft('issue.view', $this->issue)->redirect();
     }
 }
 ?>

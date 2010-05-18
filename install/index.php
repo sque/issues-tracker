@@ -1,27 +1,27 @@
 <?php
 
-require_once dirname(__FILE__) . '/lib/vendor/phplibs/ClassLoader.class.php';
-require_once dirname(__FILE__) . '/lib/tools.lib.php';
+require_once dirname(__FILE__) . '/../lib/vendor/phplibs/ClassLoader.class.php';
+require_once dirname(__FILE__) . '/../lib/tools.lib.php';
 
 // Autoloader for local and phplibs classes
 $phplibs_loader = new ClassLoader(
     array(
-    dirname(__FILE__) . '/lib/vendor/phplibs',
-    dirname(__FILE__) . '/lib/local'
+    dirname(__FILE__) . '/../lib/vendor/phplibs',
+    dirname(__FILE__) . '/../lib/local'
 ));
 $phplibs_loader->set_file_extension('.class.php');
 $phplibs_loader->register();
 
 // Load static library for HTML
-require_once dirname(__FILE__) . '/lib/vendor/phplibs/Output/html.lib.php';
+require_once dirname(__FILE__) . '/../lib/vendor/phplibs/Output/html.lib.php';
 
 // File names
-$fn_config = dirname(__FILE__) . '/config.inc.php';
-$fn_htaccess = dirname(__FILE__) . '/.htaccess';
+$fn_config = dirname(__FILE__) . '/../config.inc.php';
+$fn_htaccess = dirname(__FILE__) . '/../.htaccess';
 
 
 $dl = Layout::create('debug')->activate();
-$dl->get_document()->add_ref_css(surl('/static/css/debug.css'));
+$dl->get_document()->add_ref_css(surl('/../static/css/debug.css'));
 $dl->get_document()->title = 'Installation';
 
 etag('h2', 'PHPLibs Skeleton');
@@ -37,6 +37,6 @@ if (! is_writable($fn_config))
 }
 
 require $fn_config;
-$f = new UI_InstallationForm($fn_config, dirname(__FILE__) . '/install/build.sql');
+$f = new UI_InstallationForm($fn_config, dirname(__FILE__) . '/build.sql');
 etag('div', $f->render());
 ?>

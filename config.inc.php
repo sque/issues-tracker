@@ -15,4 +15,6 @@ Config::set('site.timezone', 'UTC');
 
 Config::set('site.google_analytics', '');
 
+Config::set('loggerhead.url', 'http://localhost:5152');
+
 ?>

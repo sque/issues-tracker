@@ -48,11 +48,12 @@ class SmartMenuEntry
 
     //! Render this entry and all its childs;
     public function render()
-    {   $REQUEST_URL = (isset($_SERVER['PATH_INFO'])?$_SERVER['PATH_INFO']:$_SERVER['REQUEST_URI']);
+    {   //$REQUEST_URL = (isset($_SERVER['PATH_INFO'])?$_SERVER['PATH_INFO']:$_SERVER['REQUEST_URI']);
+        $REQUEST_URL = $_SERVER['REQUEST_URI'];
 
         if ($this->type === 'link')
         {
-            $li = tag('li', tag('a', array('href' => url($this->link)), $this->display), $this->extra_attr);
+            $li = tag('li', tag('a', array('href' => $this->link), $this->display), $this->extra_attr);
             if ($this->autoselect_mode !== FALSE)
             {
                 if ($this->autoselect_mode === 'prefix')

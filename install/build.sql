@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `issue_action_details_changes`;
 DROP TABLE IF EXISTS `issue_action_tag_changes`;
 DROP TABLE IF EXISTS `issue_action_status_changes`;
 DROP TABLE IF EXISTS `issue_action_comments`;
@@ -60,7 +61,7 @@ DEFAULT CHARSET='UTF8';
 CREATE TABLE `issue_actions` (
     `id` integer auto_increment not null,
     `issue_id` integer not null,
-    `type` ENUM('comment', 'status_change', 'tag_change') not null,
+    `type` ENUM('comment', 'status_change', 'tag_change', 'details_change') not null,
     `actor` varchar(255) not null,
     `date` DATETIME not null,
     PRIMARY KEY(`id`)
@@ -73,7 +74,7 @@ CREATE TABLE `issue_action_comments` (
     `post` TEXT not null,
     PRIMARY KEY(`id`)
 )ENGINE=InnoDB
-DEFAULT CHARSET='UTF8';
+DEFAULT CHARSET='UTF8';DROP TABLE IF EXISTS `issue_action_tag_changes`;
 
 -- Issue action status change
 CREATE TABLE `issue_action_status_changes` (
@@ -93,13 +94,27 @@ CREATE TABLE `issue_action_tag_changes` (
 )ENGINE = InnoDB
 DEFAULT CHARSET = 'UTF8';
 
+-- Issue action edit details
+CREATE TABLE `issue_action_details_changes` (
+    `id` integer not null,
+    `old_title` varchar(255),
+    `new_title` varchar(255),
+    `old_description` TEXT not null,
+    `new_description` TEXT not null,
+    PRIMARY KEY(`id`)
+)ENGINE = InnoDB
+DEFAULT CHARSET = 'UTF8';
+
 INSERT INTO `issue_statuses` (`name`, `description`) values
     ('new', 'This issue has been added but not reviewed.'),
     ('accepted', 'This issue is valid and accepted for fixing.'),
     ('invalid', 'This issue is not valid and has been rejected.'),
     ('fixed', 'This issue was valid and was fixed.');
 
-INSERT INTO `users` (`username`, `password`, `enabled`) values ('root', sha1('root'), 1);
+INSERT INTO `users` (`username`, `password`, `enabled`) values
+    ('root', sha1('root'), 1),
+    ('sque', sha1('123123'), 1);
+
 INSERT INTO `projects` (`name`, `title`, `description`, `created`) values 
     ('libscan', 'libScan', 'A framework to manage multiple scanners', NOW()),
     ('PolicySphere', 'Policy Sphere', 'A platform to manage security roles', NOW()),
