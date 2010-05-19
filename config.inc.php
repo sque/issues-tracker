@@ -17,4 +17,5 @@ Config::set('site.google_analytics', '');
 
 Config::set('loggerhead.url', 'http://localhost:5152');
 
+Config::set('issue.default_status', 'new');
 ?>

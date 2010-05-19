@@ -59,7 +59,7 @@ function show_project($name)
                 tag('span class="id"', (string)$issue->id),
                 tag('span class="title"', $issue->title),
                 tag('span class="status"', $issue->status)->add_class($issue->status),
-                tag('span class="date"', $issue->created->format('U'))
+                tag('span class="date"', date_exformat($issue->created)->smart_details())
             )
         );
     Output_HTMLTag::pop_parent();
@@ -133,7 +133,7 @@ function show_issue($p_name, $issue_id)
     etag('div class="issue"',
         tag('h1', $i->title),
         tag('span class="description" nl_escape_on', $i->description),
-        tag('span class="date"', $i->created->format('U')),
+        tag('span class="date"', date_exformat($i->created)->smart_details()),
         tag('span class="poster user"', $i->poster),
         $ul_tags = tag('ul class="tags"'),
         $ul_actions = tag('ul class="actions"')
@@ -148,7 +148,7 @@ function show_issue($p_name, $issue_id)
     {
         $li = tag('li',
             tag('span class="actor"', $action->actor),
-            tag('span class="date"', $action->date->format('U'))
+            tag('span class="date"', date_exformat($action->date)->smart_details())
         )->appendTo($ul_actions)->add_class($action->type);
 
         if ($action->type == 'comment')

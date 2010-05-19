@@ -55,6 +55,11 @@ function dump_tag($tag, $prepend = "")
     }
 }
 
+function date_exformat($dt)
+{
+    return new Output_DateFormat($dt);
+}
+
 //! Human readable file size
 /**
  * It is preferable to display size closer to the unit that

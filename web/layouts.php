@@ -85,4 +85,18 @@ create_function('$event', '$layout = $event->arguments["layout"];
             $layout->breadcrumb->render()
         );'
 ));
+
+
+///////////////////////////////////
+// Login "default"
+$dl = Layout::create('login')->activate();
+$dl->get_document()->title = Config::get('site.title');
+$dl->get_document()->add_ref_css(surl('/static/css/login.css'));
+$dl->get_document()->add_meta('noindex', array('name' => 'robots'));
+etag('div id="wrapper"')->push_parent();
+etag('div id="main"',
+    $def_content = tag('div id="content"')
+);
+$dl->set_default_container($def_content);
+$dl->deactivate();
 ?>

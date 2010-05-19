@@ -30,12 +30,19 @@ require_once dirname(__FILE__) . '/web/layouts.php';
  * then you should it here.
  */
 
+function force_login()
+{
+    Net_HTTP_Response::redirect(url($_SERVER['PATH_INFO'] . '/+login'));
+}
 // Special handling for special urls
 Stupid::add_rule(create_function('', 'require(\'web/login.php\');'),
     array('type' => 'url_path', 'chunk[-1]' => '/\+login/')
 );
 Stupid::add_rule(create_function('', 'require(\'web/login.php\');'),
     array('type' => 'url_path', 'chunk[-1]' => '/\+logout/')
+);
+Stupid::add_rule('force_login',
+    array('type' => 'func', 'func' => create_function('', 'return !Auth_Realm::has_identity();'))
 );
 Stupid::add_rule(create_function('', 'require(\'web/home.php\');'),
     array('type' => 'url_path', 'path' => '/^\/?$/')
