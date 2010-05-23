@@ -21,7 +21,6 @@
 
 
 Layout::open('login')->activate();
-Layout::open('login')->get_document()->add_meta('noindex', array('name' => 'robots'));
 
 
 // Get the reference url to redirect back
