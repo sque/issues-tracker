@@ -15,7 +15,7 @@ Config::set('site.timezone', 'UTC');
 
 Config::set('site.google_analytics', '');
 
-Config::set('loggerhead.url', 'http://vcs.kmfa.net/');
+Config::set('loggerhead.url', 'http://bazaar.kmfa.net/');
 
 Config::set('issue.default_status', 'new');
 

@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS `issue_tags`;
 DROP TABLE IF EXISTS `issues`;
 DROP TABLE IF EXISTS `issue_statuses`;
 DROP TABLE IF EXISTS `projects`;
+DROP TABLE IF EXISTS `memberships`;
 DROP TABLE IF EXISTS `users`;
 
 -- Users
@@ -15,6 +16,14 @@ CREATE TABLE `users` (
     `password` varchar(40) not null,
     `enabled` int(1) not null,
     PRIMARY KEY(`username`)
+)ENGINE=InnoDB
+DEFAULT CHARSET='UTF8';
+
+-- Memberships
+CREATE TABLE `memberships` (
+    `username` varchar(255) not null,
+    `groupname` varchar(255) not null,
+    PRIMARY KEY(`username`, `groupname`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -115,6 +124,10 @@ INSERT INTO `users` (`username`, `password`, `enabled`) values
     ('root', sha1('root'), 1),
     ('sque', sha1('123123'), 1);
 
+INSERT INTO `memberships` (`username`, `groupname`) values
+    ('root', 'admin'),
+    ('sque', 'dev');
+    
 INSERT INTO `projects` (`name`, `title`, `description`, `created`) values 
     ('libscan', 'libScan', 'A framework to manage multiple scanners', NOW()),
     ('PolicySphere', 'Policy Sphere', 'A platform to manage security roles', NOW()),

@@ -75,7 +75,7 @@ class Authz_ACL
         return empty($this->aces);
     }
     
-    //! Get all the Auth_ACE of this list
+    //! Get all the Authz_ACE of this list
     public function get_aces()
     {
         return $this->aces;

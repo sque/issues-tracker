@@ -33,9 +33,6 @@ require_once(dirname(__FILE__) . '/../Condition.class.php');
  * - @b backref_instance [Default = false]: If you want to pass the instance from
  *  a backreference, set this to the index key in backref array.
  * - @b action [@b Mandatory]: The action to check for.
- * - @b role [Default = null]: The role to check for, when @b auto_role = @b false.
- * - @b auto_role [Default = 'authn']: false, authn. Get the current role from another
- *      subsystem. If declared the @b role parameter is ignored.
  * .
  * 
  * @par Examples
@@ -58,8 +55,6 @@ class Stupid_Condition_Authorization extends Stupid_Condition
 		// Default condition values
 		$defcond = array(
 		    'instance' => null,
-		    'role' => null,
-		    'auto_role' => false,
 		    'backref_instance' => false
 		);
 		
@@ -68,10 +63,6 @@ class Stupid_Condition_Authorization extends Stupid_Condition
 		// Check mandatory options
 		if ((!isset($options['resource'])) || (!isset($options['action'])))
 		    throw new InvalidArgumentException('Stupid_Condition[Authz]: Undefined mandatory options!');
-
-        // Get role
-        if ($options['auto_role'] === 'authn')
-            $options['role'] = (Authn_Realm::has_identity()?Authn_Realm::get_identity()->id():null);
 
         // Get instance
         if ($options['backref_instance'] !== false)
@@ -82,7 +73,7 @@ class Stupid_Condition_Authorization extends Stupid_Condition
             $options['instance'] = $previous_backrefs[$options['backref_instance']];
         }
         
-        return Authz::is_allowed(array($options['resource'], $options['instance']), $options['role'], $options['action']);
+        return Authz::is_allowed(array($options['resource'], $options['instance']), $options['action']);
 	}
 }
 Stupid_Condition_Authorization::register();

@@ -51,10 +51,14 @@ class Authz_Role_FeederInstance implements Authz_Role_Feeder
             $parents = array();
         else if(! is_array($parents))
             $parents = array($parents);
-            
-        foreach($parents as $p)
-            if (! $this->has_role($p))
+
+        // Validate and objectify parents
+        foreach($parents as $idx => $p)
+        {
+            if (! ($prole = $this->get_role($p)))
                 throw new InvalidArgumentException("Cannot add role that depends on unknown role \"{$p}\"");
+            $parents[$idx] = $prole;
+        }
             
         return $this->roles[$name] = new Authz_Role_Instance($name, $parents);
     }

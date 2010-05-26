@@ -68,19 +68,24 @@ class Authz_Role_Database implements Authz_Role
             $parent_name = $record->{$this->options['parent_name_field']};
             if ($this->options['parent_name_filter_func'])
                 $parent_name = call_user_func($this->options['parent_name_filter_func'], $parent_name);
-            $parents[] = new Authz_Role_Database(
+            $parents[$parent_name] = new Authz_Role_Database(
                 $parent_name , null);
         }
 
         return $parents;
     }
 
-    public function has_parent($parent)
+    public function has_parent($name)
     {      
-        foreach($this->get_parents() as $p)
-            if ($p->get_name() == $parent)
-                return true;
+        return array_key_exists($name, $this->get_parents());
+    }
+    
+    public function get_parent($name)
+    {   
+        if (array_key_exists($name, $parents = $this->get_parents()))
+            return $parents[$name];
+
         return false;
-    }   
+    }
 }
 ?>

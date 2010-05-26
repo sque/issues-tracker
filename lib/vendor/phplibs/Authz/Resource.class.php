@@ -109,7 +109,7 @@ class Authz_Resource
             foreach($roles->get_role($role)->get_parents() as $prole)
             {   $pdepth = -1;
                 
-                if (($ace = $this->effective_ace($prole, $action, $roles, $pdepth)) === null)
+                if (($ace = $this->effective_ace($prole->get_name(), $action, $roles, $pdepth)) === null)
                     continue;
 
                 if ($ace->is_role_null())

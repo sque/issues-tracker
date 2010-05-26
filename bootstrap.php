@@ -77,4 +77,30 @@ $auth = new Authn_Backend_DB(array(
 ));
 Authn_Realm::set_backend($auth);
 
+// Setup authorization
+Authz::set_resource_list($list = new Authz_ResourceList());
+Authz::set_role_feeder(new Authz_Role_FeederDatabase(array(
+    'role_query' => User::open_query()->where('username = ?'),
+    'role_name_field' => 'username',
+    'parents_query' => Membership::open_query()->where('username = ?'),
+    'parent_name_field' => 'groupname',
+    'parent_name_filter_func' => function($name){    return '@' . $name; }
+)));
+
+// Standard authorization
+$list->add_resource('project');
+$list->add_resource('issue', 'project');
+
+Authz::allow('project', null, 'view');
+Authz::allow('project', null, 'list');
+Authz::allow('project', '@admin', 'create');
+Authz::allow('project', '@admin', 'edit');
+
+Authz::allow('issue', '@dev', 'change-status');
+Authz::allow('issue', null, 'create');
+Authz::allow('issue', null, 'attach');
+Authz::allow('issue', null, 'post');
+Authz::allow('issue', null, 'edit');
+
+
 ?>

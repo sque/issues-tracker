@@ -33,14 +33,23 @@ interface Authz_Role
 
     //! Check if this role has a specific parent 
     /**
-     * @param $parent The name of the parent to look for.
+     * @param $name The name of the parent to look for.
      * @return
      *  - @b true If the parent was found.
      *  - @b false If this parent was unknown.
      *  .
      */
-    public function has_parent($parent);
+    public function has_parent($name);
 
+    //! Get a specific parent
+    /**
+     * @param $name The name of the parent to look for.
+     * @return
+     *  - @b Authz_Role The object of the parent
+     *  - @b false If this parent was not found.
+     *  .
+     */
+    public function get_parent($name);
 }
 
 ?>

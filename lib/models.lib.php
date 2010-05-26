@@ -12,6 +12,16 @@ class Project extends DB_Record
     );
 }
 
+class Membership extends DB_Record
+{
+    public static $table = 'memberships';
+    
+    public static $fields = array(
+        'username' => array('pk' => true),
+        'groupname' => array('pk' => true)
+    );
+}
+
 class Issue extends DB_Record
 {
     public static $table = 'issues';

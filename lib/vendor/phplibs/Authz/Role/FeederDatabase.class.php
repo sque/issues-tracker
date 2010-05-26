@@ -63,7 +63,7 @@ class Authz_Role_FeederDatabase implements Authz_Role_Feeder
     }
     
     public function has_role($name)
-    {
+    {   
         $result = $this->options['role_query']->execute($name);
         if (count($result) !== 1)
             return false;

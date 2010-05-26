@@ -32,16 +32,14 @@ class Authz_Role_Instance implements Authz_Role
     //! Construct a new role
     /**
      * @param $name The name of the role.
-     * @param $parents The parents of the instance.
+     * @param $parents An array of parent objects.
      */
-    public function __construct($name, $parents = null)
+    public function __construct($name, $parents = array())
     {
         $this->name = $name;
         
-        if (is_string($parents))
-            $this->parents[] = $parents;
-        if (is_array($parents))
-            $this->parents = $parents;
+        foreach($parents as $p)
+            $this->parents[$p->get_name()] = $p;
     }
 
     public function get_name()
@@ -54,9 +52,17 @@ class Authz_Role_Instance implements Authz_Role
         return $this->parents;
     }
     
-    public function has_parent($parent)
+    public function has_parent($name)
     {
-        return in_array($parent, $this->parents);
+        return array_key_exists($name, $this->parents);
+    }
+    
+    public function get_parent($name)
+    {   
+        if (!$this->has_parent($name))
+            return false;
+
+        return $this->parents[$name];
     }
 }
 

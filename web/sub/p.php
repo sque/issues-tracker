@@ -3,19 +3,29 @@
 Layout::open('default')->activate();
 
 Stupid::add_rule('edit_issue',
-    array('type' => 'url_path',
-        'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+issue$/', 'chunk[4]' => '/^([\d]+)$/', 'chunk[5]' => '/^\+edit$/'));
+    array('type' => 'url_path', 'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+issue$/',
+            'chunk[4]' => '/^(?P<issue_id>[\d]+)$/', 'chunk[5]' => '/^\+edit$/'),
+    array('type' => 'authz', 'resource' => 'issue', 'backref_instance' => 'issue_id', 'action' => 'edit'));
+
 Stupid::add_rule('show_issue',
     array('type' => 'url_path',
-        'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+issue$/', 'chunk[4]' => '/^([\d]+)$/'));
+        'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+issue$/', 'chunk[4]' => '/^(?P<issue_id>[\d]+)$/'),
+    array('type' => 'authz', 'resource' => 'project', 'backref_instance' => 'issue_id', 'action' => 'view'));
+    
 Stupid::add_rule('create_issue',
-    array('type' => 'url_path',
-        'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+createissue$/'));
+    array('type' => 'url_path', 'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+createissue$/'),
+    array('type' => 'authz', 'resource' => 'project', 'action' => 'create'));
+        
 Stupid::add_rule('edit_project',
-    array('type' => 'url_path', 'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+edit$/'));
+    array('type' => 'url_path', 'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+edit$/'),
+    array('type' => 'authz', 'resource' => 'project', 'action' => 'edit')
+);
 Stupid::add_rule('show_project',
-    array('type' => 'url_path', 'chunk[2]' => '/^([^\+].+)$/'));
+    array('type' => 'url_path', 'chunk[2]' => '/^(?P<project_id>[^\+].+)$/'),
+    array('type' => 'authz', 'resource' => 'project', 'backref_instance' => 'project_id', 'action' => 'view')
+);
 Stupid::add_rule('create_project',
+    array('type' => 'authz', 'resource' => 'project', 'action' => 'create'),
     array('type' => 'url_path', 'chunk[2]' => '/^\+create$/'));
 Stupid::set_default_action('default_projects');
 Stupid::chain_reaction();
@@ -190,12 +200,16 @@ function show_issue($p_name, $issue_id)
 
 function default_projects()
 {
+    if (!Authz::is_allowed('project', 'list'))
+        return;
+        
     // Show all projects
     etag('ul class="projects"')->push_parent();
     
     create_breadcrumb();
     get_submenu()
         ->create_link('Add Project', UrlFactory::craft('project.create'));
+
 
     foreach(Project::open_all() as $p)
     {
