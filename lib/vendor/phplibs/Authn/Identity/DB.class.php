@@ -22,8 +22,8 @@
 
 require_once( dirname(__FILE__) . '/../Identity.class.php');
 
-//! Implementation of Auth_Identity for Auth_Backend_DB .
-class Auth_Identity_DB implements Auth_Identity
+//! Implementation of Authn_Identity for Authn_Backend_DB .
+class Authn_Identity_DB implements Authn_Identity
 {
     private $record;
 
@@ -31,7 +31,7 @@ class Auth_Identity_DB implements Auth_Identity
 
     private $authority;
 
-    //! The object is constructed by Auth_Backend_DB
+    //! The object is constructed by Authn_Backend_DB
     public function __construct($id, $authority, $record)
     {
         $this->id = $id;
@@ -47,7 +47,8 @@ class Auth_Identity_DB implements Auth_Identity
     //! Reset password of this identity
     /**
      * @param $password The new password to be set for this identity
-     * @return - @b true If the password was changed succesfully.
+     * @return
+     *  - @b true If the password was changed succesfully.
      *  - @b false on any kind of error.
      */
     public function reset_password($password)

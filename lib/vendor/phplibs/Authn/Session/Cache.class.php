@@ -20,10 +20,10 @@
  */
 
 
-require_once(dirname(__FILE__) . '/../Storage.class.php');
+require_once(dirname(__FILE__) . '/../Session.class.php');
 
 //! Use a cache engine to store tracked identities
-class Auth_Storage_Cache implements Auth_Storage
+class Authn_Session_Cache implements Authn_Session
 {
     //! Cache Engine
     private $cache;
@@ -52,8 +52,9 @@ class Auth_Storage_Cache implements Auth_Storage
             $this->session_id = $received_cookie->get_value();
     }
 
-    public function set_identity(Auth_Identity $identity, $ttl = null)
-    {   // Clear identity
+    public function set_identity(Authn_Identity $identity, $ttl = null)
+    {   
+        // Clear identity
         $this->clear_identity();
 
         // Create a new sessionid

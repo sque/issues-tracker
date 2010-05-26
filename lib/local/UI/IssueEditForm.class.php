@@ -39,7 +39,7 @@ class UI_IssueEditForm extends Output_HTML_Form
     public function on_valid($values)
     {
         // Detail changes
-        $this->issue->action_edit(Auth_Realm::get_identity()->id(),
+        $this->issue->action_edit(Authn_Realm::get_identity()->id(),
             new DateTime(), $values['title'], $values['description']);        
         
         // Tag Changes
@@ -49,10 +49,10 @@ class UI_IssueEditForm extends Output_HTML_Form
         $removed_tags = array_diff($this->issue->tag_names(), $tags);
         
         foreach($added_tags as $t)
-            $this->issue->action_add_tag(Auth_Realm::get_identity()->id(), new DateTime(), $t);
+            $this->issue->action_add_tag(Authn_Realm::get_identity()->id(), new DateTime(), $t);
 
         foreach($removed_tags as $t)
-            $this->issue->action_remove_tag(Auth_Realm::get_identity()->id(), new DateTime(), $t);
+            $this->issue->action_remove_tag(Authn_Realm::get_identity()->id(), new DateTime(), $t);
         UrlFactory::craft('issue.view', $this->issue)->redirect();
     }
 }

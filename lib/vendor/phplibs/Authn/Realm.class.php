@@ -22,26 +22,26 @@
 
 require_once dirname(__FILE__) . '/Identity.class.php';
 require_once dirname(__FILE__) . '/Backend.class.php';
-require_once dirname(__FILE__) . '/Storage.class.php';
-require_once dirname(__FILE__) . '/Storage/Session.class.php';
+require_once dirname(__FILE__) . '/Session.class.php';
+require_once dirname(__FILE__) . '/Session/Native.class.php';
 
 //! Static singleton authentication realm
-class Auth_Realm
+class Authn_Realm
 {
     //! The authentication backend that will be used
     static private $backend = null;
 
     //! The session storage that will be used
-    static private $storage = null;
+    static private $session = null;
 
     //! The event dispatcher for events
     static private $event_dispatcher = null;
 
     //! Set the authentication backend of the realm
     /**
-     * @param $backend Any valid Auth_Backend implementation.
+     * @param $backend Any valid Authn_Backend implementation.
      */
-    static public function set_backend(Auth_Backend $backend)
+    static public function set_backend(Authn_Backend $backend)
     {   self::$backend = $backend;  }
 
     //! Get the current authentication backend.
@@ -50,16 +50,20 @@ class Auth_Realm
 
     //! Set the current session storage engine.
     /**
-     * @param $storage Any valid Auth_Storage implementation.
+     * @param $session Any valid Authn_Session implementation.
      */
-    static public function set_storage(Auth_Storage $storage)
-    {   self::$storage = $storage;  }
+    static public function set_session(Authn_Session $session)
+    {   
+        self::$session = $session;
+    }
 
     //! Get the current storage session.
-    static public function get_storage()
-    {   return self::$storage;  }
+    static public function get_session()
+    {
+        return self::$session;
+    }
 
-    //! Get the EventDispatcher of Auth_Realm
+    //! Get the EventDispatcher of Authn_Realm
     /**
 	 * Events are announced through an EventDispatcher object. The following
 	 * events are valid:
@@ -80,22 +84,24 @@ class Auth_Realm
 
     //! Check if it has an authenticated identity
     /**
-     * @return - @b true if there is an authenticated identity on this realm.
+     * @return
+     *  - @b true if there is an authenticated identity on this realm.
      *  - @b false if the current user is anonymous.
      */
     static public function has_identity()
     {   
-        return (self::$storage->get_identity() != false);
+        return (self::$session->get_identity() != false);
     }
 
     //! Get current authenticated identity
     /**
-     * @return - @b Auth_Identity object of the authenticated identity.
+     * @return
+     *  - @b Authn_Identity object of the authenticated identity.
      *  - @b false If there is no authenticated identity.
      */
     static public function get_identity()
     {   
-        return self::$storage->get_identity();
+        return self::$session->get_identity();
     }
 
     //! Clear current authenticated identity
@@ -107,15 +113,16 @@ class Auth_Realm
 
         self::events()->notify('ident.clear', array('identity' => $identity));
         
-        return self::$storage->clear_identity();
+        return self::$session->clear_identity();
     }
 
     //! Authenticate a (new) identity on this realm
     /**
      * @param $username The username of the identity
      * @param $password The password of identity
-     * @param $ttl - An explicit declaration of expiration time for this authentication.
-     *  - @b null if you want to follow the Auth_Storage default policy.
+     * @param $ttl
+     *  - An explicit declaration of expiration time for this authentication.
+     *  - @b null if you want to follow the Authn_Session default policy.
      */
     static public function authenticate($username, $password, $ttl = null)
     {
@@ -128,18 +135,19 @@ class Auth_Realm
 
         $id = self::$backend->authenticate($username, $password);
         if (!$id)
-        {   self::events()->notify('auth.error', array('username' => $username, 'password' => $password));
-            return false;
+        {   
+            self::events()->notify('auth.error', array('username' => $username, 'password' => $password));
+                return false;
         }
         self::events()->notify('auth.successful', array('username' => $username, 'password' => $password));
 
         // Save session
-        self::$storage->set_identity($id, $ttl);
+        self::$session->set_identity($id, $ttl);
         return $id;        
     }
 }
 
-// Default storage is set to session
-Auth_Realm::set_storage(new Auth_Storage_Session());
+// Default session storage is set to native
+Authn_Realm::set_session(new Authn_Session_Native());
 
 ?>

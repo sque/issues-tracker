@@ -25,8 +25,8 @@ require_once(dirname(__FILE__) . '/../Condition.class.php');
 //! Implementation of auth Stupid_Condition
 /**
  * A condition evaluator that can perform checks on the
- * WAAS and Group based on current logged on user.\n
- * This evaluator implements the <b> type = "auth"</b> 
+ * Authn_Realm
+ * This evaluator implements the <b> type = "authn"</b> 
  *
  * @par Acceptable condition options
  * - @b op [Default = isuser]: isanon, isuser
@@ -35,16 +35,16 @@ require_once(dirname(__FILE__) . '/../Condition.class.php');
  * 
  * @par Examples
  * @code
- * // This action is accesible only from users of group admin
+ * // This action is accesible only from user root
  * Stupid::add_rule('create_news',
  *     array('type' => 'url_path', 'path' => '/\/news\/\+create/'),
- *     array('type' => 'auth', 'op' => 'ingroup', 'group' => 'admin'));
+ *     array('type' => 'authn', 'op' => 'isuser', 'user' => 'root'));
  * @endcode
  */
 class Stupid_Condition_Authentication extends Stupid_Condition
 {
 	public static function type()
-	{	return 'auth';	}
+	{	return 'authn';	}
 
 	public function evaluate_impl($previous_backrefs)
 	{
@@ -58,9 +58,9 @@ class Stupid_Condition_Authentication extends Stupid_Condition
 		// Per operand
 		switch($options['op']){
 		case 'isanon';
-			return ! Auth_Realm::has_identity();
+			return ! Authn_Realm::has_identity();
 		case 'isuser':
-			return ((Auth_Realm::has_identity()) && (Auth_Realm::get_identity() == $options['user']));
+			return ((Authn_Realm::has_identity()) && (Authn_Realm::get_identity() == $options['user']));
 		}
 	}
 }

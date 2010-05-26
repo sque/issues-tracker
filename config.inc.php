@@ -7,7 +7,7 @@ Config::set('db.user', 'root');
 
 Config::set('db.pass', 'root');
 
-Config::set('db.schema', 'issues');
+Config::set('db.schema', 'issue-tracker');
 
 Config::set('site.title', 'IssueTracker');
 
@@ -15,7 +15,8 @@ Config::set('site.timezone', 'UTC');
 
 Config::set('site.google_analytics', '');
 
-Config::set('loggerhead.url', 'http://localhost:5152');
+Config::set('loggerhead.url', 'http://vcs.kmfa.net/');
 
 Config::set('issue.default_status', 'new');
+
 ?>

@@ -33,7 +33,7 @@ class UI_IssueCreateForm extends Output_HTML_Form
     
     public function on_valid($values)
     {
-        $values['poster'] = Auth_Realm::get_identity()->id();
+        $values['poster'] = Authn_Realm::get_identity()->id();
         $values['project_name'] = $this->project->name;
         $values['status'] = Config::get('issue.default_status');
         $values['created'] = new DateTime();

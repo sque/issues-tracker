@@ -19,11 +19,28 @@
  *  
  */
 
-
-//! Interface representing authentication identity
-interface Auth_Identity
+//! Interface to implement authorization roles
+interface Authz_Role
 {
-    //! The id of this identity
-    public function id();
+    //! Get the name of this role
+    public function get_name();
+
+    //! Get an array with parents of this role
+    /**
+     * Parents must also be implementations of Authz_Role interface.
+     */
+    public function get_parents();
+
+    //! Check if this role has a specific parent 
+    /**
+     * @param $parent The name of the parent to look for.
+     * @return
+     *  - @b true If the parent was found.
+     *  - @b false If this parent was unknown.
+     *  .
+     */
+    public function has_parent($parent);
+
 }
+
 ?>

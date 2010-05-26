@@ -21,6 +21,7 @@
 
 
 require_once(dirname(__FILE__) . '/Condition/Authentication.class.php');
+require_once(dirname(__FILE__) . '/Condition/Authorization.class.php');
 require_once(dirname(__FILE__) . '/Condition/Func.class.php');
 require_once(dirname(__FILE__) . '/Condition/UrlParams.class.php');
 require_once(dirname(__FILE__) . '/Condition/UrlPath.class.php');

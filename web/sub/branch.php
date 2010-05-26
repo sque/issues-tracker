@@ -11,7 +11,7 @@ Stupid::chain_reaction();
 
 function view_home_branch($user)
 {
-    if ($user !== Auth_Realm::get_identity()->id())
+    if ($user !== Authn_Realm::get_identity()->id())
         not_found();
 
     direct_proxy_url();
@@ -33,7 +33,7 @@ function branch_explorer()
     etag('ul class="branches"')->push_parent();
     
     etag('li',
-        tag('a', array('href' => url('/branch/~' . Auth_Realm::get_identity()->id() . '/')),
+        tag('a', array('href' => url('/branch/~' . Authn_Realm::get_identity()->id() . '/')),
             'Private')
     );
     Output_HTMLTag::pop_parent();

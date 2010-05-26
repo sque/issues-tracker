@@ -20,33 +20,27 @@
  */
 
 
-require_once(dirname(__FILE__) . '/../Storage.class.php');
-
-//! Track identity inside the instance of this object
-class Auth_Storage_Instance implements Auth_Storage
+//! Interface to implement roles feeder
+interface Authz_Role_Feeder
 {
-    //! The session identity
-    private $online_identity;
+    //! Check if there is a role in feeder.
+    /**
+     * @param $name The name of the feeder.
+     * @return
+     *  - @b true if the role was found.
+     *  - @b false if there is no role with that name.
+     */
+    public function has_role($name);
     
-    public function __construct()
-    {
-        $this->online_identity = false;
-    }
-        
-    public function set_identity(Auth_Identity $identity, $ttl = null)
-    {
-        $this->online_identity = $identity;
-    }
-
-    public function get_identity()
-    {
-        return $this->online_identity;
-    }
-    
-    public function clear_identity()
-    {
-        $this->online_identity = false;
-    }
+    //! Get a role from the feeder
+    /**
+     * @param $name The name of the role we are looking for.
+     * @return
+     *  - @b Authz_Role the role object.
+     *  - @b false if no role was found with that name.
+     *  .
+     */
+    public function get_role($name);
 }
 
 ?>

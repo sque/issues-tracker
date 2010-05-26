@@ -28,7 +28,7 @@ require_once( dirname(__FILE__) . '/../Identity/DB.class.php');
  * Authentication based on DB_Record implementation.
  * The database models must first be declared before using this class.
  */
-class Auth_Backend_DB implements Auth_Backend
+class Authn_Backend_DB implements Authn_Backend
 {
     //! The normalized options of this instance.
     private $options = array();
@@ -38,7 +38,9 @@ class Auth_Backend_DB implements Auth_Backend
 
     //! Get the options of this instance.
     public function get_options()
-    {   return $this->options;  }
+    {
+        return $this->options;
+    }
 
     //! Create an instance of this backend
     /**
@@ -58,7 +60,7 @@ class Auth_Backend_DB implements Auth_Backend
             $options['model_user'],
             $options['field_username'],
             $options['field_password'])
-        )   throw new InvalidArgumentException('Missing mandatory options for Auth_DB_Backend!');
+        )   throw new InvalidArgumentException('Missing mandatory options for Authn_DB_Backend!');
 
         // Merge with default options and save
         $this->options = array_merge(array(
@@ -92,18 +94,20 @@ class Auth_Backend_DB implements Auth_Backend
             return false;
 
         // Succesfull
-        return new Auth_Identity_DB($records[0]->{$this->options['field_username']}, $this, $records[0]);
+        return new Authn_Identity_DB($records[0]->{$this->options['field_username']}, $this, $records[0]);
     }
 
     //! Reset the password of an identity
     /**
      * @param $id The username of the identity.
      * @param $new_password The new effective password of identity after reset.
-     * @return - @b true if the password was reset.
+     * @return
+     *  - @b true if the password was reset.
      *  - @b false on any error.
      */
     public function reset_password($id, $new_password)
-    {   $records = DB_Record::open_query($this->options['model_user'], 'open_query')
+    {   
+        $records = DB_Record::open_query($this->options['model_user'], 'open_query')
             ->where($this->options['field_username'] . ' = ?')
             ->execute($id);
             

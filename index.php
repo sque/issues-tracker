@@ -42,7 +42,7 @@ Stupid::add_rule(create_function('', 'require(\'web/login.php\');'),
     array('type' => 'url_path', 'chunk[-1]' => '/\+logout/')
 );
 Stupid::add_rule('force_login',
-    array('type' => 'func', 'func' => create_function('', 'return !Auth_Realm::has_identity();'))
+    array('type' => 'func', 'func' => create_function('', 'return !Authn_Realm::has_identity();'))
 );
 Stupid::add_rule(create_function('', 'require(\'web/home.php\');'),
     array('type' => 'url_path', 'path' => '/^\/?$/')
