@@ -93,13 +93,12 @@ $list->add_resource('issue', 'project');
 
 Authz::allow('project', null, 'view');
 Authz::allow('project', null, 'list');
+Authz::allow('project', null, 'post-issue');
 Authz::allow('project', '@admin', 'create');
 Authz::allow('project', '@admin', 'edit');
 
 Authz::allow('issue', '@dev', 'change-status');
-Authz::allow('issue', null, 'create');
-Authz::allow('issue', null, 'attach');
-Authz::allow('issue', null, 'post');
+Authz::allow('issue', null, 'comment');
 Authz::allow('issue', null, 'edit');
 
 

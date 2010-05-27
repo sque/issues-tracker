@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS `issue_tags`;
 DROP TABLE IF EXISTS `issues`;
 DROP TABLE IF EXISTS `issue_statuses`;
 DROP TABLE IF EXISTS `projects`;
+DROP TABLE IF EXISTS `attachements`;
 DROP TABLE IF EXISTS `memberships`;
 DROP TABLE IF EXISTS `users`;
 
@@ -24,6 +25,17 @@ CREATE TABLE `memberships` (
     `username` varchar(255) not null,
     `groupname` varchar(255) not null,
     PRIMARY KEY(`username`, `groupname`)
+)ENGINE=InnoDB
+DEFAULT CHARSET='UTF8';
+
+-- Attachments
+CREATE TABLE `attachments` (
+    `id` integer auto_increment,
+    `filename` varchar(255),
+    `filesize` integer,
+    `mime` varchar(255),
+    `path` varchar(512),
+    PRIMARY KEY(`id`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -54,6 +66,8 @@ CREATE TABLE `issues` (
     `project_name` varchar(255) not null,
     `poster` varchar(255) not null,
     `created` DATETIME not null,
+    `assignee` varchar(255),
+    `fix_commit` varchar(512),
     PRIMARY KEY(`id`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
@@ -81,6 +95,7 @@ DEFAULT CHARSET='UTF8';
 CREATE TABLE `issue_action_comments` (
     `id` integer not null,
     `post` TEXT not null,
+    `attachment_id` INTEGER,
     PRIMARY KEY(`id`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';DROP TABLE IF EXISTS `issue_action_tag_changes`;

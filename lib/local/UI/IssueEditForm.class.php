@@ -11,7 +11,11 @@ class UI_IssueEditForm extends Output_HTML_Form
     {
         $this->project = $project;
         $this->issue = $issue;
-            
+
+        $assignees = array('' => '-- Unassigned --');
+        foreach(Membership::open_query()->where('groupname = ?')->execute('dev') as $m)
+            $assignees[$m->username] = $m->username;
+
         parent::__construct(
             array(
                 'title' => array('display' => 'Title', 'recheck' => '/^.{3,}$/s', 'value' => $this->issue->title),
@@ -20,6 +24,8 @@ class UI_IssueEditForm extends Output_HTML_Form
                     'onerror' => 'You must add description on issue.',
                     'value' => $this->issue->description
                  ),
+                'assignee' => array('display' => 'Assigned to', 'type' => 'dropbox', 'optionlist' => $assignees,
+                    'value' => $this->issue->assignee, 'mustselect' => false),
                 'tags' => array('display' => 'Tags', 'hint' => 'Add tags seperated by a space',
                     'regcheck' => '/^([\w\-]+(?:(?:\s(?!$))?))*$/',
                     'onerror' => 'Tags must be seperated with a space',
@@ -27,6 +33,7 @@ class UI_IssueEditForm extends Output_HTML_Form
                     'value' => implode(' ' , $this->issue->tag_names()))
             ),
             array(
+                'title' => 'Edit Issue',
                 'buttons' => array(
                     'Save' => array(),
                     'Cancel' => array('type' => 'button', 'onclick' => 
@@ -42,6 +49,10 @@ class UI_IssueEditForm extends Output_HTML_Form
         $this->issue->action_edit(Authn_Realm::get_identity()->id(),
             new DateTime(), $values['title'], $values['description']);        
         
+        // Assigne changes
+        $this->issue->assignee = $values['assignee'];
+        $this->issue->save();
+
         // Tag Changes
         $tags = array_unique(explode(' ', $values['tags']));
         

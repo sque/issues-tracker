@@ -31,6 +31,7 @@ $dl->get_document()->add_ref_css(surl('/static/css/default.css'));
 etag('div id="wrapper"')->push_parent();
 etag('div id="header"',
     tag('div id="main-menu"'),
+    tag('div id="online-info"'),
     tag('div id="breadcrumb"')
 );
 etag('div id="main"',
@@ -53,6 +54,16 @@ etag('script type="text/javascript" html_escape_off',
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();");
 $dl->set_default_container($def_content);
+
+// Online information
+$online_info = $dl->get_document()->get_body()->getElementById("online-info");
+if (Authn_Realm::has_identity())
+{
+    tag('span class="user"',
+        Authn_Realm::get_identity()->id(),
+        tag('a class="logout"', array('href' => ($_SERVER['REQUEST_URI'] .'/+logout')), 'Logout')
+    )->appendTo($online_info);
+}
 
 // Menu for default layout
 $dl->menu = new SmartMenu(array('class' => 'menu'));

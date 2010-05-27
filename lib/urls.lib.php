@@ -7,5 +7,5 @@ UrlFactory::register('project.view', '$project', '/p/{$project->name}');
 UrlFactory::register('project.edit', '$project', '/p/{$project->name}/+edit');
 UrlFactory::register('project.create', '', '/p/+create');
 UrlFactory::register('projects', '', '/p');
-
+UrlFactory::register('attachment.view', '$a', '/file/{$a->id}/{$a->filename}');
 ?>

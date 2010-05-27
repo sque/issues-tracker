@@ -1,11 +1,11 @@
 <?php
 
-
-
 Stupid::add_rule('view_home_branch',
     array('type' => 'url_path', 'chunk[2]' => '/^~(.+)$/'));
+    
 Stupid::add_rule('direct_proxy_url',
     array('type' => 'url_path', 'chunk[2]' => '/^static$/'));
+    
 Stupid::set_default_action('branch_explorer');
 Stupid::chain_reaction();
 
@@ -19,9 +19,8 @@ function view_home_branch($user)
 
 function direct_proxy_url()
 {
-    $proxy = new ProxyHandler('',Config::get('loggerhead.url'));
+    $proxy = new ReverseProxyHandler(url('/branch') ,Config::get('loggerhead.url'));
     $proxy->execute();
-
 }
 
 function branch_explorer()

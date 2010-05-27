@@ -175,65 +175,66 @@ class Output_HTML_Form
     order that will be rendered too. The key of each of record defines the unique id of the field
     and the value is another associative array with the parameters of the field.\n
     <b> The supported field parameters are: </b>
-    - display: The text that will be displayed at the left of the input
-    - type: [Default=text] The type of input control. Currently implemented are
-    ('text', 'textarea', 'password', 'dropbox', 'radio', 'checkbox', 'line', 'file', 'custom')
-    - optionlist: [Default=array()]
-    An array with all the value options that will be displayed at this control.
-    This is only needed for types that have mandatory options like (dropbox, radio).
-    The array is given in format array(key1 => text1, key2 => text2)
-    - key: The key name of this option. The result of the field is the @b key value of the selected option.
-    - text: [Default: key] The text to be displayed for this option.
-    .
-    - htmlattribs: [Default=array()]
-    An array with extra attributes that you want to add at the input html element. For example you may
-    want to define a custom maxlength of an input box this can be done by defining array('maxlength' => '20')
-    in htmlattribs.\n htmlattribs is an associative array that the key is the html attribute name and
-    value is the html attribute value.
-    - value: [Optional] A predefined value for the input that will be displayed, or the key of the selection.
-    - mustselect: [Default: true] If the type of input has options, it force you to set an option
-    - usepost: [Default=true, Exception type=password] If true it will assign value the posted one from user.
-    - hint: [Optional] A hint message for this field.
-    - regcheck: [Optional] A regular expression that field must pass to be valid.
-    - onerror: [Optional] The error that will be displayed if field is not valid (either by regchek or by manually
-    using invalidate_field() function ).
-    .\n\n
+        - display: The text that will be displayed at the left of the input
+        - type: [Default=text] The type of input control. Currently implemented are
+            ('text', 'textarea', 'password', 'dropbox', 'radio', 'checkbox', 'line', 'file', 'custom')
+        - optionlist: [Default=array()]
+            An array with all the value options that will be displayed at this control.
+            This is only needed for types that have mandatory options like (dropbox, radio).
+            The array is given in format array(key1 => text1, key2 => text2)
+            - key: The key name of this option. The result of the field is the @b key value of the selected option.
+            - text: [Default: key] The text to be displayed for this option.
+            .
+        - htmlattribs: [Default=array()]
+            An array with extra attributes that you want to add at the input html element. For example you may
+            want to define a custom maxlength of an input box this can be done by defining array('maxlength' => '20')
+            in htmlattribs.\n htmlattribs is an associative array that the key is the html attribute name and
+            value is the html attribute value.
+        - value: [Optional] A predefined value for the input that will be displayed, or the key of the selection.
+        - mustselect: [Default: true] If the type of input has options, it force you to set an option
+        - usepost: [Default=true, Exception type=password] If true it will assign value the posted one from user.
+        - hint: [Optional] A hint message for this field.
+        - regcheck: [Optional] A regular expression that field must pass to be valid.
+        - onerror: [Optional] The error that will be displayed if field is not valid (either by regchek or by manually
+        using invalidate_field() function ).
+        .\n\n
     A small example for $fields is the following
     @code
     new Form(
-    array(
-    'name' => array('display' => 'Name', type='text'),
-    'sex' => array('display' => 'Sex', type='radio', 'optionlist' = array('m' => 'Male', 'f' => 'Female'))
-    )
+        array(
+            'name' => array('display' => 'Name', type='text'),
+            'sex' => array('display' => 'Sex', type='radio', 'optionlist' = array('m' => 'Male', 'f' => 'Female'))
+        )
     );
     @endcode
 
     @param $options An associative array with the options of the form.\n
     Valid array keys are:
-    - title The title of the form.
-    - buttons [Default = array('submit' => array())\n
-    An associative array of all form buttons. Each item of array has a unique key and an array with parameters
-    of the button. Valid parameters are:
-    - display [Default same as button id]: The text on the buttom.
-    - type [Default=submit] Three types are valid "submit", "reset" and "button". Submit and reset are
-    self-explained types. Button is a general type that does nothing, but you can enchanch it
-    with "onclick" parameter of buttons
-    - onclick [Default=""] Custom user defined javascript that will be executed when user clicks
-    on this button.
-    - htmlattribs: [Default=array()]
-    An array with extra attributes that you want to add at the input html element.\n
-    htmlattribs is given as an associative array where the key is the html attribute name and
-    value is the html attribute value.
-    .
-    - css [Default = array()] An array with extra classes
-    - renderonconstruct [Default = false] The form is render immediatly at the constructor of the Form. If
-    you set it false you can render the form using render() function of the created object at any place in your page.
-    .\n\n
+        - title The title of the form.
+        - buttons [Default = array('submit' => array())\n
+            An associative array of all form buttons. Each item of array has a unique key and an array with parameters
+            of the button. Valid parameters are:
+            - display [Default same as button id]: The text on the buttom.
+            - type [Default=submit] Three types are valid "submit", "reset" and "button". Submit and reset are
+                self-explained types. Button is a general type that does nothing, but you can enchanch it
+                with "onclick" parameter of buttons
+            - onclick [Default=""] Custom user defined javascript that will be executed when user clicks
+                on this button.
+            - htmlattribs: [Default=array()]
+                An array with extra attributes that you want to add at the input html element.\n
+                htmlattribs is given as an associative array where the key is the html attribute name and
+                value is the html attribute value.
+            .
+        - css [Default = array()] An array with extra classes
+        - renderonconstruct [Default = false] The form is render immediatly at the constructor of the Form. If
+            you set it false you can render the form using render() function of the created object at any
+            place in your page.
+        .\n\n
     @p Example:
     @code
     Output_HTML_Form::__construct(
-    array(... fields ...),
-    array('title' => 'My Duper Form', 'buttons' => array('ok' => array('display' => 'Ok'))
+        array(... fields ...),
+        array('title' => 'My Duper Form', 'buttons' => array('ok' => array('display' => 'Ok'))
     );
     @endcode \n\n
     @p Another example with @b renderonconstruct set to @b false:
@@ -241,16 +242,17 @@ class Output_HTML_Form
 
     class MyForm extends Form
     {
-    public __construct()
-    {   Output_HTML_Form::__construct(
-    array(... fields ...),
-    array('title' => 'My Duper Form', 'renderonconstruct' = false, 'buttons' => array('ok' => array('display' => 'Ok'))
-    }
+        public __construct()
+        {   
+            Output_HTML_Form::__construct(
+            array(... fields ...),
+            array('title' => 'My Duper Form', 'renderonconstruct' = false, 'buttons' => array('ok' => array('display' => 'Ok'))
+        }
 
-    public function on_valid()
-    {
-    // Add your code here
-    }
+        public function on_valid()
+        {
+            // Add your code here
+        }
     }
 
     // Create process and process input
@@ -266,11 +268,11 @@ class Output_HTML_Form
     @code
     class MyForm extends Form
     {
-    protected $fields = array(...fields...);
-    protected $options = array(...options);
+        protected $fields = array(...fields...);
+        protected $options = array(...options);
 
-    public function on_valid()
-    {	// Add your code here	}
+        public function on_valid()
+        {	// Add your code here	}
     };
     new MyForm();
     @endcode
@@ -278,9 +280,9 @@ class Output_HTML_Form
     public function __construct($fields = NULL, $options = NULL)
     {
         if ($fields !== NULL)
-        $this->fields = $fields;
+            $this->fields = $fields;
         if ($options !== NULL)
-        $this->options = $options;
+            $this->options = $options;
         $this->form_id = 'form_gen_' . (self::$last_autoid ++);
         $this->enctype = 'application/x-www-form-urlencoded';
 
@@ -306,7 +308,8 @@ class Output_HTML_Form
         
         // Extra custom options
         foreach($this->fields as & $field)
-        {    // Usepost
+        {   
+            // Usepost
             if (!isset($field['usepost']))
                 $field['usepost'] = ($field['type'] == 'password')?false:true;
             // Rows and Cols for textarea
@@ -369,29 +372,39 @@ class Output_HTML_Form
 			// Files
 			if ($field['type'] == 'file')
 			{
-				if ($_FILES[$k]['error'] > 0)
+			    if ($_FILES[$k]['error'] == UPLOAD_ERR_NO_FILE)
+                {
+                    $field['value'] = null;
+                }
+				else if ($_FILES[$k]['error'] > 0)
 				{
 					$field['valid'] = false;
                     if (isset($field['onerror']))
                         $field['error'] = $field['onerror'];
 					continue;
 				}
-				// Get file data
-				$fdata = file_get_contents($_FILES[$k]['tmp_name'], FILE_BINARY);
+			    else
+			    {
+				    // Get file data
+				    $fdata = file_get_contents($_FILES[$k]['tmp_name'], FILE_BINARY);
 				
-				$field['value'] = array(
-					'orig_name' => $_FILES[$k]['name'],
-					'size' => $_FILES[$k]['size'],
-					'data' => $fdata
-				);
+				    $field['value'] = array(
+					    'orig_name' => $_FILES[$k]['name'],
+					    'size' => $_FILES[$k]['size'],
+					    'data' => $fdata
+				    );
+				}
 			}
-			// Checkboxes
-			else if ($field['type'] == 'checkbox')
-			{	$field['value'] = (isset($_POST[$k]) && ($_POST[$k] == 'on'));	}
+
 			
-			// Store values for classic elements
+			else if ($field['type'] == 'checkbox')
+			{	// Checkboxes
+			    $field['value'] = (isset($_POST[$k]) && ($_POST[$k] == 'on'));
+            }			
 			else if (isset($_POST[$k]))
+			{   // Store values for classic elements
                 $field['value'] = $_POST[$k];
+			}
 			
             // Regcheck
             $field['valid'] = true;
@@ -440,7 +453,9 @@ class Output_HTML_Form
     
     //! Get a reference to the field
     public function & get_field($fname)
-    {	return $this->fields[$fname];	}
+    {	
+        return $this->fields[$fname];
+    }
     
     //! Get all the values of fields
     /**
@@ -505,7 +520,8 @@ class Output_HTML_Form
        __construct().
    */
     public function field($fname)
-    {   if(!isset($this->fields[$fname]))
+    {   
+        if(!isset($this->fields[$fname]))
             return false;
         return $this->fields[$fname];
     }
@@ -516,14 +532,16 @@ class Output_HTML_Form
         that describes it.
     */
     public function set_field_display($fname, $display)
-    {   if(!isset($this->fields[$fname]))
+    {   
+        if(!isset($this->fields[$fname]))
             return false;
         $this->fields[$fname]['display'] = $display;
     }
     
     //! Render the form
     public function render()
-    {   // Check if it should be hidden
+    {   
+        // Check if it should be hidden
     	if ($this->options['hideform'])
     		return false;
    

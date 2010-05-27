@@ -73,6 +73,11 @@ function html_human_fsize($size, $postfix = 'ytes')
     return ceil($size/1073741824) . ' GB' . $postfix;
 }
 
+function date_exformat($dt)
+{
+    return new Output_DateFormat($dt);
+}
+
 //! Escape all html control characters from a text and return the result
 function esc_html($text)
 {

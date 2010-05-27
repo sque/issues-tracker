@@ -17,7 +17,8 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
                     'regcheck' => '/^.{3,}$/s',
                     'onerror' => 'You cannot add an empty comment'),
                 'new-status' => array('display' => 'Status', 'type' => 'dropbox', 'optionlist' => $stats,
-                    'value' => $this->issue->status)
+                    'value' => $this->issue->status),
+                'attachment' => array('display' => 'Attachment', 'type' => 'file')
             ),
             array(
                 'buttons' =>
@@ -31,7 +32,8 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
         $action = $this->issue->action_comment(
             Authn_Realm::get_identity()->id(),
             new DateTime(),
-            $values['post']);
+            $values['post'],
+            $values['attachment']);
 
         if ($values['new-status'] != $this->issue->status)
             $this->issue->action_change_status(

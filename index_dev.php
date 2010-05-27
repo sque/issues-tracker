@@ -97,6 +97,7 @@ function manager_error($code, $message, $file, $line, $context)
 {
     if (Layout::activated())
         Layout::activated()->deactivate();
+    header('Content-Type: text/html');
     Layout::open('debug')->activate();
     Layout::open('debug')->get_document()->title = 'Error: ' . $message;
 
@@ -113,6 +114,7 @@ function manage_exception($exception)
 {
     if (Layout::activated())
         Layout::activated()->deactivate();
+    header('Content-Type: text/html');
     Layout::open('debug')->activate();
     Layout::open('debug')->get_document()->title = get_class($exception) . ': ' . $exception->getMessage();
 

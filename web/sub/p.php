@@ -14,7 +14,7 @@ Stupid::add_rule('show_issue',
     
 Stupid::add_rule('create_issue',
     array('type' => 'url_path', 'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+createissue$/'),
-    array('type' => 'authz', 'resource' => 'project', 'action' => 'create'));
+    array('type' => 'authz', 'resource' => 'project', 'action' => 'post-issue'));
         
 Stupid::add_rule('edit_project',
     array('type' => 'url_path', 'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+edit$/'),
@@ -30,7 +30,7 @@ Stupid::add_rule('create_project',
 Stupid::set_default_action('default_projects');
 Stupid::chain_reaction();
 
-function create_breadcrumb($project = null, $issue = null)
+function project_breadcrumb($project = null, $issue = null)
 {
     $dl = Layout::open('default');
     $dl->breadcrumb->create_link('Projects', UrlFactory::craft('projects'));
@@ -53,7 +53,7 @@ function show_project($name)
     if (!($p = Project::open($name)))
         not_found();
 
-    create_breadcrumb($p);
+    project_breadcrumb($p);
     $sb = get_submenu();
     $sb->create_link('Edit project', UrlFactory::craft('project.edit', $p));
     $sb->create_link('Create Issue', UrlFactory::craft('issue.create', $p));
@@ -77,7 +77,7 @@ function show_project($name)
 
 function create_project()
 {
-    create_breadcrumb()
+    project_breadcrumb()
         ->create_link('Create project', UrlFactory::craft('project.create'));
     $frm = new UI_ProjectCreateForm();
     etag('div html_escape_off', $frm->render());
@@ -88,7 +88,7 @@ function edit_project($p_name)
     if (!($p = Project::open($p_name)))
         not_found();
 
-    create_breadcrumb($p)
+    project_breadcrumb($p)
         ->create_link('Edit', UrlFactory::craft('project.edit', $p));
     $edit_frm = new UI_ProjectEditForm($p);
     etag('div html_escape_off', $edit_frm->render());
@@ -103,7 +103,7 @@ function edit_issue($p_name, $issue_id)
     if ($p->name != $p_name)
         not_found();
 
-    create_breadcrumb($p, $i)
+    project_breadcrumb($p, $i)
         ->create_link('Edit', UrlFactory::craft('issue.edit', $i));
     $edit_frm = new UI_IssueEditForm($p, $i);
     etag('div html_escape_off', $edit_frm->render());
@@ -111,11 +111,10 @@ function edit_issue($p_name, $issue_id)
 
 function create_issue($p_name)
 {
-
     if (!($p = Project::open($p_name)))
         not_found();
 
-    create_breadcrumb($p)
+    project_breadcrumb($p)
         ->create_link('Create issue', UrlFactory::craft('issue.create', $p));
     $frm = new UI_IssueCreateForm($p);
     etag('div html_escape_off', $frm->render());
@@ -130,13 +129,14 @@ function show_issue($p_name, $issue_id)
     if ($p->name != $p_name)
         not_found();
 
-    create_breadcrumb($p, $i);
+    project_breadcrumb($p, $i);
         
     get_submenu()
         ->create_link('Edit', UrlFactory::craft('issue.edit', $i));
         
     // Forms
-    $post_frm = new UI_IssuePostCommentForm($i);
+    if (Authz::is_allowed(array('issue', $issue_id), 'comment'))
+        $post_frm = new UI_IssuePostCommentForm($i);
 
     // Render issue
     Layout::open('default')->get_document()->title = "Issue #{$i->id} in {$p->title} | {$i->title}";
@@ -144,7 +144,8 @@ function show_issue($p_name, $issue_id)
         tag('h1', $i->title),
         tag('span class="description" nl_escape_on', $i->description),
         tag('span class="date"', date_exformat($i->created)->smart_details()),
-        tag('span class="poster user"', $i->poster),
+        tag('span class="poster"', $i->poster)->add_class("user"),
+        tag('span class="assigne"', ($i->assignee == ''?'None':$i->assignee))->add_class('user'),
         $ul_tags = tag('ul class="tags"'),
         $ul_actions = tag('ul class="actions"')
     );
@@ -162,7 +163,14 @@ function show_issue($p_name, $issue_id)
         )->appendTo($ul_actions)->add_class($action->type);
 
         if ($action->type == 'comment')
-            tag('span class="post"', $action->get_details()->post)->appendTo($li);
+        {   $comments = $action->get_details();
+            tag('span class="post"', $comments->post)->appendTo($li);
+            if ($comments->attachment)
+                tag('a class="attachment"',
+                    $comments->attachment->filename,
+                    array('href' => UrlFactory::craft('attachment.view', $comments->attachment))
+                )->appendTo($li);
+        }
         else if ($action->type == 'status_change')
         {   
             $change = $action->get_details();
@@ -195,7 +203,8 @@ function show_issue($p_name, $issue_id)
         }
     }
 
-    etag('div', $post_frm->render());
+    if (Authz::is_allowed(array('issue', $issue_id), 'comment'))
+        etag('div', $post_frm->render());
 }
 
 function default_projects()
@@ -206,7 +215,7 @@ function default_projects()
     // Show all projects
     etag('ul class="projects"')->push_parent();
     
-    create_breadcrumb();
+    project_breadcrumb();
     get_submenu()
         ->create_link('Add Project', UrlFactory::craft('project.create'));
 
