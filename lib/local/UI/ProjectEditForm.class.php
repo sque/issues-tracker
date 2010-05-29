@@ -7,14 +7,17 @@ class UI_ProjectEditForm extends Output_HTML_Form
     {
         $this->project = $p;
         
+        $devs = Membership::get_users('dev');
+        
         parent::__construct(
             array(
                 'title' => array('display' => 'Title', 'regcheck' => '/^.{3,}$/',
                     'value' => $p->title),
                 'description' => array('display' => 'Description', 'type' => 'textarea',
                     'onerror' => 'You must add description on project.',
-                    'value' => $p->description
-                 )
+                    'value' => $p->description),
+                'manager' => array('display' => 'Supervisor', 'type' => 'dropbox', 'optionlist' => $devs,
+                    'value' => $p->manager, 'mustselect' => false),
             ),
             array(
                 'buttons' => array(
@@ -30,6 +33,7 @@ class UI_ProjectEditForm extends Output_HTML_Form
     {
         $this->project->title = $values['title'];
         $this->project->description = $values['description'];
+        $this->project->manager = $values['manager'];
         $this->project->save();
         
         UrlFactory::craft('project.view', $this->project)->redirect();

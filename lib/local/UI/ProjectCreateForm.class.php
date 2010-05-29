@@ -5,14 +5,16 @@ class UI_ProjectCreateForm extends Output_HTML_Form
 
     public function __construct()
     {
+        $devs = Membership::get_users('dev');
         parent::__construct(
             array(
                 'name' => array('display' => 'Unique name', 'regcheck' => '/^\w{3,}$/',
                     'onerror' => 'Unique name must be a 3 letters at least word.'),
                 'title' => array('display' => 'Title', 'regcheck' => '/^.{3,}$/'),
                 'description' => array('display' => 'Description', 'type' => 'textarea',
-                    'onerror' => 'You must add description on project.'
-                 )
+                    'onerror' => 'You must add description on project.'),
+                'manager' => array('display' => 'Supervisor', 'type' => 'dropbox', 'optionlist' => $devs,
+                    'mustselect' => false),
             ),
             array(
                 'title' => 'Create new project',

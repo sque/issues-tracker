@@ -8,7 +8,8 @@ class Project extends DB_Record
         'name' => array('pk' => true),
         'title',
         'description',
-        'created' => array('type' => 'datetime')
+        'created' => array('type' => 'datetime'),
+        'manager'
     );
 }
 
@@ -20,6 +21,21 @@ class Membership extends DB_Record
         'username' => array('pk' => true),
         'groupname' => array('pk' => true)
     );
+    
+    public static function get_users($groupname, $get_fullname = true)
+    {
+        $users = array();
+        foreach(Membership::open_query()
+            ->where('groupname = ?')
+            ->execute($groupname) as $m)
+        {
+            if (($get_fullname) && ($p = UserProfile::open($m->username)))
+                $users[$m->username] = $p->fullname;
+            else
+                $users[$m->username] = $m->username;
+        }
+        return $users;
+    }
 }
 
 class UserProfile extends DB_Record

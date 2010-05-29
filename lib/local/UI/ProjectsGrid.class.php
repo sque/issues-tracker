@@ -11,6 +11,7 @@ class UI_ProjectsGrid extends Output_HTML_Grid
             'name' => array('caption' => 'Nick name'),
             'title' => array('caption' => 'Title / Description', 'customdata' => true),
             'issues' => array('caption' => 'Issues', 'customdata' => true),
+            'manager' => array('caption' => 'Supervisor', 'mangle' => true),
             'created' => array('caption' => 'Registered', 'mangle' => true),
             );
         foreach($omit_fields as $f)
@@ -47,6 +48,8 @@ class UI_ProjectsGrid extends Output_HTML_Grid
             return UrlFactory::craft('project.view', $data)->anchor($data->title);
         if ($col_id == 'created')
             return date_exformat($data)->smart_details();
+        if ($col_id == 'manager')
+            return tag_user($data);
 
     }
 

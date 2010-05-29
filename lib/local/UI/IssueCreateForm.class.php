@@ -46,10 +46,11 @@ class UI_IssueCreateForm extends Output_HTML_Form
         }
         
         // Add tags
-        $tags = array_unique(explode(' ', $values['tags']));
+        $tags = array_filter(array_unique(explode(' ', $values['tags'])),
+            function($el){  if (!empty($el))    return true;    });
+            
         foreach($tags as $t)
-            if (!empty($t))
-                IssueTag::create(array('issue_id' => $i->id, 'tag' => $t));
+            IssueTag::create(array('issue_id' => $i->id, 'tag' => $t));
         
         UrlFactory::craft('issue.view', $i)->redirect();
     }

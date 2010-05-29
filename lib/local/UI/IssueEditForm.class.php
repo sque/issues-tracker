@@ -12,9 +12,10 @@ class UI_IssueEditForm extends Output_HTML_Form
         $this->project = $project;
         $this->issue = $issue;
 
-        $assignees = array('' => '-- Unassigned --');
-        foreach(Membership::open_query()->where('groupname = ?')->execute('dev') as $m)
-            $assignees[$m->username] = $m->username;
+        $assignees = array_merge(
+            array('' => '-- Unassigned --'),
+            Membership::get_users('dev')
+        );
 
         parent::__construct(
             array(
@@ -54,7 +55,8 @@ class UI_IssueEditForm extends Output_HTML_Form
         $this->issue->save();
 
         // Tag Changes
-        $tags = array_unique(explode(' ', $values['tags']));
+        $tags = array_filter(array_unique(explode(' ', $values['tags'])),
+            function($el){  if (!empty($el))    return true;    });
         
         $added_tags = array_diff($tags, $this->issue->tag_names());
         $removed_tags = array_diff($this->issue->tag_names(), $tags);

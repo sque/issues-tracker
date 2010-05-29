@@ -206,7 +206,6 @@ function default_projects()
 {
     if (!Authz::is_allowed('project', 'list'))
         return;
-        
 
     project_breadcrumb();
     get_submenu()
@@ -215,7 +214,6 @@ function default_projects()
     // Show all projects
     $p_grid = new UI_ProjectsGrid(Project::open_all());
     etag('div', $p_grid->render());
-
 }
 
 

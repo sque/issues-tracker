@@ -55,7 +55,7 @@ CREATE TABLE `projects` (
     `title` varchar(255) not null,
     `description` TEXT not null,
     `created` DATETIME NOT NULL,
-    `responsible` varchar(255),
+    `manager` varchar(255),
     PRIMARY KEY(`name`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
@@ -79,7 +79,8 @@ CREATE TABLE `issues` (
     `created` DATETIME not null,
     `assignee` varchar(255),
     `fix_commit` varchar(512),
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`id`),
+    INDEX(`status`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -153,12 +154,15 @@ INSERT INTO `users` (`username`, `password`, `enabled`) values
 INSERT INTO `memberships` (`username`, `groupname`) values
     ('root', 'admin'),
     ('sque', 'admin'),
-    ('sque', 'dev');
+    ('sque', 'dev'),
+    ('nsteiak', 'dev'),
+    ('dlam', 'dev');
     
-INSERT INTO `projects` (`name`, `title`, `description`, `created`) values 
-    ('libscan', 'libScan', 'A framework to manage multiple scanners', NOW()),
-    ('PolicySphere', 'Policy Sphere', 'A platform to manage security roles', NOW()),
-    ('idm', 'IDM', 'Omg kai 3 lol', NOW());
+INSERT INTO `projects` (`name`, `title`, `description`, `manager`, `created`) values 
+    ('libscan', 'libScan', 'A framework to manage multiple scanners', 'kpal', NOW()),
+    ('PolicySphere', 'Policy Sphere', 'A platform to manage security roles', 'nsteiak', NOW()),
+    ('idm', 'IDM', 'Omg kai 3 lol', 'dlam', NOW());
+    
 INSERT INTO `issues` (`title`, `description`, `status`, `project_name`) values 
     ('Terastio bug vrethike', 'den to szitiaw bla blalba', 'invalid', 'libscan'),
     ('Ki akki bug vrethike', 'den to szitiaw bla blalba', 'closed', 'libscan'),
