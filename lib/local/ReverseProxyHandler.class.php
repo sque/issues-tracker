@@ -138,6 +138,9 @@ class ReverseProxyHandler
             $config = array(
                 'clean' => false,
                 'output-xhtml'   => true,
+                'preserve-entities' => true,
+                'merge-divs' => false,
+                'merge-spans' => false,
                 'indent' => true,
                 'alt-text' => 'Here was an image'
             );

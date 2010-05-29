@@ -28,14 +28,15 @@ function reference_url()
 {
     $path_chunks = explode('/', $_SERVER['PATH_INFO']);
     $path_chunks =  array_filter($path_chunks,
-    create_function('$c', 'return (($c != "+login") && ($c != "+logout"));')
+    create_function('$c', 
+        'return (($c != "+login") && ($c != "+logout"));')
     );
     return url(implode('/', $path_chunks));
 }
 
 // Logout user if there is someone logged on
 Stupid::add_rule(create_function('', 'Authn_Realm::clear_identity(); Net_HTTP_Response::redirect(reference_url());'),
-array('type' => 'url_path', 'chunk[-1]' => '/\+logout/'));
+    array('type' => 'url_path', 'chunk[-1]' => '/\+logout/'));
 Stupid::chain_reaction();
 
 // Login form
@@ -45,6 +46,6 @@ if (! Authn_Realm::has_identity())
     etag('div', $form->render());
 }
 else
-Net_HTTP_Response::redirect(reference_url());
+    Net_HTTP_Response::redirect(reference_url());
 
 ?>

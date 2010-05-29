@@ -16,6 +16,12 @@ class Uri
     {
         Net_HTTP_Response::redirect($this->resource);
     }
+    
+    public function anchor($text)
+    {
+        return tag('a', $text,
+            array('href' => $this->resource));
+    }
 }
 
 ?>

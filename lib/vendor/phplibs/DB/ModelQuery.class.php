@@ -231,6 +231,13 @@ class DB_ModelQuery
 	}
 
 	//! Declare left join table (for extra criteria only)
+	/**
+	 * After declaring left join you can use it in criteria by refering to it with "l" shortcut.
+	 * Example l.title = ?
+	 * @param $model_name The left joined model.
+	 * @param $primary_field The local field of the join.
+	 * @param $joined_field The foreing field of the join.
+	 */
 	public function & left_join($model_name, $primary_field, $joined_field)
 	{   $this->assure_alterable();
 
@@ -408,6 +415,7 @@ class DB_ModelQuery
 			else
 				$query .= " LIMIT {$this->limit['length']}";
 		}
+		
 		return $query;
 	}
 	

@@ -42,11 +42,15 @@ class Authn_Realm
      * @param $backend Any valid Authn_Backend implementation.
      */
     static public function set_backend(Authn_Backend $backend)
-    {   self::$backend = $backend;  }
+    {   
+        self::$backend = $backend;
+    }
 
     //! Get the current authentication backend.
     static public function get_backend()
-    {   return self::$backend;  }
+    {   
+        return self::$backend;
+    }
 
     //! Set the current session storage engine.
     /**
@@ -134,16 +138,16 @@ class Authn_Realm
             self::clear_identity();
 
         $id = self::$backend->authenticate($username, $password);
-        if (!$id)
+        if (! ($id instanceof Authn_Identity))
         {   
             self::events()->notify('auth.error', array('username' => $username, 'password' => $password));
-                return false;
+            return false;
         }
         self::events()->notify('auth.successful', array('username' => $username, 'password' => $password));
 
         // Save session
         self::$session->set_identity($id, $ttl);
-        return $id;        
+        return $id;
     }
 }
 

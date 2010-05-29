@@ -68,6 +68,7 @@ if (!isset($_SESSION['initialized']))
 }
 
 // Setup authentication
+/*
 $auth = new Authn_Backend_DB(array(
     'model_user' => 'User',
     'field_username' => 'username',
@@ -76,6 +77,14 @@ $auth = new Authn_Backend_DB(array(
     'where_conditions' => array('enabled = 1')
 ));
 Authn_Realm::set_backend($auth);
+*/
+$auth = new Authn_Backend_LDAP(array(
+    'url' => 'ldap://192.168.59.110',
+    'baseDN' => 'CN=Users,DC=kmfa-lab,DC=net',
+    'id_attribute' => 'samaccountname'
+));
+Authn_Realm::set_backend($auth);
+//Authn_Realm::clear_identity();
 
 // Setup authorization
 Authz::set_resource_list($list = new Authz_ResourceList());
@@ -84,12 +93,19 @@ Authz::set_role_feeder(new Authz_Role_FeederDatabase(array(
     'role_name_field' => 'username',
     'parents_query' => Membership::open_query()->where('username = ?'),
     'parent_name_field' => 'groupname',
-    'parent_name_filter_func' => function($name){    return '@' . $name; }
+    'parent_name_filter_func' => function($name)
+    {
+        return '@' . $name;
+    }
 )));
 
 // Standard authorization
 $list->add_resource('project');
 $list->add_resource('issue', 'project');
+$list->add_resource('userprofile');
+
+Authz::allow('userprofile', null, 'view');
+Authz::allow('userprofile', '@admin', 'edit');
 
 Authz::allow('project', null, 'view');
 Authz::allow('project', null, 'list');

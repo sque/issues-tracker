@@ -43,8 +43,14 @@ class UI_LoginForm extends Output_HTML_Form
     {
         $user = $this->get_field_value('login-user');
         $pass = $this->get_field_value('login-pass');
-        if (Authn_Realm::authenticate($user, $pass))
+        if ($iden = Authn_Realm::authenticate($user, $pass))
         {
+            // Create profile
+            if (!UserProfile::open($iden->id()))
+                UserProfile::create(array(
+                    'username' => $iden->id(),
+                    'fullname' => $iden->get_attribute('givenname') . ' ' . $iden->get_attribute('sn'),
+                    'email' => $iden->get_attribute('mail')));
             Net_HTTP_Response::redirect($this->redirect_url);
         }
         else

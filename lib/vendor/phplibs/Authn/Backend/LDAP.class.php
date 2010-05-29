@@ -21,10 +21,9 @@
 
 
 require_once( dirname(__FILE__) . '/../Backend.class.php');
-//require_once( dirname(__FILE__) . '/Identity.class.php');
+require_once( dirname(__FILE__) . '/../Identity/LDAP.class.php');
 
-
-class Auth_LDAP_Backend implements Auth_Backend
+class Authn_Backend_LDAP implements Authn_Backend
 {
     //! The normalized options of this instance.
     private $options = array();
@@ -36,32 +35,39 @@ class Auth_LDAP_Backend implements Auth_Backend
     public function __construct($options = array())
     {
         if (! isset(
-        $options['url'],
-        $options['baseDN'])
-        )   throw new InvalidArgumentException('Missing mandatory options for Auth_DB_Backend!');
+            $options['url'],
+            $options['baseDN'])
+        )   throw new InvalidArgumentException('Missing mandatory options for Authn_Backend_LDAP!');
 
         // Merge with default options and save
         $this->options = array_merge(array(
             'username' => false,
             'password' => false,
+            'id_attribute' => 'userprincipalname',
             'force_protocol_version' => null),
         $options);
     }
 
-    public function get_last_error()
-    {   }
-
     public function authenticate($username, $password)
-    {   if (($conn = ldap_connect($this->options['url'])) == false)
-    return false;
+    {   
+        if (($conn = ldap_connect($this->options['url'])) == false)
+            return false;
 
-    if ($this->options['force_protocol_version'])
-    if (!ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, $this->options['force_protocol_version']))
-    return false;
+        if ($this->options['force_protocol_version'])
+            if (!ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, $this->options['force_protocol_version']))
+                return false;
 
-    if (!ldap_bind($conn, $username, $password))
-    return false;
+        if (!@ldap_bind($conn, $username, $password))
+            return false;
+            
+        //! Fetch the user object
+        if (!($search = ldap_search($conn, $this->options['baseDN'], '(userPrincipalName=' . $username . ')')))
+            return false;
 
-    return true;
+        $users = ldap_get_entries($conn, $search);
+        if ((!$users) || ($users['count'] != 1))
+            return false;
+
+        return new Authn_Identity_LDAP($users[0], $this->options['id_attribute']);
     }
 }

@@ -7,8 +7,9 @@ DROP TABLE IF EXISTS `issue_tags`;
 DROP TABLE IF EXISTS `issues`;
 DROP TABLE IF EXISTS `issue_statuses`;
 DROP TABLE IF EXISTS `projects`;
-DROP TABLE IF EXISTS `attachements`;
+DROP TABLE IF EXISTS `attachments`;
 DROP TABLE IF EXISTS `memberships`;
+DROP TABLE IF EXISTS `user_profiles`;
 DROP TABLE IF EXISTS `users`;
 
 -- Users
@@ -16,6 +17,15 @@ CREATE TABLE `users` (
     `username` varchar(50) not null,
     `password` varchar(40) not null,
     `enabled` int(1) not null,
+    PRIMARY KEY(`username`)
+)ENGINE=InnoDB
+DEFAULT CHARSET='UTF8';
+
+-- User profiles
+CREATE TABLE `user_profiles` (
+    `username` varchar(255) not null,
+    `fullname` varchar(255) not null,
+    `email` varchar(255) not null,
     PRIMARY KEY(`username`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';

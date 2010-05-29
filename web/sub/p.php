@@ -62,17 +62,12 @@ function show_project($name)
     etag('h1', $p->title);
     etag('p class="description" nl_escape_on', $p->description);
 
-    etag('ul class="issues"')->push_parent();
-    foreach($p->issues->subquery()->order_by('created', 'DESC')->execute() as $issue)
-        etag('li',
-            tag('a', array('href' => UrlFactory::craft('issue.view', $issue)),
-                tag('span class="id"', (string)$issue->id),
-                tag('span class="title"', $issue->title),
-                tag('span class="status"', $issue->status)->add_class($issue->status),
-                tag('span class="date"', date_exformat($issue->created)->smart_details())
-            )
-        );
-    Output_HTMLTag::pop_parent();
+
+    $grid = new UI_IssuesGrid($p->issues
+        ->subquery()
+        ->order_by('created', 'DESC')
+        ->execute(), array('project'));
+    etag('div', $grid->render());
 }
 
 function create_project()
@@ -144,8 +139,8 @@ function show_issue($p_name, $issue_id)
         tag('h1', $i->title),
         tag('span class="description" nl_escape_on', $i->description),
         tag('span class="date"', date_exformat($i->created)->smart_details()),
-        tag('span class="poster"', $i->poster)->add_class("user"),
-        tag('span class="assigne"', ($i->assignee == ''?'None':$i->assignee))->add_class('user'),
+        tag_user($i->poster, 'poster'),
+        ($i->assignee == ''?'None':tag_user($i->assignee, 'assignee')),
         $ul_tags = tag('ul class="tags"'),
         $ul_actions = tag('ul class="actions"')
     );
@@ -158,7 +153,7 @@ function show_issue($p_name, $issue_id)
     foreach($i->actions->all() as $action)
     {
         $li = tag('li',
-            tag('span class="actor"', $action->actor),
+            tag_user($action->actor, 'actor'),
             tag('span class="date"', date_exformat($action->date)->smart_details())
         )->appendTo($ul_actions)->add_class($action->type);
 

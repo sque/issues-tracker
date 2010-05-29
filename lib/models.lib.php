@@ -22,6 +22,17 @@ class Membership extends DB_Record
     );
 }
 
+class UserProfile extends DB_Record
+{
+    public static $table = 'user_profiles';
+    
+    public static $fields = array(
+        'username' => array('pk' => true),
+        'fullname',
+        'email'
+    );
+}
+
 class Attachment extends DB_Record
 {
     public static $table = 'attachments';

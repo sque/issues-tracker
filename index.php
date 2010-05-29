@@ -32,8 +32,9 @@ require_once dirname(__FILE__) . '/web/layouts.php';
 
 function force_login()
 {
-    Net_HTTP_Response::redirect(url($_SERVER['PATH_INFO'] . '/+login'));
+    Net_HTTP_Response::redirect($_SERVER['REQUEST_URI'] . '/+login');
 }
+
 // Special handling for special urls
 Stupid::add_rule(create_function('', 'require(\'web/login.php\');'),
     array('type' => 'url_path', 'chunk[-1]' => '/\+login/')
@@ -44,6 +45,13 @@ Stupid::add_rule(create_function('', 'require(\'web/login.php\');'),
 Stupid::add_rule('force_login',
     array('type' => 'func', 'func' => create_function('', 'return !Authn_Realm::has_identity();'))
 );
+Stupid::add_rule(function(){    require(__DIR__ . '/web/user.php');   },
+    array('type' => 'url_path', 'chunk[1]' => '/^~.+$/')
+);
+Stupid::add_rule(function(){    require(__DIR__ . '/web/user.php');   },
+    array('type' => 'url_path', 'chunk[1]' => '/^@.+$/')
+);
+
 Stupid::add_rule(create_function('', 'require(\'web/home.php\');'),
     array('type' => 'url_path', 'path' => '/^\/?$/')
 );
