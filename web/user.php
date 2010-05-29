@@ -25,6 +25,13 @@ function view_user($user)
     else
         etag('h1', $user);
     
+    // TODO List
+    etag('h2', 'Assigned issues');
+    $grid = new UI_IssuesGrid(Issue::open_query()
+        ->where('assignee = ?')
+        ->order_by('created', 'DESC')
+        ->execute($user));
+    etag('div', $grid->render());
     
     // Show all related issues
     $issues = Issue::open_query()
@@ -39,11 +46,12 @@ function view_user($user)
         ->where('l.actor = ?')
         ->execute($user));
 
+    $f_issues = array();
     foreach($issues as $i)
         $f_issues[$i->id] = $i;
     $f_issues = array_values($f_issues);
 
-    etag('h2', 'Related issues');
+    etag('h2', 'Involved issues');
     $grid = new UI_IssuesGrid($f_issues);
     etag('div', $grid->render());
 }

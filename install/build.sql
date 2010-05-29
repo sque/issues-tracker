@@ -55,6 +55,7 @@ CREATE TABLE `projects` (
     `title` varchar(255) not null,
     `description` TEXT not null,
     `created` DATETIME NOT NULL,
+    `responsible` varchar(255),
     PRIMARY KEY(`name`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
@@ -151,6 +152,7 @@ INSERT INTO `users` (`username`, `password`, `enabled`) values
 
 INSERT INTO `memberships` (`username`, `groupname`) values
     ('root', 'admin'),
+    ('sque', 'admin'),
     ('sque', 'dev');
     
 INSERT INTO `projects` (`name`, `title`, `description`, `created`) values 

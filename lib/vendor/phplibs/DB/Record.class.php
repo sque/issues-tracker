@@ -356,7 +356,8 @@ class DB_Record
 		$insert_args = array();
 		$values = array();
 		foreach($model->fields(true) as $field_name => $field)
-		{	if ($field['ai'])
+		{	
+		    if ($field['ai'])
 				continue;	// We cannot set values for ai fields
 			if (isset($args[$field_name]))
 				$values[$field_name] = $model->db_field_data($field_name, $args[$field_name]);

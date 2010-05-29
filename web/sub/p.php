@@ -207,23 +207,15 @@ function default_projects()
     if (!Authz::is_allowed('project', 'list'))
         return;
         
-    // Show all projects
-    etag('ul class="projects"')->push_parent();
-    
+
     project_breadcrumb();
     get_submenu()
         ->create_link('Add Project', UrlFactory::craft('project.create'));
 
+    // Show all projects
+    $p_grid = new UI_ProjectsGrid(Project::open_all());
+    etag('div', $p_grid->render());
 
-    foreach(Project::open_all() as $p)
-    {
-        etag('li',
-            tag('a', array('href' => UrlFactory::craft('project.view', $p)), 
-                $p->title
-            )
-        );
-    }
-    Output_HTMLTag::pop_parent();
 }
 
 
