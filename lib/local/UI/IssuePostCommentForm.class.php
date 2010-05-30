@@ -29,12 +29,24 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
 
     public function on_valid($values)
     {
+        // Comit comment
         $action = $this->issue->action_comment(
             Authn_Realm::get_identity()->id(),
             new DateTime(),
             $values['post'],
             $values['attachment']);
 
+        // Send mail
+        $ac = $action->get_details();
+        $mail = new MailerIssue($this->issue, $ac->post .
+            ($ac->attachment?
+                "Attachments:\n" .
+                UrlFactory::craft_fqn('attachment.view', $ac->attachment)
+                :'')
+        );
+        $mail->send();
+        
+        // Change status if new one
         if ($values['new-status'] != $this->issue->status)
             $this->issue->action_change_status(
                 Authn_Realm::get_identity()->id(),
@@ -48,6 +60,7 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
             $f = & $this->get_field('new-status');
             $f['value'] = $this->issue->status;
         }
+
     }
 }
 

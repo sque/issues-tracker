@@ -4,6 +4,9 @@ body {
 	margin: 10px 50px;
 }
 
+/* General classes */
+
+
 /* Execption / Error title */
 div.exception, div.error {
 	font-size: 14pt;
@@ -115,6 +118,12 @@ div.ui-form.ui-installation{
 	width: 500px;
 }
 
+div.ui-form.ui-installation h4{
+	margin-top: 30px;
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid gray;
+}
 div.ui-form.ui-installation input[type=text], div.ui-form.ui-installation input[type=password]{
 	width: 99%;
 }
@@ -125,4 +134,14 @@ div.ui-form.ui-installation label{
 
 div.ui-form.ui-installation dt{
     margin-bottom: 15px;
+}
+
+.ui-form-hint {
+    color: gray;
+    font-style: italic;
+}
+
+.ui-form-error {
+    font-weight: bold;
+    color: red;
 }

@@ -66,6 +66,7 @@ class UI_IssueEditForm extends Output_HTML_Form
 
         foreach($removed_tags as $t)
             $this->issue->action_remove_tag(Authn_Realm::get_identity()->id(), new DateTime(), $t);
+        
         UrlFactory::craft('issue.view', $this->issue)->redirect();
     }
 }

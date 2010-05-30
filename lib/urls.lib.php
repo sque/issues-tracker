@@ -1,5 +1,6 @@
 <?php
 
+UrlFactory::$force_host = Config::get('site.public_host');
 UrlFactory::register('issue.view', '$issue', '/p/{$issue->project->name}/+issue/{$issue->id}');
 UrlFactory::register('issue.edit', '$issue', '/p/{$issue->project->name}/+issue/{$issue->id}/+edit');
 UrlFactory::register('issue.create', '$project', '/p/{$project->name}/+createissue');

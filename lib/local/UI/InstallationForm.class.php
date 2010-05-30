@@ -45,10 +45,18 @@ class UI_InstallationForm extends Output_HTML_Form
 				'onerror' => 'This field is mandatory.'),
 			'db-build' => array('display' => 'Execute database creation script', 'type' => 'checkbox'),
             'other' => array('type' => 'custom', 'value' => '<h4>Other Options</h4>'),
+            'public-url' => array('display' => 'Issues tracker public server name',
+                'value' => $_SERVER['HTTP_HOST'], 'regcheck' => '/.+/',
+                'onerror' => 'This field is mandatory',
+			    'hint' => 'This name will be used to create FQN urls.'),
+			'loggerhead-url' => array('display' => 'Bazaar web interface address',
+			    'hint' => 'The url that will be used from tracker to contact loggerhead.'),
+			'sender-mailer' => array('display' => 'Notifications email address',
+			    'regcheck' => '/[\w\-\.]+@[\w\-\.]+/',
+			    'onerror' => 'You must add a valid mail address.',
+			    'hint' => 'The email address to be displayed in "From" field.'),
 			'site-ga' => array('display' => 'Google Analytics Web Property ID',
 			    'hint' => 'If you want to track this site with google analytics add your id here.'),
-			'loggerhead-url' => array('display' => 'Bazaar web interface address',
-			    'hint' => 'Add here the url that points to bazaar web interface.'),
         ),
         array('title' => '', 'css' => array('ui-form', 'ui-installation'),
 		    'buttons' => array(
@@ -81,6 +89,8 @@ class UI_InstallationForm extends Output_HTML_Form
         Config::set('db.pass', $values['db-pass']);
         Config::set('db.schema', $values['db-schema']);
         Config::set('site.google_analytics', $values['site-ga']);
+        Config::set('site.public_host', $values['public-url']);
+        Config::set('issues.mail_from', $values['sender-mailer']);
         Config::set('loggerhead.url', $values['loggerhead-url']);
 
         $data = "<?php\n// File generated with install.php\n";

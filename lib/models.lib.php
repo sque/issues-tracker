@@ -22,15 +22,34 @@ class Membership extends DB_Record
         'groupname' => array('pk' => true)
     );
     
-    public static function get_users($groupname, $get_fullname = true)
+    //! Get users fetching extra data from profile
+    /**
+     * @param $profile_attribute
+     *  - @b string The name of the attribute
+     *  - @b false dont fetch profile
+     *  - @b true Fetch an array with all attributes
+     *  .
+     */
+    public static function get_users($groupname, $profile_attribute = 'fullname')
     {
         $users = array();
         foreach(Membership::open_query()
             ->where('groupname = ?')
             ->execute($groupname) as $m)
         {
-            if (($get_fullname) && ($p = UserProfile::open($m->username)))
-                $users[$m->username] = $p->fullname;
+            
+            if (($profile_attribute !== false) && ($p = UserProfile::open($m->username)))
+            {   
+                if ($profile_attribute === true)
+                {
+
+                    $users[$m->username] = array();
+                    foreach(UserProfile::model()->fields() as $fname)
+                        $users[$m->username][$fname] = $p->$fname;
+                }
+                else
+                    $users[$m->username] = $p->$profile_attribute;
+            }
             else
                 $users[$m->username] = $m->username;
         }

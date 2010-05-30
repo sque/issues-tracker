@@ -36,6 +36,14 @@ if (! is_writable($fn_config))
     exit;
 }
 
+if (! is_writable(__DIR__ . '/../uploads'))
+{
+    etag('div class="error" nl_escape_on', 'Cannot continue installing ' . Config::get('site.title') .'
+        The upload folder "uploads" must be writable, you can change
+        permissions and retry installation.');
+    exit;
+}
+
 require $fn_config;
 $f = new UI_InstallationForm($fn_config, dirname(__FILE__) . '/build.sql');
 etag('div', $f->render());

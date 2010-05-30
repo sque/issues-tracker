@@ -38,6 +38,9 @@ $phplibs_loader->register();
 // Start code profiling
 Profile::checkpoint('document.start');
 
+// Load configuration file
+require_once dirname(__FILE__) . '/config.inc.php';
+
 // Load static library for HTML
 require_once dirname(__FILE__) . '/lib/vendor/phplibs/Output/html.lib.php';
 
@@ -46,9 +49,6 @@ require_once dirname(__FILE__) . '/lib/models.lib.php';
 
 // Load urls
 require_once(dirname(__FILE__) . '/lib/urls.lib.php');
-
-// Load configuration file
-require_once dirname(__FILE__) . '/config.inc.php';
 
 // Database connection
 DB_Conn::connect(Config::get('db.host'), Config::get('db.user'), Config::get('db.pass'), Config::get('db.schema'), 'error_log', true);
@@ -67,6 +67,10 @@ if (!isset($_SESSION['initialized']))
     session_regenerate_id();
 }
 
+// Mailer
+Mailer::set_mail_instance(Mail::factory('mock'));
+Mailer::set_default_headers(array('From' => Config::get('issues.mail_from')));
+
 // Setup authentication
 /*
 $auth = new Authn_Backend_DB(array(
@@ -76,15 +80,24 @@ $auth = new Authn_Backend_DB(array(
     'hash_function' => 'sha1',
     'where_conditions' => array('enabled = 1')
 ));
-Authn_Realm::set_backend($auth);
 */
 $auth = new Authn_Backend_LDAP(array(
     'url' => 'ldap://192.168.59.110',
-    'baseDN' => 'CN=Users,DC=kmfa-lab,DC=net',
+    'baseDN' => 'DC=kmfa-lab,DC=net',
+    'default_domain' => 'kmfa-lab.net',
+    'force_protocol_version' => 3,
     'id_attribute' => 'samaccountname'
 ));
+/*
+// Encode authentication
+$auth = new Authn_Backend_LDAP(array(
+    'url' => 'ldap://10.0.0.3',
+    'baseDN' => 'DC=ENCODE',
+    'force_protocol_version' => 3,
+    'id_attribute' => 'samaccountname'
+));
+*/
 Authn_Realm::set_backend($auth);
-//Authn_Realm::clear_identity();
 
 // Setup authorization
 Authz::set_resource_list($list = new Authz_ResourceList());

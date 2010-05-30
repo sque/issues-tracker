@@ -51,7 +51,11 @@ class UI_IssueCreateForm extends Output_HTML_Form
             
         foreach($tags as $t)
             IssueTag::create(array('issue_id' => $i->id, 'tag' => $t));
-        
+            
+        // Send mail
+        $mail = new MailerIssue($i, Authn_Realm::get_identity()->id() . " posted a new issue\n\n" . $i->description);
+        $mail->send();
+          
         UrlFactory::craft('issue.view', $i)->redirect();
     }
 }

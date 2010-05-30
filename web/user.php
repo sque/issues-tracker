@@ -56,5 +56,4 @@ function view_user($user)
     etag('div', $grid->render());
 }
 
-
 ?>

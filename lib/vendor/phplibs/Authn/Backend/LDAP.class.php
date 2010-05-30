@@ -44,7 +44,8 @@ class Authn_Backend_LDAP implements Authn_Backend
             'username' => false,
             'password' => false,
             'id_attribute' => 'userprincipalname',
-            'force_protocol_version' => null),
+            'force_protocol_version' => null,
+            'default_domain' => null),
         $options);
     }
 
@@ -53,6 +54,11 @@ class Authn_Backend_LDAP implements Authn_Backend
         if (($conn = ldap_connect($this->options['url'])) == false)
             return false;
 
+        // Prefix default domain to username if not there
+        if ($this->options['default_domain'])
+            if (strpos($username, '@') === false)
+                $username .= '@' . $this->options['default_domain'];
+            
         if ($this->options['force_protocol_version'])
             if (!ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, $this->options['force_protocol_version']))
                 return false;

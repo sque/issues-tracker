@@ -152,12 +152,12 @@ INSERT INTO `users` (`username`, `password`, `enabled`) values
     ('sque', sha1('123123'), 1);
 
 INSERT INTO `memberships` (`username`, `groupname`) values
-    ('root', 'admin'),
-    ('sque', 'admin'),
-    ('sque', 'dev'),
+    ('kpal', 'admin'),
+    ('ggoudr', 'admin'),
+    ('kpal', 'dev'),
     ('nsteiak', 'dev'),
     ('dlam', 'dev');
-    
+        
 INSERT INTO `projects` (`name`, `title`, `description`, `manager`, `created`) values 
     ('libscan', 'libScan', 'A framework to manage multiple scanners', 'kpal', NOW()),
     ('PolicySphere', 'Policy Sphere', 'A platform to manage security roles', 'nsteiak', NOW()),
