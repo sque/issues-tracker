@@ -43,7 +43,7 @@ function project_breadcrumb($project = null, $issue = null)
     if ($project)
         $bc->create_link($project->title, UrlFactory::craft('project.view', $project), null, array('class' => 'project'));
     if ($issue)
-        $bc->create_link($issue->title, UrlFactory::craft('issue.view', $issue), null, array('class' => 'issue'));
+        $bc->create_link("Issue #{$issue->id}", UrlFactory::craft('issue.view', $issue), null, array('class' => 'issue'));
     
     return $bc;
 }
@@ -94,6 +94,7 @@ function show_project($name)
     $sb->create_link('Create Issue', UrlFactory::craft('issue.create', $p));
         
     Layout::open('default')->get_document()->title = $p->title;
+    var_dump(Layout::open('default')->add_widget);
     etag('h1', $p->title);
     etag('div', project_breadcrumb($p)->render());
     etag('p class="description" nl_escape_on', $p->description);
@@ -156,6 +157,8 @@ function create_issue($p_name)
 
     $bc = project_breadcrumb($p);
     $bc->create_link('Create issue', UrlFactory::craft('issue.create', $p));
+    
+    etag('h1', $p->title);
     etag('div', $bc->render());
     $frm = new UI_IssueCreateForm($p);
     etag('div html_escape_off', $frm->render());

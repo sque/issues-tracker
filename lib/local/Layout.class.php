@@ -38,7 +38,7 @@ class Layout
     /**
     * To create a new layout use factory function create()
     */
-    final private function __construct()
+    final public function __construct($name)
     {
         $this->document = new Output_HTMLDoc();
         $this->default_container = $this->document->get_body();

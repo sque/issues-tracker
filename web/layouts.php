@@ -30,6 +30,10 @@ $dl->get_document()->add_favicon(surl('/favicon.png'));
 $dl->get_document()->title = Config::get('site.title');
 $dl->get_document()->add_ref_css(surl('/static/css/default.css'));
 $dl->get_document()->add_ref_js(surl('/static/js/jquery-1.4.2.min.js'));
+$dl->add_widget = function(){
+    var_dump($this);
+};
+
 etag('div id="wrapper"')->push_parent();
 etag('div id="header"',
     tag('div id="main-menu"'),
@@ -38,7 +42,11 @@ etag('div id="header"',
 etag('div id="main"',
     $def_content = tag('div id="content"'),
     $widgets = tag('div id="widgets"', 
-        tag('div class="submenu-widget" id="submenu"')
+        tag('div class="widget" id="submenu"')->add_class('submenu'),
+        tag('div class="widget"',
+            tag('span class="title"', 'Status'),
+            tag('span', 'Eimai poly gay')
+        )
     )
 );
 etag('div id="footer"', 
@@ -79,7 +87,7 @@ $dl->deactivate();
 // SubMenu for default layout
 $dl->submenu = new SmartMenu();
 $dl->submenu_enabled = false;
-$dl->submenu_title = '';
+$dl->submenu_title = 'Actions';
 $dl->events()->connect('pre-flush',
 create_function('$event', '$layout = $event->arguments["layout"];
     if ($layout->submenu_enabled)

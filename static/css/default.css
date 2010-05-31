@@ -30,9 +30,25 @@ a:hover{
 
 /* Layout */
 #main{
+
+}
+#content{
     margin: 35px 20px 0px 20px;
-    
     min-height: 450px;
+    width: 79%;
+    display: inline-block;
+}
+
+#widgets{
+    position:fixed;
+    top: 50px;
+    right: 0px;
+    width: 200px;
+    padding: 5px 12px;
+    background: #d2d8ec;
+    -moz-border-radius: 15px 0px 0px 15px;
+    -moz-box-shadow: #b4b4b4 0px 0px 8px;
+    border: 1px solid #a1a1a1;
 }
 
 
@@ -41,14 +57,9 @@ a:hover{
     height: 30px;
 }
 
-#widgets{
-    position: absolute;
-    right: 0px;
-    top: 25px;
-}
+
 
 #footer{
-	
 	text-align: right;
 	padding: 15px;
 }
@@ -79,6 +90,51 @@ a:hover{
     font-size: 9pt;
     text-transform: lowercase;
     color: #d2d8ec;
+}
+/* Widgets */
+div.widget{
+    font-size: 10pt;
+    background-color: white;
+    padding: 2px;
+    -moz-box-shadow: inset gray 0px 0px 2px;
+    -moz-border-radius: 5px;
+    border: 1px solid #f1f1f1;
+    margin: 10px auto;
+}
+
+div.widget .title{
+    display: block;
+    font-weight: bold;
+    padding: 2px 8px;
+    text-align: center;
+    font-size: 11pt;
+    margin: 0px;
+    border-bottom: 1px solid #dedede;
+    background-color: #f1f1f1;
+}
+
+.submenu ul{
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.submenu ul li{
+    margin: 0px;
+    padding: 0px;
+}
+
+.submenu ul li a{
+    display: block;
+    padding: 6px 15px;
+
+    background-color: white;
+    border-bottom: 1px dotted #dedede;
+}
+.submenu ul li a:hover{
+    background-color: #f1f1f1;
+
+
 }
 
 /* Menu */
@@ -285,7 +341,7 @@ dl dd{
 
 /* Issues view */
 .issue-view .description{
-	margin: 15px;
+	margin: 15px 0px;
 	display: block;
     border: 1px solid #dedede;
     -moz-border-radius: 8px;
@@ -294,6 +350,7 @@ dl dd{
 	width: 700px;
 	padding: 15px;
 	font-family: "Courier New";
+	min-height: 59px;
 }
 
 .issue-view > .poster, .issue-view > .date{
