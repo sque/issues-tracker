@@ -30,8 +30,26 @@ function text_sample($text, $length)
 	return substr($text, 0, $length - 3) . '...';
 }
 
-/* Backport functions */
+//! Search the matched array of a preg_match and remove duplicated named-unamed entries
+/**
+ * The entries that are unamed are left intact, those that are named the numerical entry
+ * is removed.
+ */
+function preg_matches_remove_unamed($matches)
+{   $fmatches = $matches; // Filtered array
+    $idx_count = 0;
+    foreach($matches as $idx => $match)
+    {
+        if ($idx !== $idx_count)
+        {   unset($fmatches[$idx_count]);
+            continue;
+        }
+        $idx_count++;
+    }
+    return $fmatches;
+}
 
+/* Backport functions */
 if (!function_exists('get_called_class'))
 {	
 	//! This function has been added at php 5.3

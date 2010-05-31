@@ -37,7 +37,7 @@ class MailerIssue
         if ((!($p = UserProfile::open(Authn_Realm::get_identity()->id()))) || empty($p->email))
             $extra_headers = array();
         else
-            $extra_headers = array('From' => "{$p->fullname} <{$p->email}>");
+            $extra_headers = array('From' => "{$p->email}");
         $extra_headers['X-IssuesTracker-Issue'] = $this->issue->id;
         
         $receipients = array();

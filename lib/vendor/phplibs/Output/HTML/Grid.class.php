@@ -191,7 +191,7 @@ class Output_HTML_Grid
     // Render column captions only
     private function render_column_captions()
     {	// Render Headers
-		$tr = tag('tr');
+		$tr = tag('tr class="ui-headers"');
 		foreach($this->columns as $col_id => $c)
 		{	$tr->append($th = tag('th', $c['caption']));
 		

@@ -26,14 +26,14 @@ Output_HTMLTag::$default_render_mode = 'xhtml';
 ///////////////////////////////////
 // Layout "default"
 $dl = Layout::create('default')->activate();
+$dl->get_document()->add_favicon(surl('/favicon.png'));
 $dl->get_document()->title = Config::get('site.title');
 $dl->get_document()->add_ref_css(surl('/static/css/default.css'));
 $dl->get_document()->add_ref_js(surl('/static/js/jquery-1.4.2.min.js'));
 etag('div id="wrapper"')->push_parent();
 etag('div id="header"',
     tag('div id="main-menu"'),
-    tag('div id="online-info"'),
-    tag('div id="breadcrumb"')
+    tag('div id="online-info"')
 );
 etag('div id="main"',
     $def_content = tag('div id="content"'),
@@ -89,26 +89,25 @@ create_function('$event', '$layout = $event->arguments["layout"];
         );'
 ));
 
-// BreadCrumb for default layout
-$dl->breadcrumb = new SmartMenu(array('class' => 'breadcrumb'));
-$dl->events()->connect('pre-flush',
-create_function('$event', '$layout = $event->arguments["layout"];
-        $layout->get_document()->get_body()->getElementById("breadcrumb")->append(
-            $layout->breadcrumb->render()
-        );'
-));
-
 
 ///////////////////////////////////
 // Login "default"
 $dl = Layout::create('login')->activate();
 $dl->get_document()->title = Config::get('site.title');
+$dl->get_document()->add_favicon(surl('/favicon.png'));
 $dl->get_document()->add_ref_css(surl('/static/css/login.css'));
+$dl->get_document()->add_ref_js(surl('/static/js/jquery-1.4.2.min.js'));
 $dl->get_document()->add_meta('noindex', array('name' => 'robots'));
 etag('div id="wrapper"')->push_parent();
 etag('div id="main"',
     $def_content = tag('div id="content"')
 );
+etag('script html_escape_off',
+"
+     $(document).ready(function(){
+        $('.ui-login input:visible:first').focus();
+    });
+");
 $dl->set_default_container($def_content);
 $dl->deactivate();
 ?>

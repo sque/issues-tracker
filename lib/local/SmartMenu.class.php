@@ -47,9 +47,9 @@ class SmartMenu
      * @param $display The text to be displayed.
      * @param $id A unique id for this menu entry that can be used to reference it.
      */
-    public function create_entry($display, $id = null)
+    public function create_entry($display, $id = null, $extra_attribs = array())
     {   
-        return $this->main_menu->create_entry($display, $id);
+        return $this->main_menu->create_entry($display, $id, $extra_attribs);
     }
 
     //! Create a new link entry in main menu
@@ -58,9 +58,9 @@ class SmartMenu
      * @param $link The actual link of entry.
      * @param $id A unique id for this menu entry that can be used to reference it.
      */    
-    public function create_link($display, $link, $id = null)
+    public function create_link($display, $link, $id = null, $extra_attribs = array())
     {   
-        return $this->main_menu->create_link($display, $link, $id);
+        return $this->main_menu->create_link($display, $link, $id, $extra_attribs);
     }
     
     //! Render menu and return html tree.

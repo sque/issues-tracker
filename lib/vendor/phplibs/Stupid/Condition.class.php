@@ -41,7 +41,8 @@ abstract class Stupid_Condition
 	
 	//! Called by derived classes to register them selfs
 	public static function register()
-	{	$called_class = get_called_class();	
+	{	
+	    $called_class = get_called_class();	
 		self::$evaluators[eval("return $called_class::type();")] = $called_class;
 	}
 
@@ -50,11 +51,13 @@ abstract class Stupid_Condition
 	{
 		// Check if there is an implementation of this condition type
 		if (!isset($cond_options['type']))
-		{	trigger_error("Cannot create StupidCondition without defining its \"type\"");
+		{	
+		    trigger_error("Cannot create StupidCondition without defining its \"type\"");
 			return false;
 		}
 		if (!isset(self::$evaluators[$cond_options['type']]))
-		{	trigger_error("There is no register condition evaluator that can understand " . $cond_options['type']);
+		{	
+		    trigger_error("There is no register condition evaluator that can understand " . $cond_options['type']);
 			return false;
 		}
 		
@@ -67,15 +70,20 @@ abstract class Stupid_Condition
 	
 	//! Constructor of condition
 	final public function __construct($options)
-	{	$this->options = $options;	}
+	{	
+	    $this->options = $options;
+	}
 
 	//! Params for action (Return an array with the parameters)
 	public function action_arguments()
-	{	return $this->back_references;	}
+	{
+	    return $this->back_references;
+    }
 	
 	//! Published interface for evaluation
 	public function evaluate($previous_backrefs= array())
-	{	if ( (isset($this->options['not'])) && ($this->options['not'] === true ))
+	{	
+	    if ( (isset($this->options['not'])) && ($this->options['not'] === true ))
 			return ! $this->evaluate_impl($previous_backrefs);	
 		return $this->evaluate_impl($previous_backrefs);
 	}

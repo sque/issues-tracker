@@ -50,10 +50,14 @@ require_once dirname(__FILE__) . '/lib/models.lib.php';
 // Load urls
 require_once(dirname(__FILE__) . '/lib/urls.lib.php');
 
+// Diff lib
+require_once dirname(__FILE__) . '/lib/diff.lib.php';
+
 // Database connection
-DB_Conn::connect(Config::get('db.host'), Config::get('db.user'), Config::get('db.pass'), Config::get('db.schema'), 'error_log', true);
+DB_Conn::connect(Config::get('db.host'), Config::get('db.user'), Config::get('db.pass'), Config::get('db.schema'), true);
 DB_Conn::query('SET NAMES utf8;');
 DB_Conn::query("SET time_zone='+0:00';");
+DB_Conn::events()->connect('error',function($e){ error_log(var_export($e, true)); });
 
 // PHP TimeZone
 date_default_timezone_set(Config::get('site.timezone'));
@@ -68,7 +72,7 @@ if (!isset($_SESSION['initialized']))
 }
 
 // Mailer
-Mailer::set_mail_instance(Mail::factory('mock'));
+Mailer::set_mail_instance(Mail::factory('mock', array('sendmail_path' => '/usr/sbin/sendmail')));
 Mailer::set_default_headers(array('From' => Config::get('issues.mail_from')));
 
 // Setup authentication

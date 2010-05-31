@@ -1,27 +1,167 @@
 body {
-	font: 12pt Arial;
-	margin: 10px 50px;
-	color: #344534;
+	font: 11pt Arial;
+	color: #454544;
+    background-color: #f1f1f1;
+    margin: 0px;
+    padding: 0px;
 }
 
-a {
-	text-decoration: none;
-	color: #345034;
+/*h1{
+    text-shadow: -1px -1px white, 1px 1px #333;
+	color: #d5d5d5;
+    margin: 5px 5px 15px 0px;
+}
+h2{
+	color: #8a8a8a;
+}*/
+
+h1,h2{
+	color: #656565;
+}
+a{
+    text-decoration: none;
+    color: #4c5847;
+    font-weight: bold;
+}
+
+a:hover{
+    color: #75b05d;
+}
+
+/* Layout */
+#main{
+    margin: 35px 20px 0px 20px;
+    
+    min-height: 450px;
+}
+
+
+#header{
+
+    height: 30px;
+}
+
+#widgets{
+    position: absolute;
+    right: 0px;
+    top: 25px;
+}
+
+#footer{
+	
+	text-align: right;
+	padding: 15px;
+}
+/* Online info */
+
+#online-info
+{
+    background: #7b99d5;
+    height: 20px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 5px;
+    border-bottom: 1px solid #7b99d5;
+    border-right: 1px solid #7b99d5;
+    -moz-border-radius: 0px 0px 15px 0px;
+    -moz-box-shadow: gray 0px 0px 8px;
+}
+
+#online-info a{
+    color: white;
+    font-weight: bold;
+    font-size: 11pt;
+    padding: 0px 5px;
+}
+
+#online-info a.logout{
+    font-size: 9pt;
+    text-transform: lowercase;
+    color: #d2d8ec;
+}
+
+/* Menu */
+#main-menu{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: #7b99d5;
+    border-bottom: 1px solid #7b99d5;
+    border-left: 1px solid #7b99d5;
+    -moz-border-radius: 0px 0px 0px 15px;
+    -moz-box-shadow: gray 0px 0px 8px;
+    /*height: 10px;*/
+}
+
+#main-menu:hover{
+    height: auto;
+}
+
+#main-menu:hover ul.menu{
+    visibility: visible;
+}
+
+ul.menu {
+	list-style-type: none;
+	display: block;
+	padding: 0px;
+	margin: 0px; padding: 0px;
+	/*visibility: hidden;*/
+}
+
+ul.menu li {
+	display: inline;
+}
+
+ul.menu li a {
+	display: inline-block;
+	padding: 8px 20px;
 	font-weight: bold;
+	color: white;
 }
 
-a:hover {
-	color: #45ae69;
+ul.menu li:hover a {
+
 }
 
-.error {
-	color: red;
+ul.menu li.selected a {
+}
+
+/* breadcrumb */
+
+ul.breadcrumb {
+	list-style-type: none;
+	display: block;
+	padding: 0px;
+    margin: 0px;
+}
+
+ul.breadcrumb li {
+	display: inline;
+}
+
+ul.breadcrumb li a {
+	display: inline-block;
+	font-weight: bold;Konstantinos PaliourasLogout
+	color: black;
+	
+	}
+ul.breadcrumb li:not(:last-child ) a{
+	background: transparent url('images/right_arrorw.jpg') no-repeat right 58%;
+	padding: 0px 14px 0px 0px;
+	margin-right: 6px;
 }
 
 /* ui-form */
 div.ui-form {
+	display: block;
+    border: 1px solid #dedede;
+    -moz-border-radius: 8px;
+	-moz-box-shadow: gray 2px 2px 5px;
+    background-color: white;
+	width: 670px;
 	padding: 30px;
-	border: 1px solid #45ae69;
 }
 
 div.ui-form .title {
@@ -36,12 +176,12 @@ div.ui-form dt {
 }
 
 div.ui-form label {
-	color: black;
 	display: block;
-	font-size: 95%;
+	font-size: 11pt;
+	margin: 5px 0px;
 }
 
-div.ui-form dt input {
+div.ui-form dt input, div.ui-form dt textarea {
 	width: 95%;
 }
 
@@ -51,10 +191,16 @@ div.ui-form dt input[type=checkbox]{
 
 div.ui-form .buttons {
 	text-align: right;
+	padding-right: 20px;
 }
 
 div.ui-form .buttons input {
 	margin-left: 10px;
+}
+
+div.ui-form .ui-form-error, div.ui-form .ui-form-hint{
+    display: block;
+    font-size: 10pt;
 }
 
 div.ui-form .ui-form-error {
@@ -63,76 +209,227 @@ div.ui-form .ui-form-error {
 	font-weight: bold;
 }
 
-/* ui-form ui-login */
-div.ui-form.ui-login{
-	width: 200px;
+div.ui-form .ui-form-hint {
+    color: gray;
 }
 
-/* ui-form ui-installation */
-div.ui-form.ui-installation{
-	width: 500px;
-}
-
-/* code */
-.code {
-	background-color: #121212;
-	color: green;
-	font-weight: bold;
+/* Dictionary list */
+dl{
+    border: 1px solid #dedede;
+    -moz-border-radius: 8px;
+	-moz-box-shadow: gray 2px 2px 5px;
+    background-color: white;
+	width: 470px;
 	padding: 15px;
-	font-size: 90%;
 }
 
-/* Title */
-h1 {
-	color: #45ae69;
+dl dt{
+	font-size: 10pt;
 }
-
-h1.error {
-	color: #ae4569;
-}
-
-/* Menu */
-ul.menu {
-	list-style-type: none;
-	display: block;
-	padding: 0px;
-	height: 40px;
-}
-
-ul.menu li {
-	display: inline;
-}
-
-ul.menu li a {
-	display: inline-block;
-	padding: 10px;
-	margin-right: 10px;
-	background-color: #de6565;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	color: white;
+dl dd{
 	font-weight: bold;
-	text-decoration: none;
+	margin-left: 20px;
+	margin-bottom: 5px;
 }
 
-ul.menu li:hover a {
-	text-shadow: 0px 0px 5px #ffdede;
+/* Grid */
+.ui-grid-list
+{
+    border: 1px solid #dedede;
+    -moz-border-radius: 8px;
+	-moz-box-shadow: gray 2px 2px 5px;
+    background-color: white;
+    padding: 5px;
+    border-spacing:0px;
+	min-width: 500px;
 }
 
-ul.menu li.selected a {
-	background-color: #ff4550;
-	text-shadow: 0px 0px 1px #983434;
-	-moz-box-shadow: 1px 1px 3px #ff4550;
-	-webkit-box-shadow: 1px 1px 3px #ff4550;
+.ui-grid-list .ui-headers
+{
+    background: #bfb5a0 !important;
+    color: white;
+	border-bottom: 5px solid transparent;
 }
 
-/* Container */
-div#content {
-	min-height: 450px;
+.ui-grid-list th
+{
+    padding: 5px 10px;
+
+	border: 2px solid white;
+	border-bottom-width: 10px;
+	margin: 2px 5px;    
 }
 
-/* Footer */
-div#footer {
-	text-align: right;
-	color: #969696;
+.ui-grid-list tr.ui-even{
+    background-color: #f3f3f3;
+
 }
+
+.ui-grid-list tr:hover{
+    background-color: #f0f0e5;
+}
+
+.ui-grid-list td{
+    vertical-align: top;
+	padding: 4px 5px;
+}
+
+.ui-grid-list p{
+    margin: 2px 0px;
+    font-style: italic;
+}
+
+.ui-grid-list .status{
+    text-transform: capitalize;
+}
+
+/* Issues view */
+.issue-view .description{
+	margin: 15px;
+	display: block;
+    border: 1px solid #dedede;
+    -moz-border-radius: 8px;
+	-moz-box-shadow: gray 2px 2px 5px;
+    background-color: white;
+	width: 700px;
+	padding: 15px;
+	font-family: "Courier New";
+}
+
+.issue-view > .poster, .issue-view > .date{
+    display: inline-block;
+    margin-left: 15px;
+}
+
+ul.tags{
+    margin: 15px 0px 0px 15px;
+    padding: 0px;
+    list-style: none;
+    display: block;
+}
+
+ul.tags li{
+    margin: 0px; 
+    display: inline-block;
+    font-weight: bold;
+    padding: 0px 10px 0px 18px;
+}
+    
+ul.actions{
+    margin: 0px; padding: 0px;
+    list-style-type: none;
+}
+
+.ui-form.issue-post{
+    margin-top: 20px;
+}
+
+/* Actions */
+ul.actions li{
+    display: block;
+    margin: 15px 0px; padding: 0px;
+    border: 1px solid #dedede;
+    -moz-border-radius: 8px;
+	-moz-box-shadow: gray 2px 2px 5px;
+    background-color: #dedede;
+	width: 700px;
+	padding: 15px;
+	position: relative;
+}
+
+ul.actions li.comment{
+   background-color: white;
+}
+
+ul.actions li:target{
+    -moz-box-shadow: #72a4d2 0px 0px 5px 2px;
+    border-color: #629ed7;
+}
+
+ul.actions li .anchor{
+    display: block;
+    font-size: 13pt;
+    padding: 0px 0px 5px 0px;
+    border-bottom: 1px solid #d1d1d1;
+    margin-bottom: 5px;
+    text-align: right;
+}
+
+ul.actions li .actor{
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+
+ul.actions li .date{
+    position: absolute;
+    right: 55px;
+    top: 17px;
+    font-size: 10pt;
+}
+/* Comments */
+ul.actions li .post{
+	font-family: "Courier New";
+}
+
+ul.actions li .attachment{
+    display: block;
+    margin-top: 10px;
+    background: transparent url('images/download-16.png') no-repeat left center;
+    padding-left: 18px;
+}
+
+ul.actions li .title{
+    margin: 5px 0px 5px 0px;
+    display: block;
+    font-weight: bold;
+    font-size: 11pt;
+    color: #646464;
+}
+
+/* Details changes */
+ul.actions li.details_change .diff{
+    font-size: 10pt;
+    margin-left: 18px;
+}
+
+
+/* Status change */
+ul.actions li.status_change .status{
+    text-transform: capitalize;
+}
+ul.actions li.status_change .old{
+    padding-left: 30px;
+}
+
+/* General */
+.status.new{    color: #e3780f; }
+.status.accepted{    color: red; }
+.status.invalid{    color: gray; }
+.status.fixed{  color: green;}
+
+.user{
+    background: transparent url('images/user-16.png') no-repeat left center;
+    padding-left: 18px !important;
+}
+
+.tag{
+    background: transparent url('images/tag-16.png') no-repeat left center;
+    padding-left: 18px !important;
+}
+
+.issue{
+    background: transparent url('images/issue-16.png') no-repeat left center;
+    padding-left: 18px !important;
+}
+
+.project{
+    background: transparent url('images/project-16.png') no-repeat left center;
+    padding-left: 18px !important;
+}
+
+.diff   {   font-family: "Courier New";  }
+.diff *{    text-decoration: none;   }
+.diff del{  background-color: rgba(255,0,0,0.2);    text-decoration: line-through;  }
+.diff ins{    background-color: rgba(0,255,0,0.2);  }
+

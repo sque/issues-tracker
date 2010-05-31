@@ -19,6 +19,7 @@
  *  
  */
 
+
 //! Create an absolute url based on root file
 function url($relative)
 {

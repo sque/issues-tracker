@@ -21,6 +21,7 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
                 'attachment' => array('display' => 'Attachment', 'type' => 'file')
             ),
             array(
+                'css' => array('ui-form', 'issue-post'),
                 'buttons' =>
                     array('Post' => array())
             )
@@ -61,6 +62,7 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
             $f['value'] = $this->issue->status;
         }
 
+        UrlFactory::craft('issueaction.view', $action)->redirect();
     }
 }
 

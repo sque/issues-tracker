@@ -14,7 +14,8 @@ function view_user($user)
     Layout::open('default')->activate();
     if ($p = UserProfile::open($user))
     {
-        etag('h1', 'User: ', tag('em', $p->fullname));
+        Layout::open('default')->get_document()->title = $p->fullname;
+        etag('h1', $p->fullname);
         etag('dl',
             tag('dt', 'Nickname:',
               tag('dd', $p->username)),
@@ -25,13 +26,17 @@ function view_user($user)
     else
         etag('h1', $user);
     
-    // TODO List
-    etag('h2', 'Assigned issues');
-    $grid = new UI_IssuesGrid(Issue::open_query()
+    // Assigned issues List
+    $issues = Issue::open_query()
         ->where('assignee = ?')
         ->order_by('created', 'DESC')
-        ->execute($user));
-    etag('div', $grid->render());
+        ->execute($user);
+    if (!empty($issues))
+    {
+        etag('h2', 'Assigned issues');
+        $grid = new UI_IssuesGrid($issues);
+        etag('div', $grid->render());
+    }
     
     // Show all related issues
     $issues = Issue::open_query()
@@ -51,9 +56,12 @@ function view_user($user)
         $f_issues[$i->id] = $i;
     $f_issues = array_values($f_issues);
 
-    etag('h2', 'Involved issues');
-    $grid = new UI_IssuesGrid($f_issues);
-    etag('div', $grid->render());
+    if (!empty($f_issues))
+    {
+        etag('h2', 'Watch list');
+        $grid = new UI_IssuesGrid($f_issues);
+        etag('div', $grid->render());
+    }
 }
 
 ?>

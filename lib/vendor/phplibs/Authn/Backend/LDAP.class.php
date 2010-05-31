@@ -63,7 +63,7 @@ class Authn_Backend_LDAP implements Authn_Backend
             if (!ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, $this->options['force_protocol_version']))
                 return false;
 
-        if (!@ldap_bind($conn, $username, $password))
+        if (! @ldap_bind($conn, $username, $password))
             return false;
             
         //! Fetch the user object

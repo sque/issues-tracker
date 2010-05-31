@@ -94,10 +94,11 @@ class SmartMenuEntry
      * @param $display The text to be displayed.
      * @param $id A unique id for this menu entry that can be used to reference it.
      */
-    public function create_entry($display, $id = null)
+    public function create_entry($display, $id = null, $extra_attribs = array())
     {   
         $entry = new SmartMenuEntry();
         $entry->set_display($display);
+        $entry->set_extra_attributes($extra_attribs);
         if ($id !== null)
             $this->childs[$id] = $entry;
         else
@@ -112,9 +113,9 @@ class SmartMenuEntry
      * @param $link The actual link of entry.
      * @param $id A unique id for this menu entry that can be used to reference it.
      */    
-    public function create_link($display, $link, $id = null)
+    public function create_link($display, $link, $id = null, $extra_attribs = array())
     {   
-        $entry = $this->create_entry($display, $id);
+        $entry = $this->create_entry($display, $id, $extra_attribs);
         $entry->set_type('link');
         $entry->set_link($link);
         return $entry;
@@ -180,6 +181,18 @@ class SmartMenuEntry
     public function get_autoselect_mode()
     {
         return $this->autoselect_mode;
+    }
+    
+    //! Set extra attributes
+    public function set_extra_attributes($attribs)
+    {
+        $this->extra_attr = $attribs;
+    }
+    
+    //! Get extra attributes
+    public function get_extra_attributes($attribs)
+    {
+        return $this->extra_attr;
     }
 }
 

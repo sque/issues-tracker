@@ -30,10 +30,10 @@ class UI_LoginForm extends Output_HTML_Form
 			'login-user' => array('display' => 'Username'),
 			'login-pass' => array('display' => 'Password', 'type' => 'password'),
         ),
-        array('title' => Config::get('site.title') . ' Login', 'css' => array('ui-form','ui-login'),
+        array('title' => 'Issues Tracker',
+            'css' => array('ui-form','ui-login'),
 		    'buttons' => array(
 		        'login' => array('display' =>'Login'),
-		        'back' => array('display' => 'Back', 'type' => 'button', 'onclick' => "window.location='{$redirect_url}'")
                 )
             )
         );

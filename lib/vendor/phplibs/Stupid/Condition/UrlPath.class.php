@@ -88,7 +88,7 @@ class Stupid_Condition_UrlPath extends Stupid_Condition
 				return false;
 				
 			// Push back references
-			if (count($matches) > 1)
+            if (count($matches) > 1)
 				$this->back_references = array_merge($this->back_references, array_slice($matches, 1));
 		}
 		
@@ -123,6 +123,7 @@ class Stupid_Condition_UrlPath extends Stupid_Condition
 					return false;
 				
 				// Push back references
+				$matches = preg_matches_remove_unamed($matches);
 				if (count($matches) > 1)
 					$this->back_references = array_merge($this->back_references, array_slice($matches, 1));
 			}

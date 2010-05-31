@@ -186,6 +186,8 @@ class Stupid
 	 * @return NULL
 	 */
 	public static function set_default_action($func)
-	{	self::$def_action = $func;	}
+	{	
+	    self::$def_action = $func;
+    }
 }
 ?>

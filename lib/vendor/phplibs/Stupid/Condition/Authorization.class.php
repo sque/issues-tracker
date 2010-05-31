@@ -57,7 +57,6 @@ class Stupid_Condition_Authorization extends Stupid_Condition
 		    'instance' => null,
 		    'backref_instance' => false
 		);
-		
 		$options = array_merge($defcond, $this->options);
 		
 		// Check mandatory options
@@ -71,8 +70,9 @@ class Stupid_Condition_Authorization extends Stupid_Condition
                     'Stupid_Condition[Authz] there is no backref with index key "' . $options['backref_instance'] . '"!');
                     
             $options['instance'] = $previous_backrefs[$options['backref_instance']];
-        }
-        
+        }   $depth;
+        		//var_dump(Authz::get_resource(array($options['resource'], $options['instance']))->effective_ace(Authn_Realm::get_identity()->id(), 'create', Authz::get_role_feeder(), $depth));
+        		//var_dump(Authz::get_role_feeder());
         return Authz::is_allowed(array($options['resource'], $options['instance']), $options['action']);
 	}
 }
