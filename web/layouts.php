@@ -23,84 +23,14 @@
 // Enable XHTML Mode
 Output_HTMLTag::$default_render_mode = 'xhtml';
 
-///////////////////////////////////
 // Layout "default"
-$dl = Layout::create('default')->activate();
-$dl->get_document()->add_favicon(surl('/favicon.png'));
-$dl->get_document()->title = Config::get('site.title');
-$dl->get_document()->add_ref_css(surl('/static/css/default.css'));
-$dl->get_document()->add_ref_js(surl('/static/js/jquery-1.4.2.min.js'));
-$dl->add_widget = function(){
-    var_dump($this);
-};
-
-etag('div id="wrapper"')->push_parent();
-etag('div id="header"',
-    tag('div id="main-menu"'),
-    tag('div id="online-info"')
-);
-etag('div id="main"',
-    $def_content = tag('div id="content"'),
-    $widgets = tag('div id="widgets"', 
-        tag('div class="widget" id="submenu"')->add_class('submenu'),
-        tag('div class="widget"',
-            tag('span class="title"', 'Status'),
-            tag('span', 'Eimai poly gay')
-        )
-    )
-);
-etag('div id="footer"', 
-    tag('a', 'PHPlibs', array('href' => 'http://phplibs.kmfa.net')),' skeleton');
-if (Config::get('site.google_analytics'))
-etag('script type="text/javascript" html_escape_off',
-" var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '" . Config::get('site.google_analytics') ."']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();");
-$dl->set_default_container($def_content);
-
-// Online information
-$online_info = $dl->get_document()->get_body()->getElementById("online-info");
-if (Authn_Realm::has_identity())
-{
-    tag('span class="user-info"',
-        tag_user(Authn_Realm::get_identity()->id()),
-        tag('a class="logout"', array('href' => ($_SERVER['REQUEST_URI'] .'/+logout')), 'Logout')
-    )->appendTo($online_info);
-}
-
-// Menu for default layout
-$dl->menu = new SmartMenu(array('class' => 'menu'));
-$dl->events()->connect('pre-flush',
-create_function('$event', '$layout = $event->arguments["layout"];
-    $layout->get_document()->get_body()->getElementById("main-menu")->append($layout->menu->render());'));
-$dl->menu->create_link('Home', url('/'))->set_autoselect_mode('equal');
-$dl->menu->create_link('Projects', url('/p'));
-$dl->menu->create_link('Branches', url('/branch'));
-$dl->deactivate();
-
-// SubMenu for default layout
-$dl->submenu = new SmartMenu();
-$dl->submenu_enabled = false;
-$dl->submenu_title = 'Actions';
-$dl->events()->connect('pre-flush',
-create_function('$event', '$layout = $event->arguments["layout"];
-    if ($layout->submenu_enabled)
-        $layout->get_document()->get_body()->getElementById("submenu")->append(
-            tag(\'span class="title"\', $layout->submenu_title),
-            $layout->submenu->render()
-        );'
-));
+$dl = new Layout_Default('default');
+$dl->activate();
 
 
-///////////////////////////////////
 // Login "default"
-$dl = Layout::create('login')->activate();
+$dl = new Layout('login');
+$dl->activate();
 $dl->get_document()->title = Config::get('site.title');
 $dl->get_document()->add_favicon(surl('/favicon.png'));
 $dl->get_document()->add_ref_css(surl('/static/css/login.css'));

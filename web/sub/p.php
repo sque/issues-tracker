@@ -50,9 +50,7 @@ function project_breadcrumb($project = null, $issue = null)
 
 function get_submenu()
 {
-    $dl = Layout::open('default');
-    $dl->submenu_enabled = true;
-    return $dl->submenu;
+    return Layout::open('default')->get_submenu();
 }
 
 function show_tag($pname, $tagname)
@@ -94,11 +92,9 @@ function show_project($name)
     $sb->create_link('Create Issue', UrlFactory::craft('issue.create', $p));
         
     Layout::open('default')->get_document()->title = $p->title;
-    var_dump(Layout::open('default')->add_widget);
     etag('h1', $p->title);
     etag('div', project_breadcrumb($p)->render());
     etag('p class="description" nl_escape_on', $p->description);
-
 
     $issues = $p->issues
         ->subquery()
@@ -111,6 +107,19 @@ function show_project($name)
         $grid = new UI_IssuesGrid($issues, array('project'));
         etag('div', $grid->render());
     }
+    
+    $tag_counters = $p->tag_counters->all();
+    if (!empty($tag_counters))
+    {
+        $ul = tag('div class="tag-cloud"');
+        foreach($tag_counters as $counter)
+            UrlFactory::craft('project.tag', $p, $counter->tag)
+                ->anchor($counter->tag)
+                ->attr('style', 'font-size: ' . ($counter->percent + 1.0) . 'em;')
+                ->appendTo($ul);
+        Layout::open('default')->add_widget('Tags', $ul, $prepend = true);
+    }
+
 }
 
 function create_project()

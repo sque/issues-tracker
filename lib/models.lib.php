@@ -11,6 +11,56 @@ class Project extends DB_Record
         'created' => array('type' => 'datetime'),
         'manager'
     );
+    
+    public function update_counters()
+    {
+        // Delete previous
+        ProjectTagCount::raw_query()
+            ->delete()
+            ->where('project_name = ?')
+            ->execute($this->name);
+            
+        $tags =IssueTag::open_query()
+            ->left_join('Issue', 'issue_id','id')
+            ->where('l.project_name = ?')
+            ->execute($this->name);
+
+        $max = 0;
+        $tags_counter = array();
+        foreach($tags as $t)
+        {   if (!isset($tags_counter[$t->tag]))
+                $tags_counter[$t->tag] = 0;
+            $tags_counter[$t->tag] += 1;
+            
+            if ($tags_counter[$t->tag] > $max)
+                $max = $tags_counter[$t->tag];
+        }
+        $min = $max;
+        foreach($tags_counter as $count)
+            if ($count < $min)
+                $min = $count;
+        $breadth = $max - $min;
+        // Save to database
+        foreach($tags_counter as $tag => $count)
+            ProjectTagCount::create(array(
+                'project_name' => $this->name,
+                'tag' => $tag,
+                'count' => $count,
+                'percent' => ($breadth?($count - $min) / $breadth:1.0)
+            ));
+    }
+}
+
+class ProjectTagCount extends DB_Record
+{
+    public static $table = 'project_tag_count';
+
+    public static $fields = array(
+        'project_name' => array('pk' => true, 'fk' => 'Project'),
+        'tag' => array('pk' => true),
+        'count',
+        'percent'
+    );
 }
 
 class Membership extends DB_Record
@@ -219,6 +269,10 @@ class Issue extends DB_Record
         // Add tag
         $create_tag = array('issue_id' => $this->id, 'tag' => $tag);
         IssueTag::create($create_tag);
+        
+        // Update stats
+        $this->project->update_counters();
+        
         return $action;
     }
 
@@ -241,6 +295,10 @@ class Issue extends DB_Record
         // Add tag
         $t = IssueTag::open(array('issue_id' => $this->id, 'tag' => $tag));
         $t->delete();
+        
+        // Update stats
+        $this->project->update_counters();
+
         return $action;
     }
     
@@ -367,6 +425,7 @@ class IssueActionDetailsChange extends DB_Record
 }
 
 Project::one_to_many('Issue', 'project', 'issues');
+Project::one_to_many('ProjectTagCount', 'project', 'tag_counters');
 Issue::one_to_many('IssueAction', 'issue', 'actions');
 Issue::one_to_many('IssueTag', 'issue', 'tags');
 Attachment::one_to_many('IssueActionComment', 'attachment', 'issues');

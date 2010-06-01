@@ -58,6 +58,9 @@ DB_Conn::connect(Config::get('db.host'), Config::get('db.user'), Config::get('db
 DB_Conn::query('SET NAMES utf8;');
 DB_Conn::query("SET time_zone='+0:00';");
 DB_Conn::events()->connect('error',function($e){ error_log(var_export($e, true)); });
+$dbcache = new Cache_Apc('issue-tracker');
+DB_Model::set_model_cache($dbcache);
+DB_ModelQueryCache::set_global_query_cache($dbcache);
 
 // PHP TimeZone
 date_default_timezone_set(Config::get('site.timezone'));

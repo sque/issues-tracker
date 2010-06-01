@@ -26,7 +26,8 @@
  */
 require_once 'bootstrap.php';
 
-$dl = Layout::create('debug')->activate();
+$dl = new Layout('debug');
+$dl->activate();
 $dl->get_document()->title = 'Error';
 $dl->get_document()->add_ref_css(surl('/static/css/debug.css'));
 $dl->deactivate();

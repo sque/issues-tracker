@@ -92,6 +92,16 @@ CREATE TABLE `issue_tags` (
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
+-- Project Tags Count
+CREATE TABLE `project_tag_count` (
+    `project_name` varchar(255) not null,
+    `tag` varchar(50) not null,
+    `count` integer default 0,
+    `percent` float default 0,
+    PRIMARY KEY(`project_name`, `tag`)
+)ENGINE=InnoDB
+DEFAULT CHARSET='UTF8';
+
 -- Issue actions
 CREATE TABLE `issue_actions` (
     `id` integer auto_increment not null,

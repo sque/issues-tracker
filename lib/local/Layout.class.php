@@ -34,18 +34,29 @@ class Layout
     //! Event dispatcher
     private $events;
 
-    //! Private constructor of new layout
+    //! Create a new persistent layout with unique name
     /**
     * To create a new layout use factory function create()
     */
     final public function __construct($name)
     {
+        // Check if there is already a layout with that name
+        if (self::open($name) !== null)
+            throw new RuntimeException("There is already a layout with name {$name}");
+
+        // Register myself
+        self::$instances[$name] = $this;
+        
         $this->document = new Output_HTMLDoc();
         $this->default_container = $this->document->get_body();
         $this->events = new EventDispatcher(array(
             'pre-flush',
             'post-flush'
             ));
+            
+        // Call initialize method
+        if (method_exists($this, '__init_layout'))
+            $this->__init_layout();
     }
 
     //! Get the event dispatcher for this layout
@@ -133,20 +144,11 @@ class Layout
             $this->activate();
         }
         else
-        $this->default_container = $container;
+            $this->default_container = $container;
     }
 
     //! Internal holder of instances
     static private $instances;
-
-    //! Create a new instance of layout
-    static public function create($name)
-    {
-        if (isset(self::$instances[$name]))
-            return self::$instances[$name];
-
-        return self::$instances[$name] = new Layout();
-    }
 
     //! Open an already opened instance
     static public function open($name)

@@ -459,6 +459,11 @@ ul.actions li.status_change .old{
     padding-left: 30px;
 }
 
+/* Tag cloud */
+.tag-cloud a:after{
+    content: ' ';
+
+}
 /* General */
 .status.new{    color: #e3780f; }
 .status.accepted{    color: red; }
