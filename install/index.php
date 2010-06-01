@@ -20,7 +20,8 @@ $fn_config = dirname(__FILE__) . '/../config.inc.php';
 $fn_htaccess = dirname(__FILE__) . '/../.htaccess';
 
 
-$dl = Layout::create('debug')->activate();
+$dl = new Layout('debug');
+$dl->activate();
 $dl->get_document()->add_ref_css(surl('/../static/css/debug.css'));
 $dl->get_document()->title = 'Installation';
 

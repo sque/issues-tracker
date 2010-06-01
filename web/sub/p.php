@@ -194,13 +194,24 @@ function show_issue($p_name, $issue_id)
     etag('div class="issue-view"',
         tag('h1', $i->title),
         project_breadcrumb($p, $i)->render(),
-        tag('span class="date"', date_exformat($i->created)->smart_details()),
-        tag_user($i->poster, 'poster'),
-        ($i->assignee == ''?'None':tag_user($i->assignee, 'assignee')),
-        tag('span class="description" nl_escape_on', $i->description),
-        $ul_tags = tag('ul class="tags"'),
+        tag('div class="header"',
+            tag('span class="description" nl_escape_on', $i->description),
+            tag('span class="date"', date_exformat($i->created)->smart_details()),
+            tag_user($i->poster, 'poster'),
+            $ul_tags = tag('ul class="tags"')
+        ),
         $ul_actions = tag('ul class="actions"')
     );
+    Layout::open('default')->add_widget('Issue status',
+        tag('div class="issue-status"',
+            tag('dt', 'Status:'),
+            tag('dd class="status"', $i->status)->add_class($i->status),
+            tag('dt', 'Posted at:'),
+            tag('dd class="poster"', date_exformat($i->created)->smart_details()),
+            tag('dt', 'Assigned to:'),
+            tag('dd class="assignee"', ($i->assignee?tag_user($i->assignee):'Unassigned'))
+
+        ));
 
     // Tags
     foreach($i->tags->all() as $t)
@@ -261,6 +272,29 @@ function show_issue($p_name, $issue_id)
                     tag('span class="title_change"',
                         tag('span class="title"', 'Issue description changed:'),
                         tag('div', htmlDiff($change->old_description, $change->new_description))
+                ));
+            if ($change->old_assignee != $change->new_assignee)
+                $li->append(
+                    tag('span class="assignee_change"',
+                        tag('span class="title"', 'Assignee changed:'),
+                        tag('span class="old"', 
+                        ($change->old_assignee?tag_user($change->old_assignee):'Unassigned')),
+                        ' → ',
+                        tag('span class="new"',
+                        ($change->new_assignee?tag_user($change->new_assignee):'Unassigned'))
+                    
+                ));
+            if (!empty($change->removed_tags))
+                $li->append(
+                    tag('span class="tag_change"',
+                        tag('span class="title"', 'Removed tags:'),
+                        tag('span class="tags"', implode(', ', explode(' ', $change->removed_tags)))
+                ));
+            if (!empty($change->added_tags))
+                $li->append(
+                    tag('span class="tag_change"',
+                        tag('span class="title"', 'Added tags:'),
+                        tag('span class="tags"', implode(', ', explode(' ', $change->added_tags)))
                 ));
         }
     }

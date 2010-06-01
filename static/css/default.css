@@ -62,6 +62,7 @@ a:hover{
 #footer{
 	text-align: right;
 	padding: 15px;
+	font-size: 0.8em;
 }
 /* Online info */
 
@@ -113,6 +114,25 @@ div.widget .title{
     background-color: #f1f1f1;
 }
 
+/* Issue status widget */
+.widget .issue-status{
+    padding: 5px 5px 0px 5px;
+}
+
+.widget .issue-status dt{
+    margin-bottom: 2px;
+}
+
+.widget .issue-status dd{
+    font-size: 1.15em;
+    font-weight: bold;
+    margin-left: 15px;
+    margin-bottom: 8px;
+}
+
+.widget .issue-status .status{
+    text-transform: capitalize;
+}
 .submenu ul{
     list-style-type: none;
     margin: 0px;
@@ -350,6 +370,9 @@ dl dd{
 }
 
 /* Issues view */
+.issue-view .header{
+    width: 732px;
+}
 .issue-view .description{
 	margin: 15px 0px;
 	display: block;
@@ -358,14 +381,19 @@ dl dd{
 	-moz-box-shadow: gray 2px 2px 5px;
     background-color: white;
 	width: 700px;
-	padding: 15px;
+	padding: 15px 15px 20px 15px;
 	font-family: "Courier New";
 	min-height: 59px;
 }
 
-.issue-view > .poster, .issue-view > .date{
+.issue-view .header .poster, .issue-view  .header .date{
+    font-size: 0.90em;
     display: inline-block;
-    margin-left: 15px;
+    margin-left: 8px;
+    float: right;
+    position: relative;
+    top: -40px;
+    left: -15px;
 }
 
 ul.tags{
@@ -450,16 +478,26 @@ ul.actions li .title{
     margin: 5px 0px 5px 0px;
     display: block;
     font-weight: bold;
-    font-size: 11pt;
+    font-size: 10pt;
     color: #646464;
 }
 
 /* Details changes */
+ul.actions li.details_change .title{
+
+}
 ul.actions li.details_change .diff{
-    font-size: 10pt;
+    font-size: 9pt;
     margin-left: 18px;
 }
 
+ul.actions li.details_change .tags{
+    margin-left: 18px;
+}
+
+ul.actions li.details_change .old{
+    margin-left: 18px;
+}
 
 /* Status change */
 ul.actions li.status_change .status{

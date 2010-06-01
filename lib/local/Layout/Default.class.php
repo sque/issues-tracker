@@ -95,7 +95,13 @@ class Layout_Default extends Layout
             tag('div id="content"')
         );
         etag('div id="footer"', 
-            tag('a', 'PHPlibs', array('href' => 'http://phplibs.kmfa.net')),' skeleton');
+            tag('div', 'all rights reserved to ',
+                tag('a', 'Encode Group', array('target' => '_blank', 'href' => 'http://www.encodegroup.com'))
+            ),
+            tag('div', 'made with ',
+                tag('a', 'PHPlibs', array('target' => '_blank', 'href' => 'http://phplibs.kmfa.net'))
+            )
+        );
         if (Config::get('site.google_analytics'))
             etag('script type="text/javascript" html_escape_off',
             " var _gaq = _gaq || [];

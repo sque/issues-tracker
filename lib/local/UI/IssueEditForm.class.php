@@ -46,26 +46,15 @@ class UI_IssueEditForm extends Output_HTML_Form
     
     public function on_valid($values)
     {
-        // Detail changes
-        $this->issue->action_edit(Authn_Realm::get_identity()->id(),
-            new DateTime(), $values['title'], $values['description']);        
-        
-        // Assigne changes
-        $this->issue->assignee = $values['assignee'];
-        $this->issue->save();
-
-        // Tag Changes
+        // Calculate tags
         $tags = array_filter(array_unique(explode(' ', $values['tags'])),
             function($el){  if (!empty($el))    return true;    });
-        
         $added_tags = array_diff($tags, $this->issue->tag_names());
         $removed_tags = array_diff($this->issue->tag_names(), $tags);
         
-        foreach($added_tags as $t)
-            $this->issue->action_add_tag(Authn_Realm::get_identity()->id(), new DateTime(), $t);
-
-        foreach($removed_tags as $t)
-            $this->issue->action_remove_tag(Authn_Realm::get_identity()->id(), new DateTime(), $t);
+        // Change issue
+        $this->issue->action_edit(Authn_Realm::get_identity()->id(),
+            new DateTime(), $values['title'], $values['description'], $removed_tags, $added_tags, $values['assignee']);        
         
         UrlFactory::craft('issue.view', $this->issue)->redirect();
     }

@@ -1,11 +1,16 @@
 <?php
 
 Stupid::add_rule('view_home_branch',
-    array('type' => 'url_path', 'chunk[2]' => '/^~(.+)$/'));
-    
+    array('type' => 'url_path', 'chunk[2]' => '/^~(.+)$/'),
+    array('type' => 'authz', 'resource' => 'branch', 'instance' => 'private', 'action' => 'view'));
+
+Stupid::add_rule('view_pub_branch',
+    array('type' => 'url_path', 'chunk[2]' => '/^pub$/'),
+    array('type' => 'authz', 'resource' => 'branch', 'instance' => 'pub', 'action' => 'view'));
+
 Stupid::add_rule('direct_proxy_url',
     array('type' => 'url_path', 'chunk[2]' => '/^static$/'));
-    
+
 Stupid::set_default_action('branch_explorer');
 Stupid::chain_reaction();
 
@@ -15,6 +20,12 @@ function view_home_branch($user)
         not_found();
 
     direct_proxy_url();
+}
+
+function view_pub_branch()
+{
+    $proxy = new ReverseProxyHandler(url('/branch/pub/') ,Config::get('loggerhead.url'));
+    $proxy->execute();
 }
 
 function direct_proxy_url()
@@ -33,8 +44,15 @@ function branch_explorer()
     
     etag('li',
         tag('a', array('href' => url('/branch/~' . Authn_Realm::get_identity()->id() . '/')),
-            'Private')
+            'Private'),
+        tag('p', 'Your own private repository of branches located in your home folder.')
     );
+    etag('li',
+        tag('a', array('href' => url('/branch/pub/')),
+            'Public'),
+        tag('p', 'The public repository for all developpers.')
+    );
+
     Output_HTMLTag::pop_parent();
 }
 ?>

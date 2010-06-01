@@ -47,8 +47,8 @@ function htmlDiff($old, $new){
 	foreach($diff as $k){
 		if(is_array($k))
 			$diff_el->append(
-			    (!empty($k['d'])?tag('del nl_escape_on', implode(' ',$k['d']), "\n"):''),
-				(!empty($k['i'])?tag('ins nl_escape_on', implode(' ',$k['i']), "\n"):'')
+			    (!empty($k['d'])?tag('del nl_escape_on', implode("\n",$k['d']), "\n"):''),
+				(!empty($k['i'])?tag('ins nl_escape_on', implode("\n",$k['i']), "\n"):'')
 		    );
 		else 
 		    $diff_el->append(tag('span  nl_escape_on', $k . "\n"));

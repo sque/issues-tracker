@@ -199,31 +199,51 @@ class Issue extends DB_Record
         
     }
 
-    public function action_edit($actor, $date, $new_title, $new_description)
+    public function action_edit($actor, $date, $new_title, $new_description, $removed_tags, $added_tags, $new_assignee)
     {
-        if (($new_description == $this->description) &&
-                ($new_title == $this->title))
+        if (
+            ($new_title == $this->title) &&
+            ($new_description == $this->description) &&
+            ($new_assignee == $this->assignee) &&
+            (empty($added_tags)) &&
+            (empty($removed_tags))
+        )
             return false;
-
-        $create_args = array(
+            
+        // Create action
+        $action = IssueAction::create(array(
             'actor' => $actor,
             'date' => $date,
             'issue_id' => $this->id,
-            'type' => 'details_change');
-
-        $action = IssueAction::create($create_args);
-        $create_args = array(
+            'type' => 'details_change'));
+            
+        IssueActionDetailsChange::create(array(
             'id' => $action->id,
-            'old_title' => $this->title,
-            'new_title' => $new_title,
-            'old_description' => $this->description,
-            'new_description' => $new_description
-        );
-        DB_Record::create($create_args, 'IssueActionDetailsChange');
-        
+            'old_title' => ($this->title != $new_title)?$this->title:'',
+            'new_title' => ($this->title != $new_title)?$new_title:'',
+            'old_description' => ($this->description != $new_description)?$this->description:'',
+            'new_description' => ($this->description != $new_description)?$new_description:'',
+            'old_assignee' => ($this->assignee != $new_assignee)?$this->assignee:'',
+            'new_assignee' => ($this->assignee != $new_assignee)?$new_assignee:'',
+            'removed_tags' => implode(' ', $removed_tags),
+            'added_tags' => implode(' ', $added_tags)
+        ));
+
+        // Save issue details
         $this->title = $new_title;
         $this->description = $new_description;
+        $this->assignee = $new_assignee;
         $this->save();
+                
+        // Save tag changes
+        foreach($added_tags as $tag)
+            IssueTag::create(array('issue_id' => $this->id, 'tag' => $tag));
+        foreach($removed_tags as $tag)
+            IssueTag::open(array('issue_id' => $this->id, 'tag' => $tag))
+                ->delete();
+        if ( (!empty($added_tags)) || (!(empty($removed_tags))) )
+            $this->project->update_counters();
+
         return $action;
     }
 
@@ -247,58 +267,6 @@ class Issue extends DB_Record
 
         $action = IssueAction::create($create_args);
         DB_Record::create(array('id' => $action->id, 'post' => $post, 'attachment_id' => $attachment_id), 'IssueActionComment');
-        return $action;
-    }
-
-    public function action_add_tag($actor, $date, $tag)
-    {
-        // Log action
-        $create_args = array(
-            'actor' => $actor,
-            'date' => $date,
-            'issue_id' => $this->id,
-            'type' => 'tag_change');
-
-        $action = IssueAction::create($create_args);
-        $create_args = array(
-            'id' => $action->id,
-            'operation' => 'add',
-            'tag' => $tag);
-        DB_Record::create($create_args, 'IssueActionTagChange');
-
-        // Add tag
-        $create_tag = array('issue_id' => $this->id, 'tag' => $tag);
-        IssueTag::create($create_tag);
-        
-        // Update stats
-        $this->project->update_counters();
-        
-        return $action;
-    }
-
-    public function action_remove_tag($actor, $date, $tag)
-    {
-        // Log action
-        $create_args = array(
-            'actor' => $actor,
-            'date' => $date,
-            'issue_id' => $this->id,
-            'type' => 'tag_change');
-
-        $action = IssueAction::create($create_args);
-        $create_args = array(
-            'id' => $action->id,
-            'operation' => 'remove',
-            'tag' => $tag);
-        DB_Record::create($create_args, 'IssueActionTagChange');
-
-        // Add tag
-        $t = IssueTag::open(array('issue_id' => $this->id, 'tag' => $tag));
-        $t->delete();
-        
-        // Update stats
-        $this->project->update_counters();
-
         return $action;
     }
     
@@ -351,8 +319,6 @@ class IssueAction extends DB_Record
             return IssueActionComment::open($this->id);
         else if ($this->type === 'status_change')
             return IssueActionStatusChange::open($this->id);
-        else if ($this->type === 'tag_change')
-            return IssueActionTagChange::open($this->id);
         else if ($this->type === 'details_change')
             return IssueActionDetailsChange::open($this->id);
     }
@@ -390,22 +356,6 @@ class IssueActionStatusChange extends DB_Record
     }
 }
 
-class IssueActionTagChange extends DB_Record
-{
-    public static $table = 'issue_action_tag_changes';
-
-    public static $fields = array(
-        'id' => array('pk' => true),
-        'operation',
-        'tag'
-    );
-
-    public function get_action()
-    {
-        return IssueAction::open($this->id);
-    }
-}
-
 class IssueActionDetailsChange extends DB_Record
 {
     public static $table = 'issue_action_details_changes';
@@ -415,7 +365,11 @@ class IssueActionDetailsChange extends DB_Record
         'old_title',
         'new_title',
         'old_description',
-        'new_description'
+        'new_description',
+        'old_assignee',
+        'new_assignee',
+        'removed_tags',
+        'added_tags'
     );
 
     public function get_action()

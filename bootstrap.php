@@ -57,10 +57,14 @@ require_once dirname(__FILE__) . '/lib/diff.lib.php';
 DB_Conn::connect(Config::get('db.host'), Config::get('db.user'), Config::get('db.pass'), Config::get('db.schema'), true);
 DB_Conn::query('SET NAMES utf8;');
 DB_Conn::query("SET time_zone='+0:00';");
-DB_Conn::events()->connect('error',function($e){ error_log(var_export($e, true)); });
+DB_Conn::events()->connect('error',function($e)
+{
+    error_log( $e->arguments['message']); 
+});
 $dbcache = new Cache_Apc('issue-tracker');
+$dbcache->delete_all();
 DB_Model::set_model_cache($dbcache);
-DB_ModelQueryCache::set_global_query_cache($dbcache);
+//DB_ModelQueryCache::set_global_query_cache($dbcache);
 
 // PHP TimeZone
 date_default_timezone_set(Config::get('site.timezone'));
@@ -123,6 +127,7 @@ Authz::set_role_feeder(new Authz_Role_FeederDatabase(array(
 $list->add_resource('project');
 $list->add_resource('issue', 'project');
 $list->add_resource('userprofile');
+$list->add_resource('branch');
 
 Authz::allow('userprofile', null, 'view');
 Authz::allow('userprofile', '@admin', 'edit');
@@ -137,5 +142,8 @@ Authz::allow('issue', '@dev', 'change-status');
 Authz::allow('issue', null, 'comment');
 Authz::allow('issue', null, 'edit');
 
+Authz::deny('branch', null, 'view');
+Authz::allow(array('branch', 'private'), null, 'view');
+Authz::allow(array('branch', 'pub'), '@dev', 'view');
 
 ?>
