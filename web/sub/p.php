@@ -125,8 +125,8 @@ function show_project($name)
 
 function create_project()
 {
-    $bc = project_breadcrumb($p);
-    $bc->create_link('Create project', UrlFactory::craft('project.create'));
+    $bc = project_breadcrumb();
+        $bc->create_link('Create project', UrlFactory::craft('project.create'));
     etag('div', $bc->render());
     $frm = new UI_ProjectCreateForm();
     etag('div html_escape_off', $frm->render());

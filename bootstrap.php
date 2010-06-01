@@ -92,6 +92,16 @@ $auth = new Authn_Backend_DB(array(
     'where_conditions' => array('enabled = 1')
 ));
 */
+/*
+// Encode authentication
+$auth = new Authn_Backend_LDAP(array(
+    'url' => 'ldap://10.0.0.3',
+    'baseDN' => 'DC=ENCODE',
+    'force_protocol_version' => 3,
+    'default_domain' => 'encode',
+    'id_attribute' => 'samaccountname'
+));
+*/
 $auth = new Authn_Backend_LDAP(array(
     'url' => 'ldap://192.168.59.110',
     'baseDN' => 'DC=kmfa-lab,DC=net',
@@ -99,15 +109,6 @@ $auth = new Authn_Backend_LDAP(array(
     'force_protocol_version' => 3,
     'id_attribute' => 'samaccountname'
 ));
-/*
-// Encode authentication
-$auth = new Authn_Backend_LDAP(array(
-    'url' => 'ldap://10.0.0.3',
-    'baseDN' => 'DC=ENCODE',
-    'force_protocol_version' => 3,
-    'id_attribute' => 'samaccountname'
-));
-*/
 Authn_Realm::set_backend($auth);
 
 // Setup authorization

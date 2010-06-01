@@ -118,7 +118,7 @@ class UI_InstallationForm extends Output_HTML_Form
         
         // Show result
         $this->hide();
-        $relative_folder = dirname($_SERVER['SCRIPT_NAME']);
+        $relative_folder = dirname($_SERVER['SCRIPT_NAME']) . '/..';
         etag('p', 'Installation finished succesfully !');
         etag('p', 'You can add support for cool urls by adding the
         	following data in .htaccess file at skeleton\'s root directory.',

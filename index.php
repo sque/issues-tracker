@@ -32,7 +32,10 @@ require_once dirname(__FILE__) . '/web/layouts.php';
 
 function force_login()
 {
-    Net_HTTP_Response::redirect($_SERVER['REQUEST_URI'] . '/+login');
+    if (substr($_SERVER['REQUEST_URI'], -1) == '/')
+        Net_HTTP_Response::redirect($_SERVER['REQUEST_URI'] . '+login');
+    else
+        Net_HTTP_Response::redirect($_SERVER['REQUEST_URI'] . '/+login');
 }
 
 // Special handling for special urls
