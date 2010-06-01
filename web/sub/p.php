@@ -65,6 +65,7 @@ function show_tag($pname, $tagname)
         array('class' => 'tag')
     );
     
+    Layout::open('default')->get_document()->title = "Tag: {$tagname} | {$p->title}";
     etag('h1', $p->title);
     etag('div', $bc->render());
     
@@ -154,6 +155,8 @@ function edit_issue($p_name, $issue_id)
 
     $bc = project_breadcrumb($p, $i);
     $bc->create_link('Edit', UrlFactory::craft('issue.edit', $i), null, array('class' => 'action-edit'));
+    
+    Layout::open('default')->get_document()->title = "Edit: #{$i->id} | {$i->title}";
     etag('div', $bc->render());
     $edit_frm = new UI_IssueEditForm($p, $i);
     etag('div html_escape_off', $edit_frm->render());
@@ -167,6 +170,7 @@ function create_issue($p_name)
     $bc = project_breadcrumb($p);
     $bc->create_link('Create issue', UrlFactory::craft('issue.create', $p));
     
+    Layout::open('default')->get_document()->title = "Create Issue | {$p->title}";
     etag('h1', $p->title);
     etag('div', $bc->render());
     $frm = new UI_IssueCreateForm($p);
@@ -304,13 +308,11 @@ function show_issue($p_name, $issue_id)
 }
 
 function default_projects()
-{   
-    //var_dump(Authz::get_role_feeder()->has_role('kpal'));
-    //var_dump(Membership::open_query()->where('username = ?')->execute('kpal'));
-
+{    
     if (!Authz::is_allowed('project', 'list'))
         return;
 
+    Layout::open('default')->get_document()->title = 'Projects | Issues Tracker';
     etag('h1', 'Projects');
     get_submenu()
         ->create_link('Add Project', UrlFactory::craft('project.create'), null, array('class' => 'action-add'));

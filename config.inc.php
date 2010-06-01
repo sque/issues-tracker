@@ -9,7 +9,7 @@ Config::set('db.pass', 'root');
 
 Config::set('db.schema', 'issue-tracker');
 
-Config::set('site.title', 'IssuesTracker');
+Config::set('site.title', 'Issues Tracker');
 
 Config::set('site.timezone', 'UTC');
 

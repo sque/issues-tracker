@@ -107,7 +107,6 @@ class Stupid_Condition_UrlPath extends Stupid_Condition
 			$chunks = $subject_path;
 			$chunks = explode($options['delimiter'], $chunks);
 		
-			//var_dump($chunks);
 			foreach($chunk_checks as $chunk_index => $regex)
 			{	// Check out of boundries
 				if (($chunk_index >= 0) && ($chunk_index >= count($chunks)))

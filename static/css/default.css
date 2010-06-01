@@ -121,12 +121,13 @@ div.widget .title{
 
 .widget .issue-status dt{
     margin-bottom: 2px;
+    color: #9a9a9a;
 }
 
 .widget .issue-status dd{
     font-size: 1.15em;
     font-weight: bold;
-    margin-left: 15px;
+    margin-left: 5px;
     margin-bottom: 8px;
 }
 

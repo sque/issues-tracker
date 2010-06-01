@@ -197,8 +197,6 @@ class DB_Record
 	        'foreign_model' => $model_name,
 	        'bridge_model' => $bridge_model_name
 	    );
-
-	    var_dump(self::$dynamic_relationships);
 	}
 	
 	//! Open the record based on its primary key

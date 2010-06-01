@@ -38,6 +38,7 @@ function branch_explorer()
 {
     // Use default layout to render this page
     Layout::open('default')->activate();
+    Layout::open('default')->get_document()->title = 'Branches | Issues Tracker';
     
     etag('h1', 'Branches');
     etag('ul class="branches"')->push_parent();

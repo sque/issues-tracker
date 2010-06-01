@@ -146,57 +146,14 @@ CREATE TABLE `issue_action_details_changes` (
 )ENGINE = InnoDB
 DEFAULT CHARSET = 'UTF8';
 
-INSERT INTO `issue_statuses` (`name`, `description`) values
-    ('new', 'This issue has been added but not reviewed.'),
-    ('accepted', 'This issue is valid and accepted for fixing.'),
-    ('invalid', 'This issue is not valid and has been rejected.'),
-    ('fixed', 'This issue was valid and was fixed.');
-
 INSERT INTO `users` (`username`, `password`, `enabled`) values
-    ('root', sha1('root'), 1),
-    ('sque', sha1('123123'), 1);
+    ('root', sha1('root'), 1);
 
 INSERT INTO `memberships` (`username`, `groupname`) values
     ('kpal', 'admin'),
-    ('ggoudr', 'admin'),
+    ('nsteiak', 'admin'),
     ('kpal', 'dev'),
     ('nsteiak', 'dev'),
     ('dlam', 'dev');
-        
-INSERT INTO `projects` (`name`, `title`, `description`, `manager`, `created`) values 
-    ('libscan', 'libScan', 'A framework to manage multiple scanners', 'kpal', NOW()),
-    ('PolicySphere', 'Policy Sphere', 'A platform to manage security roles', 'nsteiak', NOW()),
-    ('idm', 'IDM', 'Omg kai 3 lol', 'dlam', NOW());
-    
-INSERT INTO `issues` (`title`, `description`, `status`, `project_name`) values 
-    ('Terastio bug vrethike', 'den to szitiaw bla blalba', 'invalid', 'libscan'),
-    ('Ki akki bug vrethike', 'den to szitiaw bla blalba', 'closed', 'libscan'),
-    ('Perissotera bug vrethike', 'den to szitiaw bla blalba', 'open', 'libscan'),
-    ('Nia nai bug vrethike', 'den to szitiaw bla blalba', 'open', 'PolicySphere'),
-    ('ooxi bug vrethike', 'den to szitiaw bla blalba', 'open', 'PolicySphere');
-
-INSERT INTO `issue_actions` (`issue_id`, `type`, `actor`, `date`) values 
-    (1, 'comment', 'sque', NOW()),
-    (1, 'comment', 'vag', NOW()),
-    (1, 'status_change', 'vag', NOW()),
-    (1, 'comment', 'sque', NOW()),
-    (2, 'comment', 'vag', NOW()),
-    (2, 'status_change', 'vag', NOW()),
-    (3, 'comment', 'sque', NOW());
-
-INSERT INTO `issue_tags` (`issue_id`, `tag`) values 
-    (1, 'uber'),
-    (3, 'dead');
-    
-INSERT INTO `issue_action_comments` (`id`, `post`) values
-    (1, 'Ou uo dou apo pantoy'),
-    (2, 'Egw lew pws lew malakies!'),
-    (4, 'xaxaxaxax ante re pou elw egw malakeis'),
-    (5, 'Egw lew pws lew malakies!'),
-    (7, 'Kai egw kai egw lew pws lew malakies!');
-
-INSERT INTO `issue_action_status_changes` (`id`, `old_status`, `new_status`) values
-    (3, 'open', 'invalid'),
-    (6, 'open', 'closed');
 
 

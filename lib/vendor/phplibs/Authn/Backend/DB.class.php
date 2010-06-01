@@ -81,7 +81,6 @@ class Authn_Backend_DB implements Authn_Backend
     {
         // Get user
         $records = $this->model_query->execute($username);
-        //var_dump($records);
         if (count($records) !== 1)
             return false;
 

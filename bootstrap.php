@@ -112,9 +112,7 @@ Authn_Realm::set_backend($auth);
 
 // Setup authorization
 Authz::set_resource_list($list = new Authz_ResourceList());
-Authz::set_role_feeder(new Authz_Role_FeederDatabase(array(
-    'role_query' => User::open_query()->where('username = ?'),
-    'role_name_field' => 'username',
+Authz::set_role_feeder(new AuthzRoleFeederDatabaseLoose(array(
     'parents_query' => Membership::open_query()->where('username = ?'),
     'parent_name_field' => 'groupname',
     'parent_name_filter_func' => function($name)
