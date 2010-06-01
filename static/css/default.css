@@ -126,7 +126,7 @@ div.widget .title{
 
 .submenu ul li a{
     display: block;
-    padding: 6px 15px;
+    padding: 6px 25px;
 
     background-color: white;
     border-bottom: 1px dotted #dedede;
@@ -134,7 +134,17 @@ div.widget .title{
 .submenu ul li a:hover{
     background-color: #f1f1f1;
 
+}
+.submenu .action-edit a{
+    background: transparent url('images/edit-16.png') no-repeat 5px center;
+}
 
+.submenu .action-add a{
+    background: transparent url('images/add-16.png') no-repeat 5px center;
+}
+
+.submenu .action-issue a{
+    background: transparent url('images/issue-16.png') no-repeat 5px center;
 }
 
 /* Menu */
@@ -487,6 +497,16 @@ ul.actions li.status_change .old{
 
 .project{
     background: transparent url('images/project-16.png') no-repeat left center;
+    padding-left: 18px !important;
+}
+
+.edit{
+    background: transparent url('images/edit-16.png') no-repeat left center;
+    padding-left: 18px !important;
+}
+
+.issue{
+    background: transparent url('images/issue-16.png') no-repeat left center;
     padding-left: 18px !important;
 }
 

@@ -88,8 +88,8 @@ function show_project($name)
         not_found();
 
     $sb = get_submenu();
-    $sb->create_link('Edit project', UrlFactory::craft('project.edit', $p));
-    $sb->create_link('Create Issue', UrlFactory::craft('issue.create', $p));
+    $sb->create_link('Edit project', UrlFactory::craft('project.edit', $p), null, array('class' => 'action-edit'));
+    $sb->create_link('Create issue', UrlFactory::craft('issue.create', $p), null, array('class' => 'action-issue'));
         
     Layout::open('default')->get_document()->title = $p->title;
     etag('h1', $p->title);
@@ -137,7 +137,7 @@ function edit_project($p_name)
         not_found();
 
     $bc = project_breadcrumb($p);
-    $bc->create_link('Edit', UrlFactory::craft('project.edit', $p));
+    $bc->create_link('Edit', UrlFactory::craft('project.edit', $p), null, array('class' => 'action-edit'));
     etag('div', $bc->render());
     $edit_frm = new UI_ProjectEditForm($p);
     etag('div html_escape_off', $edit_frm->render());
@@ -153,7 +153,7 @@ function edit_issue($p_name, $issue_id)
         not_found();
 
     $bc = project_breadcrumb($p, $i);
-    $bc->create_link('Edit', UrlFactory::craft('issue.edit', $i));
+    $bc->create_link('Edit', UrlFactory::craft('issue.edit', $i), null, array('class' => 'action-edit'));
     etag('div', $bc->render());
     $edit_frm = new UI_IssueEditForm($p, $i);
     etag('div html_escape_off', $edit_frm->render());
@@ -183,7 +183,7 @@ function show_issue($p_name, $issue_id)
         not_found();
 
     get_submenu()
-        ->create_link('Edit', UrlFactory::craft('issue.edit', $i));
+        ->create_link('Edit', UrlFactory::craft('issue.edit', $i), null, array('class' => 'action-edit'));
         
     // Forms
     if (Authz::is_allowed(array('issue', $issue_id), 'comment'))
@@ -279,7 +279,7 @@ function default_projects()
 
     etag('h1', 'Projects');
     get_submenu()
-        ->create_link('Add Project', UrlFactory::craft('project.create'));
+        ->create_link('Add Project', UrlFactory::craft('project.create'), null, array('class' => 'action-add'));
 
     // Show all projects
     $p_grid = new UI_ProjectsGrid(Project::open_all());
