@@ -57,7 +57,7 @@ class DB_ModelQuery
 	protected $limit = NULL;
 	
 	//! Order of output data (on select only)
-	protected $order_by = NULL;
+	protected $order_by = array();
 
     //! Left join table
     protected $ljoin = NULL;
@@ -107,7 +107,7 @@ class DB_ModelQuery
 		$this->insert_fields = array();
 		$this->insert_values = array();
 		$this->limit = NULL;
-		$this->order_by = NULL;
+		$this->order_by = array();
 		$this->ljoin = NULL;
 		$this->conditions = array();
 		$this->sql_hash = 'HASH:' . $this->model->table() .':';
@@ -265,7 +265,7 @@ class DB_ModelQuery
 	//! Select order by
 	public function & order_by($field, $order = 'ASC')
 	{	$this->assure_alterable();
-		$this->order_by = array('field' => $field, 'order' => $order);
+		$this->order_by[] = array('field' => $field, 'order' => $order);
 		$this->sql_hash .= ':order:' . $field . ':' . $order;
 		return $this;
 	}
@@ -403,11 +403,17 @@ class DB_ModelQuery
 		$query .= $this->analyze_where_conditions();
 		
 		// Order by
-		if ($this->order_by !== NULL)
-			$query .= ' ORDER BY ' . 
-			    (($this->ljoin !== NULL)?' p.':'') .
-			    $this->model->field_info($this->order_by['field'], 'sqlfield') .
-				' ' . $this->order_by['order'];
+		if (!empty($this->order_by))
+		{   $query .= ' ORDER BY ';
+		
+		    $orders = array();
+	        foreach($this->order_by as $order)
+	            $orders[] = 
+			        (($this->ljoin !== NULL)?' p.':'') .
+			        $this->model->field_info($order['field'], 'sqlfield') .
+				    ' ' . $order['order'];
+            $query .= implode(', ', $orders);
+        }
 		// Limit
 		if ($this->limit !== NULL)
 		{	if ($this->limit['offset'] !== NULL)
@@ -438,10 +444,19 @@ class DB_ModelQuery
 		$query .= ' ' . implode(', ', $fields);
 		$query .= $this->analyze_where_conditions();
 		
-		// Order by
-		if ($this->order_by !== NULL)
-			$query .= ' ORDER BY ' . $this->model->field_info($this->order_by['field'], 'sqlfield') .
-				' ' . $this->order_by['order'];
+    	// Order by
+		if (!empty($this->order_by))
+		{   $query .= ' ORDER BY ';
+		
+		    $orders = array();
+	        foreach($this->order_by as $order)
+	            $orders[] = 
+			        (($this->ljoin !== NULL)?' p.':'') .
+			        $this->model->field_info($order['field'], 'sqlfield') .
+				    ' ' . $order['order'];
+            $query .= implode(', ', $orders);
+        }
+        
 		// Limit
 		if ($this->limit !== NULL)
 			$query .= " LIMIT {$this->limit['length']}";
@@ -479,11 +494,19 @@ class DB_ModelQuery
 	{	$query = 'DELETE FROM ' . $this->model->table();
 		$query .= $this->analyze_where_conditions();
 		
+		
 		// Order by
-		if ($this->order_by !== NULL)
-			$query .= ' ORDER BY ' . 
-				$this->model->field_info($this->order_by['fielld'], 'sqlfield') .
-				' ' . $this->order_by['order'];
+		if (!empty($this->order_by))
+		{   $query .= ' ORDER BY ';
+		
+		    $orders = array();
+	        foreach($this->order_by as $order)
+	            $orders[] = 
+			        (($this->ljoin !== NULL)?' p.':'') .
+			        $this->model->field_info($order['field'], 'sqlfield') .
+				    ' ' . $order['order'];
+            $query .= implode(', ', $orders);
+        }
 		
 		// Limit
 		if ($this->limit !== NULL)

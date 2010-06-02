@@ -62,7 +62,9 @@ DB_Conn::events()->connect('error',function($e)
     error_log( $e->arguments['message']); 
 });
 
+
 $dbcache = new Cache_Apc('issue-tracker');
+//$dbcache->delete_all();
 DB_Model::set_model_cache($dbcache);
 DB_ModelQueryCache::set_global_query_cache($dbcache);
 
@@ -123,16 +125,6 @@ else if (Config::get('site.authn.type') == 'ldap')
         }
     ));
 }
-/*
-// Encode authentication
-$auth = new Authn_Backend_LDAP(array(
-    'url' => 'ldap://10.0.0.3',
-    'baseDN' => 'DC=ENCODE',
-    'force_protocol_version' => 3,
-    'default_domain' => 'encode',
-    'id_attribute' => 'samaccountname'
-));
-*/
 Authn_Realm::set_backend($auth);
 
 // Setup authorization

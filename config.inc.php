@@ -37,6 +37,6 @@ Config::set('issue.upload_folder', '/home/sque/workspace/issues-tracker/uploads'
 
 Config::set('mail.default_from', 'issues@dev.kmfa.net');
 
-Config::set('mail.enabled', '1');
+Config::set('mail.enabled', '0');
 
 ?>

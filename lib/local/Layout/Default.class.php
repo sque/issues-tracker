@@ -122,7 +122,7 @@ class Layout_Default extends Layout
         {   
             $online_info = $doc->get_body()->getElementById("online-info");
             tag('span class="user-info"',
-                tag_user(Authn_Realm::get_identity()->id()),
+                tag_user(Authn_Realm::get_identity()->id(), array(), false),
                 tag('a class="logout"', array('href' => ($_SERVER['REQUEST_URI'] .'/+logout')), 'Logout')
             )->appendTo($online_info);
         }

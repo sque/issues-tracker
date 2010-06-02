@@ -44,12 +44,12 @@ function branch_explorer()
     etag('ul class="branches"')->push_parent();
     
     etag('li',
-        tag('a', array('href' => url('/branch/~' . Authn_Realm::get_identity()->id() . '/')),
+        tag('a class="bazaar"', array('target' => '_blank', 'href' => url('/branch/~' . Authn_Realm::get_identity()->id() . '/')),
             'Private'),
         tag('p', 'Your own private repository of branches located in your home folder.')
     );
     etag('li',
-        tag('a', array('href' => url('/branch/pub/')),
+        tag('a class="bazaar"', array('target' => '_blank', 'href' => url('/branch/pub/')),
             'Public'),
         tag('p', 'The public repository for all developpers.')
     );

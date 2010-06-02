@@ -15,14 +15,22 @@ UrlFactory::register('attachment.view', '$a', '/file/{$a->id}/{$a->filename}');
 UrlFactory::register('user.view', '$name', '/~{$name}');
 UrlFactory::register('group.view', '$name', '/@{$name}');
 
-function tag_user($username, $extra_classes = array())
+function tag_user($username, $extra_classes = array(), $dot_name = true)
 {   $display_name = $username;
     if (empty($username))
         return;
         
     if ($p = UserProfile::open($username))
+    {
         $display_name = $p->fullname;
-
+        if ($dot_name)
+        {
+            $names = explode(' ', $p->fullname);
+            $names[0] = $names[0][0] . '.';
+            $display_name = implode(' ', $names);
+        }
+    }
+    
     $a = tag('a class="user"', $display_name, 
         array('href' => UrlFactory::craft('user.view', $username))
     );

@@ -38,13 +38,14 @@ class MailerIssue
             $extra_headers = array('From' => "{$p->fullname} <{$p->email}>");
         $extra_headers['X-IssuesTracker-Issue'] = $this->issue->id;
         
-        $receipients = array();
+        // Add poster in receipient list to avoid getting mail
+        $receipients = array($p->username => $p->username);
         
         // Involved
-        $involved = array($this->issue->poster => $this->issue->poster);
+        $involved = array_diff(array($this->issue->poster => $this->issue->poster), $receipients);
         foreach($this->issue->actions->all() as $a)
             $involved[$a->actor] = $a->actor;
-        $receipients = $involved;
+        $receipients = array_merge($receipients, $involved);
         Mailer::send_users_mail(array_keys($involved),
             $this->get_title(), 
             $this->get_body("You received this mail because you are\ntaking part in issue's conversation"),

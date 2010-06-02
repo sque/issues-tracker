@@ -58,7 +58,10 @@ class UI_IssueCreateForm extends Output_HTML_Form
             IssueTag::create(array('issue_id' => $i->id, 'tag' => $t));
             
         // Send mail
-        $mail = new MailerIssue($i, Authn_Realm::get_identity()->id() . " posted a new issue\n\n" . $i->description);
+        $mail = new MailerIssue($i,
+            UserProfile::open($values['poster'])->fullname . " posted a new issue...\n" .
+            "------------------------------------------------\n\n" .
+            $i->description);
         $mail->send();
 
         // Update counters

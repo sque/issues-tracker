@@ -4,7 +4,7 @@ class UI_IssuesGrid extends Output_HTML_Grid
 {
     protected $issues;
     
-    public function __construct($issues, $omit_fields = array())
+    public function __construct($issues, $omit_fields = array('created', 'poster'))
     {   $this->issues = $issues;
 
         $fields = array(
@@ -12,8 +12,9 @@ class UI_IssuesGrid extends Output_HTML_Grid
             'title' => array('caption' => 'Title', 'customdata' => true),
             'project' => array('caption' => 'Project', 'mangle' => true),
             'status' => array('caption' => 'Status', 'mangle' => true),
-            'poster' => array('caption' => 'Poster', 'mangle' => true),
+            'assignee' => array('caption' => 'Assigned', 'mangle' => true),
             'created' => array('caption' => 'Post Date', 'mangle' => true),
+            'poster' => array('caption' => 'Poster', 'mangle' => true),
             'last-activity' => array('caption' => 'Last Activity', 'customdata' => true),
             );
         foreach($omit_fields as $f)
@@ -51,6 +52,12 @@ class UI_IssuesGrid extends Output_HTML_Grid
             return UrlFactory::craft('project.view', $data)->anchor($data->title);
         if ($col_id == 'poster')
             return tag_user($data);
+        if ($col_id == 'assignee')
+        {   
+            if (!$data)
+                return '---';
+            return tag_user($data);
+        }
         if ($col_id == 'status')
             return tag('span class="status"', $data)->add_class($data);
         if ($col_id == 'created')

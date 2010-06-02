@@ -239,6 +239,17 @@ ul.breadcrumb li:not(:last-child ) a{
 	margin-right: 6px;
 }
 
+/* branches */
+ul.branches {
+	list-style-type: none;
+	display: block;
+}
+
+ul.branches p{
+    margin: 3px 0px 15px 0px;
+    font-style: italic;
+}
+
 /* ui-form */
 div.ui-form {
 	display: block;
@@ -549,6 +560,12 @@ ul.actions li.status_change .old{
     background: transparent url('images/issue-16.png') no-repeat left center;
     padding-left: 18px !important;
 }
+
+.bazaar{
+    background: transparent url('images/bazaar-16.png') no-repeat left center;
+    padding-left: 18px !important;
+}
+
 
 .diff   {   font-family: "Courier New";  }
 .diff *{    text-decoration: none;   }
