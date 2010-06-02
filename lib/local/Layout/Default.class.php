@@ -84,6 +84,8 @@ class Layout_Default extends Layout
         $doc->title = Config::get('site.title');
         $doc->add_ref_css(surl('/static/css/default.css'));
         $doc->add_ref_js(surl('/static/js/jquery-1.4.2.min.js'));
+        $doc->add_ref_js(surl('/static/js/widgets_bar.js'));
+        $doc->add_ref_js(surl('/static/js/issues.js'));
         
         etag('div id="wrapper"')->push_parent();
         etag('div id="header"',

@@ -41,7 +41,7 @@ class UI_IssuePostCommentForm extends Output_HTML_Form
         $ac = $action->get_details();
         $mail = new MailerIssue($this->issue, $ac->post .
             ($ac->attachment?
-                "Attachments:\n" .
+                "\n\nAttachments:\n" .
                 UrlFactory::craft_fqn('attachment.view', $ac->attachment)
                 :'')
         );

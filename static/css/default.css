@@ -4,20 +4,20 @@ body {
     background-color: #f1f1f1;
     margin: 0px;
     padding: 0px;
+    min-width: 1100px;
+    position: relative;
 }
 
-/*h1{
-    text-shadow: -1px -1px white, 1px 1px #333;
-	color: #d5d5d5;
-    margin: 5px 5px 15px 0px;
+h1, h2{  color: #656565; }
+h1{
+    margin: 8px 5px 15px 0px;
+    font-size: 1.85em;
 }
 h2{
-	color: #8a8a8a;
-}*/
-
-h1,h2{
-	color: #656565;
+    font-size: 1.40em;
 }
+
+
 a{
     text-decoration: none;
     color: #4c5847;
@@ -33,14 +33,14 @@ a:hover{
 
 }
 #content{
-    margin: 35px 20px 0px 20px;
+    margin: 15px 20px 0px 20px;
     min-height: 450px;
-    width: 79%;
+    width: 77%;
     display: inline-block;
 }
 
 #widgets{
-    position:fixed;
+    position:absolute;
     top: 50px;
     right: 0px;
     width: 200px;
@@ -230,10 +230,9 @@ ul.breadcrumb li {
 
 ul.breadcrumb li a {
 	display: inline-block;
-	font-weight: bold;Konstantinos PaliourasLogout
-	color: black;
-	
-	}
+	font-weight: bold;
+}
+
 ul.breadcrumb li:not(:last-child ) a{
 	background: transparent url('images/right_arrorw.jpg') no-repeat right 58%;
 	padding: 0px 14px 0px 0px;
@@ -306,7 +305,7 @@ dl{
     -moz-border-radius: 8px;
 	-moz-box-shadow: gray 2px 2px 5px;
     background-color: white;
-	width: 470px;
+
 	padding: 15px;
 }
 
@@ -329,6 +328,8 @@ dl dd{
     padding: 5px;
     border-spacing:0px;
 	min-width: 500px;
+	font-size: 0.9em;
+	width: 100%;
 }
 
 .ui-grid-list .ui-headers
@@ -340,7 +341,7 @@ dl dd{
 
 .ui-grid-list th
 {
-    padding: 5px 10px;
+    padding: 3px 10px;
 
 	border: 2px solid white;
 	border-bottom-width: 10px;
