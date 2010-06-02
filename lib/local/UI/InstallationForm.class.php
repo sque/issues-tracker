@@ -98,6 +98,7 @@ class UI_InstallationForm extends Output_HTML_Form
         Config::set('mail.enabled', (boolean)$values['mail-enabled']);
         Config::set('mail.default_from', $values['mail-default-sender']);
         Config::set('loggerhead.url', $values['loggerhead-url']);
+        Config::set('issue.upload_folder', realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../uploads'));
 
         // Timezone
         if (isset($this->tzones[$values['timezone']]))
@@ -128,11 +129,11 @@ class UI_InstallationForm extends Output_HTML_Form
         // Show result
         $this->hide();
 
-        etag('p', 'Installation finished succesfully !');
-
-        $relative_folder = implode('/', array_slice(explode('/', dirname($_SERVER['SCRIPT_NAME'])), 0, -1));
+        etag('strong', 'Installation finished succesfully !');
+        etag('p class="error"', 'For security reasons you must delete folder "install" from web server.');
         
-        if ($relative_folder !== '/')
+        $relative_folder = implode('/', array_slice(explode('/', dirname($_SERVER['SCRIPT_NAME'])), 0, -1));        
+        if (!empty($relative_folder))
             etag('p class="error"', 'Site is running under a subdirectory, for proper support of ' .
                 'cool urls, the .htaccess file must be edit and the option ', tag('strong', 'RewriteBase'),
                 ' should be change to: ',

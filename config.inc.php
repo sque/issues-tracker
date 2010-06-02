@@ -11,7 +11,7 @@ Config::set('db.schema', 'issue-tracker');
 
 Config::set('site.title', 'Issues Tracker');
 
-Config::set('site.timezone', 'Europe/Andorra');
+Config::set('site.timezone', 'Europe/Athens');
 
 Config::set('site.google_analytics', '');
 
@@ -25,6 +25,6 @@ Config::set('site.public_host', '192.168.59.99');
 
 Config::set('mail.default_from', 'issues@dev.kmfa.net');
 
-Config::set('mail.enabled', '');
+Config::set('mail.enabled', '1');
 
 ?>
