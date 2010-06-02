@@ -63,7 +63,6 @@ DB_Conn::events()->connect('error',function($e)
 });
 
 $dbcache = new Cache_Apc('issue-tracker');
-//$dbcache->delete_all();
 DB_Model::set_model_cache($dbcache);
 DB_ModelQueryCache::set_global_query_cache($dbcache);
 
@@ -84,15 +83,46 @@ Mailer::set_mail_instance(Mail::factory((Config::get('mail.enabled')?'mail':'moc
 Mailer::set_default_headers(array('From' => Config::get('mail.default_from')));
 
 // Setup authentication
-/*
-$auth = new Authn_Backend_DB(array(
-    'model_user' => 'User',
-    'field_username' => 'username',
-    'field_password' => 'password',
-    'hash_function' => 'sha1',
-    'where_conditions' => array('enabled = 1')
-));
-*/
+if (Config::get('site.authn.type') == 'db')
+{
+    $auth = new Authn_Backend_DB(array(
+        'model_user' => 'User',
+        'field_username' => 'username',
+        'field_password' => 'password',
+        'hash_function' => 'sha1',
+        'where_conditions' => array('enabled = 1')
+    ));
+    
+    $authz = new Authz_Role_FeederDatabase(array(
+        'role_query' => User::open_querY()->where('username = ?'),
+        'role_name_field' => 'username',
+        'parents_query' => Membership::open_query()->where('username = ?'),
+        'parent_name_field' => 'groupname',
+        'parent_name_filter_func' => function($name)
+        {
+            return '@' . $name;
+        }
+    ));
+}
+else if (Config::get('site.authn.type') == 'ldap')
+{
+    $auth = new Authn_Backend_LDAP(array(
+        'url' => Config::get('site.authn.ldap_url'),
+        'baseDN' => Config::get('site.authn.ldap_basedn'),
+        'default_domain' => Config::get('site.authn.ldap_default_domain'),
+        'force_protocol_version' => Config::get('site.authn.ldap_force_protocol'),
+        'id_attribute' => Config::get('site.authn.ldap_id_attribute')
+    ));
+    
+    $authz = new AuthzRoleFeederDatabaseLoose(array(
+        'parents_query' => Membership::open_query()->where('username = ?'),
+        'parent_name_field' => 'groupname',
+        'parent_name_filter_func' => function($name)
+        {
+            return '@' . $name;
+        }
+    ));
+}
 /*
 // Encode authentication
 $auth = new Authn_Backend_LDAP(array(
@@ -103,25 +133,11 @@ $auth = new Authn_Backend_LDAP(array(
     'id_attribute' => 'samaccountname'
 ));
 */
-$auth = new Authn_Backend_LDAP(array(
-    'url' => 'ldap://192.168.59.110',
-    'baseDN' => 'DC=kmfa-lab,DC=net',
-    'default_domain' => 'kmfa-lab.net',
-    'force_protocol_version' => 3,
-    'id_attribute' => 'samaccountname'
-));
 Authn_Realm::set_backend($auth);
 
 // Setup authorization
 Authz::set_resource_list($list = new Authz_ResourceList());
-Authz::set_role_feeder(new AuthzRoleFeederDatabaseLoose(array(
-    'parents_query' => Membership::open_query()->where('username = ?'),
-    'parent_name_field' => 'groupname',
-    'parent_name_filter_func' => function($name)
-    {
-        return '@' . $name;
-    }
-)));
+Authz::set_role_feeder($authz);
 
 // Standard authorization
 $list->add_resource('project');
