@@ -32,7 +32,7 @@ class UI_ProjectCreateForm extends Output_HTML_Form
     {
         $values['created'] = new DateTime();
         $p = Project::create($values);
-        $p->update_counters();
+
         UrlFactory::craft('project.view', $p)->redirect();
     }
 }

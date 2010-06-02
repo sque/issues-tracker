@@ -60,7 +60,9 @@ class UI_IssueCreateForm extends Output_HTML_Form
         // Send mail
         $mail = new MailerIssue($i, Authn_Realm::get_identity()->id() . " posted a new issue\n\n" . $i->description);
         $mail->send();
-          
+
+        // Update counters
+        $i->project->update_counters();
         UrlFactory::craft('issue.view', $i)->redirect();
     }
 }

@@ -12,11 +12,6 @@ Stupid::add_rule('show_issue',
         'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+issue$/', 'chunk[4]' => '/^(?P<issue_id>[\d]+)$/'),
     array('type' => 'authz', 'resource' => 'issue', 'backref_instance' => 'issue_id', 'action' => 'view'));
 
-Stupid::add_rule('show_tag',
-    array('type' => 'url_path',
-        'chunk[2]' => '/^(?P<project_id>[^\+].+)$/', 'chunk[3]' => '/^\+tag$/', 'chunk[4]' => '/^(?P<tag>[\w\-]+)$/'),
-    array('type' => 'authz', 'resource' => 'project', 'backref_instance' => 'project_id', 'action' => 'view'));
-    
 Stupid::add_rule('create_issue',
     array('type' => 'url_path', 'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+createissue$/'),
     array('type' => 'authz', 'resource' => 'project', 'action' => 'post-issue'));
@@ -25,6 +20,12 @@ Stupid::add_rule('edit_project',
     array('type' => 'url_path', 'chunk[2]' => '/^([^\+].+)$/', 'chunk[3]' => '/^\+edit$/'),
     array('type' => 'authz', 'resource' => 'project', 'action' => 'edit')
 );
+
+Stupid::add_rule('show_project',
+    array('type' => 'url_path',
+        'chunk[2]' => '/^(?P<project_id>[^\+].+)$/', 'chunk[3]' => '/^\+tag$/', 'chunk[4]' => '/^(?P<tag>[\w\-]+)$/'),
+    array('type' => 'authz', 'resource' => 'project', 'backref_instance' => 'project_id', 'action' => 'view'));
+
 Stupid::add_rule('show_project',
     array('type' => 'url_path', 'chunk[2]' => '/^(?P<project_id>[^\+].+)$/'),
     array('type' => 'authz', 'resource' => 'project', 'backref_instance' => 'project_id', 'action' => 'view')
@@ -67,38 +68,8 @@ function show_tag_cloud($p)
         Layout::open('default')->add_widget('Tags', $ul, $prepend = true);
     }
 }
-function show_tag($pname, $tagname)
-{
-    if (!($p = Project::open($pname)))
-        not_found();
-        
-    $bc = project_breadcrumb($p);
-    $bc->create_link($tagname,
-        UrlFactory::craft('project.tag', $p, $tagname),
-        null,
-        array('class' => 'tag')
-    );
-    
-    Layout::open('default')->get_document()->title = "Tag: {$tagname} | {$p->title}";
-    etag('h1', $p->title);
-    etag('div', $bc->render());
-    
-    $issues = $p->issues->subquery()
-        ->left_join('IssueTag', 'id', 'issue_id')
-        ->where('l.tag = ?')
-        ->execute($tagname);
-    
-    etag('h2', "Issues tagged with \"{$tagname}\"");
-    if (!empty($issues))
-    {
-        $grid = new UI_IssuesGrid($issues, array('project'));
-        etag('div', $grid->render());
-    }
-    
-    show_tag_cloud($p);
-}
 
-function show_project($name)
+function show_project($name, $tagname = null)
 {
     if (!($p = Project::open($name)))
         not_found();
@@ -106,20 +77,33 @@ function show_project($name)
     $sb = get_submenu();
     $sb->create_link('Edit project', UrlFactory::craft('project.edit', $p), null, array('class' => 'action-edit'));
     $sb->create_link('Create issue', UrlFactory::craft('issue.create', $p), null, array('class' => 'action-issue'));
-        
+
+    $bc = project_breadcrumb($p);
+    if ($tagname)
+        $bc->create_link($tagname,
+            UrlFactory::craft('project.tag', $p, $tagname),
+            null,
+            array('class' => 'tag')
+        );
+
     Layout::open('default')->get_document()->title = $p->title;
     etag('h1', $p->title);
-    etag('div', project_breadcrumb($p)->render());
+    etag('div', $bc->render());
     etag('p class="description" nl_escape_on', $p->description);
-
-    $issues = $p->issues
-        ->subquery()
-        ->order_by('created', 'DESC')
-        ->execute();
+    if ($tagname)
+        $issues = $p->issues->subquery()
+            ->left_join('IssueTag', 'id', 'issue_id')
+            ->where('l.tag = ?')
+            ->execute($tagname);
+    else
+        $issues = $p->issues
+            ->subquery()
+            ->order_by('created', 'DESC')
+            ->execute();
         
     if (!empty($issues))
     {
-        etag('h2', 'Issues');
+        etag('h2', ($tagname?"Issues tagged with \"{$tagname}\"":'Issues'));
         $grid = new UI_IssuesGrid($issues, array('project'));
         etag('div', $grid->render());
     }

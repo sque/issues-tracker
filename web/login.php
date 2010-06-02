@@ -25,12 +25,13 @@ Layout::open('login')->activate();
 // Get the reference url to redirect back
 function reference_url()
 {
-    $path_chunks = explode('/', $_SERVER['REQUEST_URI']);
+    $path_chunks = explode('/', $_SERVER['PATH_INFO']);
     $path_chunks =  array_filter($path_chunks,
-    create_function('$c', 
+    create_function('$c',
         'return (($c != "+login") && ($c != "+logout"));')
     );
-    return implode('/', $path_chunks);
+    $cleaned_path = implode('/', $path_chunks);
+    return url($cleaned_path?$cleaned_path:'/');
 }
 
 // Logout user if there is someone logged on
