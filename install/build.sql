@@ -34,7 +34,9 @@ DEFAULT CHARSET='UTF8';
 CREATE TABLE `memberships` (
     `username` varchar(255) not null,
     `groupname` varchar(255) not null,
-    PRIMARY KEY(`username`, `groupname`)
+    PRIMARY KEY(`username`, `groupname`),
+    INDEX(`username`),
+    INDEX(`groupname`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -56,7 +58,8 @@ CREATE TABLE `projects` (
     `description` TEXT not null,
     `created` DATETIME NOT NULL,
     `manager` varchar(255),
-    PRIMARY KEY(`name`)
+    PRIMARY KEY(`name`),
+    INDEX(`created`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -80,7 +83,10 @@ CREATE TABLE `issues` (
     `assignee` varchar(255),
     `fix_commit` varchar(512),
     PRIMARY KEY(`id`),
-    INDEX(`status`)
+    INDEX(`status`),
+    INDEX(`created`),
+    INDEX(`project_name`),
+    INDEX(`assignee`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -88,7 +94,9 @@ DEFAULT CHARSET='UTF8';
 CREATE TABLE `issue_tags` (
     `issue_id` integer not null,
     `tag` varchar(50) not null,
-    PRIMARY KEY(`issue_id`, `tag`)
+    PRIMARY KEY(`issue_id`, `tag`),
+    INDEX(`issue_id`),
+    INDEX(`tag`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -98,7 +106,8 @@ CREATE TABLE `project_tag_count` (
     `tag` varchar(50) not null,
     `count` integer default 0,
     `percent` float default 0,
-    PRIMARY KEY(`project_name`, `tag`)
+    PRIMARY KEY(`project_name`, `tag`),
+    INDEX(`project_name`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -109,7 +118,8 @@ CREATE TABLE `issue_actions` (
     `type` ENUM('comment', 'status_change', 'details_change') not null,
     `actor` varchar(255) not null,
     `date` DATETIME not null,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`id`),
+    INDEX(`issue_id`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -146,6 +156,13 @@ CREATE TABLE `issue_action_details_changes` (
 )ENGINE = InnoDB
 DEFAULT CHARSET = 'UTF8';
 
+
+INSERT INTO `issue_statuses` (`name`, `description`) values
+    ('new', 'This issue has been added but not reviewed.'),
+    ('accepted', 'This issue is valid and accepted for fixing.'),
+    ('invalid', 'This issue is not valid and has been rejected.'),
+    ('fixed', 'This issue was valid and was fixed.');
+    
 INSERT INTO `users` (`username`, `password`, `enabled`) values
     ('root', sha1('root'), 1);
 

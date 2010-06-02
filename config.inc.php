@@ -11,7 +11,7 @@ Config::set('db.schema', 'issue-tracker');
 
 Config::set('site.title', 'Issues Tracker');
 
-Config::set('site.timezone', 'UTC');
+Config::set('site.timezone', 'Europe/Andorra');
 
 Config::set('site.google_analytics', '');
 
@@ -23,6 +23,8 @@ Config::set('issue.upload_folder', '/home/sque/workspace/issues-tracker/uploads'
 
 Config::set('site.public_host', '192.168.59.99');
 
-Config::set('issues.mail_from', 'issues@kmfa.net');
+Config::set('mail.default_from', 'issues@dev.kmfa.net');
+
+Config::set('mail.enabled', '');
 
 ?>

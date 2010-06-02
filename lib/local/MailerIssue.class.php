@@ -17,27 +17,25 @@ class MailerIssue
     
     public function get_title()
     {   $i = $this->issue;
-        return "[#{$i->id} {$i->project->name}] | $i->title";
+        return "[Issue #{$i->id}] $i->title";
     }
     
     public function get_body($receive_reason)
     {   $i = $this->issue;
         return $this->body . 
-            "
-            
-            -- 
-            " .
+            "\n\n-- \n" .
             "Project: {$i->project->title}\n" .
             "Issue: [#{$i->id}] {$i->title}\n" .
             "       " . UrlFactory::craft_fqn('issue.view', $i) . "\n" .
             $receive_reason;
     }
+    
     public function send()
     {   
         if ((!($p = UserProfile::open(Authn_Realm::get_identity()->id()))) || empty($p->email))
             $extra_headers = array();
         else
-            $extra_headers = array('From' => "{$p->email}");
+            $extra_headers = array('From' => "{$p->fullname} <{$p->email}>");
         $extra_headers['X-IssuesTracker-Issue'] = $this->issue->id;
         
         $receipients = array();

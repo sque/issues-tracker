@@ -5,7 +5,9 @@ body {
 }
 
 /* General classes */
-
+.error{
+    color: red;
+}
 
 /* Execption / Error title */
 div.exception, div.error {
@@ -92,14 +94,20 @@ ul.backtrace>li .line:after {
 }
 
 /* Code */
-ul.code {
-	list-style-type: none;
+
+.code {
 	font-family: MonoSpace, "Courier New";
 	font-size: 10pt;
 	font-weight: bold;
-	display: none;
 	color: white;
 	background-color: #343434;
+	padding: 5px;
+	margin: 3px;
+}
+
+ul.code {
+	list-style-type: none;
+	display: none;
 	padding: 5px;
 	margin: 3px;
 }

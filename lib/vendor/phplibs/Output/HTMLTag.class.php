@@ -91,7 +91,7 @@ class Output_HTMLTag
 	public static $default_render_mode = 'html';
 
 	//! List of html element that do not close
-	private static $html_single_tags = array('hr', 'br', 'img', 'meta', 'link');
+	private static $html_single_tags = array('hr', 'br', 'img', 'meta', 'link', 'input');
 	
 	//! The actual tag
 	public $tag = '';

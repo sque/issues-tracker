@@ -31,7 +31,8 @@ class DB_Model
 	
 	//! Open a model from models pool
 	/**
-	 * @return - @b DB_Model object with models information
+	 * @return
+	 *  - @b DB_Model object with models information
 	 *  - @b NULL if model was not found.
 	 */
 	static public function open($model_name)
@@ -73,7 +74,8 @@ class DB_Model
 	
 	//! Check if a model exists
 	/*
-	 * @return -@b true if model exists
+	 * @return
+	 *  - @b true if model exists
 	 *  - @b if model does not exists.
 	 */
 	static public function exists($model_name)
@@ -87,7 +89,9 @@ class DB_Model
 	
 	//! Get the model cache
 	static public function get_model_cache()
-	{	return self::$model_cache;	}
+	{
+	    return self::$model_cache;
+    }
 	
 	//! The actual meta data
 	private $meta_data = NULL;
@@ -153,11 +157,15 @@ class DB_Model
 	
 	//! The name of the model
 	public function name()
-	{	return $this->meta_data['model'];	}
+	{
+	    return $this->meta_data['model'];
+    }
 	
 	//! Name of table associated with the model
 	public function table()
-	{	return $this->meta_data['table'];	}
+	{
+	    return $this->meta_data['table'];
+    }
 	
 	//! Get all fields of this model
 	/**
@@ -166,7 +174,8 @@ class DB_Model
 	 *  - array with field names.  
 	 */
 	public function fields($fields_info = false)
-	{	if ($fields_info === false)
+	{
+	    if ($fields_info === false)
 			return array_keys($this->meta_data['fields']);
 		else
 			return $this->meta_data['fields'];
@@ -179,7 +188,8 @@ class DB_Model
 	 *  - array with field names.  
 	 */
 	public function pk_fields($fields_info = false)
-	{	if ($fields_info === false)
+	{
+	    if ($fields_info === false)
 			return array_keys($this->meta_data['pk']);
 		return $this->meta_data['pk'];
 	}
@@ -191,7 +201,8 @@ class DB_Model
 	 *  - array with field names.  
 	 */
 	public function ai_fields($fields_info = false)
-	{	if ($fields_info === false)
+	{
+	    if ($fields_info === false)
 			return array_keys($this->meta_data['ai']);
 		return $this->meta_data['ai'];
 	}
@@ -203,7 +214,8 @@ class DB_Model
 	 *  - array with field names.  
 	 */
 	public function fk_fields($fields_info = false)
-	{	if ($fields_info === false)
+	{
+	    if ($fields_info === false)
 			return array_keys($this->meta_data['fk']);
 		return $this->meta_data['fk'];
 	}
@@ -217,7 +229,8 @@ class DB_Model
 	 *  - @b null If there is no foreign key for this model or on any error.
 	 */
 	public function fk_field_for($model, $field_info = false)
-	{   foreach($this->meta_data['fk'] as $fk)
+	{  
+	    foreach($this->meta_data['fk'] as $fk)
 	    {   if ($fk['fk'] === $model)
 	            if ($field_info)
 	                return $fk;
@@ -233,7 +246,9 @@ class DB_Model
 	 * - @b false if the name is unknown.
 	 */
 	public function has_field($name)
-	{	return isset($this->meta_data['fields'][$name]);	}
+	{
+	    return isset($this->meta_data['fields'][$name]);
+    }
 	
 	//! Query fields properties
 	/**
@@ -260,7 +275,8 @@ class DB_Model
 	 * @return @b FieldName The name of the field or @b NULL if it was not found
 	 */
 	public function field_name_by_sqlfield($sqlfield)
-	{	foreach($this->meta_data['fields'] as $field)
+	{
+	    foreach($this->meta_data['fields'] as $field)
 			if ($field['sqlfield'] === $sqlfield)
 				return $field['name'];
 		return NULL;
@@ -286,7 +302,7 @@ class DB_Model
 		if ($field['type'] === 'serialized')
 			return unserialize($db_data);
 		else if ($field['type'] === 'datetime')
-			return new DateTime($db_data);
+			return date_create($db_data, new DateTimeZone('UTC'))->setTimeZone(new DateTimeZone(date_default_timezone_get()));
 
 		// Unknown type return same
 		return $db_data;
@@ -311,7 +327,7 @@ class DB_Model
 		if ($field['type'] === 'serialized')
 			return serialize($user_data);
 		else if ($field['type'] === 'datetime')
-			return $user_data->format(DATE_ISO8601);
+			return $user_data->setTimeZone(new DateTimeZone('UTC'))->format(DATE_ISO8601);
 		else if ($field['type'] === 'relationship')
 			return $description;
 		return (string) $user_data;
@@ -319,11 +335,14 @@ class DB_Model
 	
 	//! Check if there is a relationship with name
 	public function has_relationship($name)
-	{	return isset($this->meta_data['relationships'][$name]);	}
+	{
+	    return isset($this->meta_data['relationships'][$name]);
+    }
 	
 	//! All the relationships of this model
 	public function relationships($info = false)
-	{	if ($info === false)
+	{  
+	    if ($info === false)
 			return array_keys($this->meta_data['relationships']);
 		else
 			return $this->meta_data['relationships'];
@@ -355,7 +374,8 @@ class DB_Model
 	 * @return @b TRUE if it was cached succesfully.
 	 */
 	public function push_cache($key, $obj)
-	{	if (self::$model_cache === NULL)
+	{
+	    if (self::$model_cache === NULL)
 			return false;
 		
 		return self::$model_cache->set('dbmodel[' . $this->name() . ']' . $key, $obj);
@@ -369,13 +389,15 @@ class DB_Model
 	 * @return The object that was found inside the cache, or @b NULL if it was not found.
 	 */
 	public function fetch_cache($key, & $succ)
-	{	$succ = false;
+	{
+	    $succ = false;
 		if (self::$model_cache === NULL)
 			return NULL;
 
 		$obj = self::$model_cache->get('dbmodel[' . $this->name() . ']' . $key, $rsucc);
 		if ($rsucc)
-		{	$succ = true;
+		{
+		    $succ = true;
 			return $obj;
 		}
 		

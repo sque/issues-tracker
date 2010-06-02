@@ -21,8 +21,6 @@ class UI_IssueEditForm extends Output_HTML_Form
             array(
                 'title' => array('display' => 'Title', 'recheck' => '/^.{3,}$/s', 'value' => $this->issue->title),
                 'description' => array('display' => 'Description', 'type' => 'textarea',
-                    'regcheck' => '/^.+$/s',
-                    'onerror' => 'You must add description on issue.',
                     'value' => $this->issue->description
                  ),
                 'assignee' => array('display' => 'Assigned to', 'type' => 'dropbox', 'optionlist' => $assignees,

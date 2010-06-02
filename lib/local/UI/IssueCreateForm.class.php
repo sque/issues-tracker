@@ -8,13 +8,18 @@ class UI_IssueCreateForm extends Output_HTML_Form
     public function __construct($project)
     {
         $this->project = $project;
-            
+
+        $assignees = array_merge(
+            array('' => '-- Unassigned --'),
+            Membership::get_users('dev')
+        );
+        
         parent::__construct(
             array(
                 'title' => array('display' => 'Title', 'regcheck' => '/^.{3,}$/'),
-                'description' => array('display' => 'Description', 'type' => 'textarea',
-                    'onerror' => 'You must add description on issue.'
-                 ),
+                'description' => array('display' => 'Description', 'type' => 'textarea'),
+                'assignee' => array('display' => 'Assigned to', 'type' => 'dropbox', 'optionlist' => $assignees,
+                    'mustselect' => false),
                 'tags' => array('display' => 'Tags',
                     'regcheck' => '/^([\w\-]+(?:(?:\s(?!$))?))*$/',
                     'onerror' => 'Tags must be seperated with a space',

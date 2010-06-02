@@ -53,6 +53,20 @@ function get_submenu()
     return Layout::open('default')->get_submenu();
 }
 
+function show_tag_cloud($p)
+{
+    $tag_counters = $p->tag_counters->all();
+    if (!empty($tag_counters))
+    {
+        $ul = tag('div class="tag-cloud"');
+        foreach($tag_counters as $counter)
+            UrlFactory::craft('project.tag', $p, $counter->tag)
+                ->anchor($counter->tag)
+                ->attr('style', 'font-size: ' . ($counter->percent + 1.0) . 'em;')
+                ->appendTo($ul);
+        Layout::open('default')->add_widget('Tags', $ul, $prepend = true);
+    }
+}
 function show_tag($pname, $tagname)
 {
     if (!($p = Project::open($pname)))
@@ -77,10 +91,11 @@ function show_tag($pname, $tagname)
     etag('h2', "Issues tagged with \"{$tagname}\"");
     if (!empty($issues))
     {
-    
         $grid = new UI_IssuesGrid($issues, array('project'));
         etag('div', $grid->render());
     }
+    
+    show_tag_cloud($p);
 }
 
 function show_project($name)
@@ -109,18 +124,7 @@ function show_project($name)
         etag('div', $grid->render());
     }
     
-    $tag_counters = $p->tag_counters->all();
-    if (!empty($tag_counters))
-    {
-        $ul = tag('div class="tag-cloud"');
-        foreach($tag_counters as $counter)
-            UrlFactory::craft('project.tag', $p, $counter->tag)
-                ->anchor($counter->tag)
-                ->attr('style', 'font-size: ' . ($counter->percent + 1.0) . 'em;')
-                ->appendTo($ul);
-        Layout::open('default')->add_widget('Tags', $ul, $prepend = true);
-    }
-
+    show_tag_cloud($p);
 }
 
 function create_project()

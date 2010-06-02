@@ -26,14 +26,14 @@ function view_user($user)
     else
         etag('h1', $user);
     
-    // Assigned issues List
+    // Open assigned issues List
     $issues = Issue::open_query()
         ->where('assignee = ?')
         ->order_by('created', 'DESC')
-        ->execute($user);
+        ->execute( $user);
     if (!empty($issues))
     {
-        etag('h2', 'Assigned issues');
+        etag('h2', 'Open assigned issues');
         $grid = new UI_IssuesGrid($issues);
         etag('div', $grid->render());
     }

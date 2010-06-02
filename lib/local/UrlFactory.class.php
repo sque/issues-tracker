@@ -48,7 +48,7 @@ class UrlFactory
         $args = array_slice($args, 1);
         $absolute = url(call_user_func_array(array(self::$resources[$name], 'generate'), $args));
         
-        return new Uri('http://' . $host . $absolute);
+        return new Uri((empty($_SERVER['HTTPS'])?'http':'https') .'://' . $host . $absolute);
     }
 
 }

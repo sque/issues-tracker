@@ -79,7 +79,7 @@ class ClassLoader
      * @param $class The class name that we are looking for its file.
      */
     public function load_class($class)
-    {
+    {   
         foreach($this->directories as $directory)
         {
             $file = $directory . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $class) . $this->file_extension;

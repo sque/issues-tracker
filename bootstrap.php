@@ -61,10 +61,11 @@ DB_Conn::events()->connect('error',function($e)
 {
     error_log( $e->arguments['message']); 
 });
+
 $dbcache = new Cache_Apc('issue-tracker');
-$dbcache->delete_all();
+//$dbcache->delete_all();
 DB_Model::set_model_cache($dbcache);
-//DB_ModelQueryCache::set_global_query_cache($dbcache);
+DB_ModelQueryCache::set_global_query_cache($dbcache);
 
 // PHP TimeZone
 date_default_timezone_set(Config::get('site.timezone'));
@@ -79,8 +80,8 @@ if (!isset($_SESSION['initialized']))
 }
 
 // Mailer
-Mailer::set_mail_instance(Mail::factory('mock', array('sendmail_path' => '/usr/sbin/sendmail')));
-Mailer::set_default_headers(array('From' => Config::get('issues.mail_from')));
+Mailer::set_mail_instance(Mail::factory((Config::get('mail.enabled')?'mail':'mock')));
+Mailer::set_default_headers(array('From' => Config::get('mail.default_from')));
 
 // Setup authentication
 /*

@@ -440,7 +440,8 @@ class DB_Record
 	
 		// Populate fields data
 		foreach($model->fields(true) as $field_name => $field)
-		{	$this->fields_data[$field_name] = (isset($sql_data[$field['sqlfield']]))?$sql_data[$field['sqlfield']]:NULL;
+		{	
+		    $this->fields_data[$field_name] = (isset($sql_data[$field['sqlfield']]))?$sql_data[$field['sqlfield']]:NULL;
 			$this->data_cast_cache[$field_name] = NULL;			
 		}
 	}
