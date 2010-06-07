@@ -22,7 +22,7 @@
 
 // Use default layout to render this page
 Layout::open('default')->activate();
-UrlFactory::craft('user.view', Authn_Realm::get_identity()->id())->redirect();
+UrlFactory::craft('projects')->redirect();
 echo 'This is the home page!';
 etag('br');
 echo 'You can change it by editing ';

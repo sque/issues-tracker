@@ -137,7 +137,7 @@ class Net_HTTP_Cookie
 
     //! Set the effective domain of the cookie
     /**
-     * @param $value The new effective domain.
+     * @param $domain The new effective domain.
      */
     public function set_domain($domain)
     {
@@ -146,7 +146,7 @@ class Net_HTTP_Cookie
 
     //! Set the effective path of the cookie
     /**
-     * @param $value The new effective path.
+     * @param $path The new effective path.
      */
     public function set_path($path)
     {
@@ -173,8 +173,9 @@ class Net_HTTP_Cookie
 
     //! Set the expiration time of the cookie.
     /**
-     * @param $time - The unix time stamp of the expiration date.
-     *      - @b 0 if the cookie is a session cookie.
+     * @param $time
+     *  - The unix time stamp of the expiration date.
+     *  - @b 0 if the cookie is a session cookie.
      *  .
      */
     public function set_expiration_time($time)

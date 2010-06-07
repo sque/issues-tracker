@@ -71,7 +71,6 @@ class Layout_Default extends Layout
                 ->append($layout->get_mainmenu()->render());
         });
 
-        $this->mainmenu->create_link('Home', url('/'))->set_autoselect_mode('equal');
         $this->mainmenu->create_link('Projects', url('/p'));
         $this->mainmenu->create_link('Branches', url('/branch'));
     }
@@ -84,6 +83,7 @@ class Layout_Default extends Layout
         $doc->title = Config::get('site.title');
         $doc->add_ref_css(surl('/static/css/default.css'));
         $doc->add_ref_js(surl('/static/js/jquery-1.4.2.min.js'));
+        $doc->add_ref_js(surl('/static/js/jquery-color.min.js'));
         $doc->add_ref_js(surl('/static/js/widgets_bar.js'));
         $doc->add_ref_js(surl('/static/js/issues.js'));
         

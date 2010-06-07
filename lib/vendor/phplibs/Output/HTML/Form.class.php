@@ -150,7 +150,7 @@ require_once dirname(__FILE__) . '/../html.lib.php';
  *           V
  * ( Output_HTML_Form Constructor End )
  *   @endverbatim
- *   .
+ *
  */
 class Output_HTML_Form
 {

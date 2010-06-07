@@ -103,7 +103,7 @@ class UI_InstallationForm extends Output_HTML_Form
         // Timezone
         if (isset($this->tzones[$values['timezone']]))
             Config::set('site.timezone', $this->tzones[$values['timezone']]);
-        $data = "<?php\n// File generated with install.php\n";
+        $data = "<?php\n// File generated with /install\n";
         	
         foreach(Config::get_all() as $name => $value)
             $data .= sprintf("\nConfig::set('%s', '%s');\n",

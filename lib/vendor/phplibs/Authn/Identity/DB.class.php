@@ -32,7 +32,12 @@ class Authn_Identity_DB implements Authn_Identity
     private $authority;
 
     //! The object is constructed by Authn_Backend_DB
-    public function __construct($id, $authority, $record)
+    /**
+     * @param $id The unique id of this identity.
+     * @param $authority The Authn_Backend_DB that created this identity.
+     * @param $record The database record of this user.
+     */
+    public function __construct($id, Authn_Backend_DB $authority, $record)
     {
         $this->id = $id;
         $this->record = $record;

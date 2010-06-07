@@ -75,8 +75,10 @@ function show_project($name, $tagname = null)
         not_found();
 
     $sb = get_submenu();
+    $sb->create_link('Report issue', UrlFactory::craft('project.post-issue', $p), null, array('class' => 'action-issue'));
+    
     $sb->create_link('Edit project', UrlFactory::craft('project.edit', $p), null, array('class' => 'action-edit'));
-    $sb->create_link('Create issue', UrlFactory::craft('issue.create', $p), null, array('class' => 'action-issue'));
+
 
     $bc = project_breadcrumb($p);
     if ($tagname)
@@ -302,8 +304,11 @@ function default_projects()
 
     Layout::open('default')->get_document()->title = 'Projects | Issues Tracker';
     etag('h1', 'Projects');
-    get_submenu()
-        ->create_link('Add Project', UrlFactory::craft('project.create'), null, array('class' => 'action-add'));
+
+    if (Authz::is_allowed('project', 'post-issue'))
+        get_submenu()->create_link('Report issue', UrlFactory::craft('issue.create'), null, array('class' => 'action-issue'));
+    if (Authz::is_allowed('project', 'create'))
+        get_submenu()->create_link('Add Project', UrlFactory::craft('project.create'), null, array('class' => 'action-add'));
 
     // Show all projects
     $p_grid = new UI_ProjectsGrid(Project::open_all());

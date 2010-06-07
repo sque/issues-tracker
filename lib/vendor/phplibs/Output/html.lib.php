@@ -60,7 +60,8 @@ function dump_tag($tag, $prepend = "")
  * It is preferable to display size closer to the unit that
  * results with less digits and without using floating point. It is better
  * to use 1.2K or 1K than 1200bytes.
- * @param $size The size in bytes
+ *  @param $size The size in bytes
+ *  @param $postfix The string to be postfixed after measurement unit.
  */
 function html_human_fsize($size, $postfix = 'ytes')
 {	

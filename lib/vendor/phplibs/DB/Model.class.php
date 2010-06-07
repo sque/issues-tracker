@@ -20,7 +20,7 @@
  */
 
 
-//! The schema of model
+//! The object holding all the model info
 class DB_Model
 {
 	//! An array with all models
@@ -28,6 +28,9 @@ class DB_Model
 	
 	//! The model cache
 	static private $model_cache = NULL;
+	
+	//! Database time zone
+	static public $database_time_zone = 'UTC';
 	
 	//! Open a model from models pool
 	/**
@@ -170,8 +173,9 @@ class DB_Model
 	//! Get all fields of this model
 	/**
 	 * @param $fields_info Set @b true to request fields info otherwise only names.
-	 * @return - associative array with fields and their info or
-	 *  - array with field names.  
+	 * @return
+	 *  - @b associative @b array with fields and their info or
+	 *  - @b array with field names.  
 	 */
 	public function fields($fields_info = false)
 	{
@@ -184,8 +188,9 @@ class DB_Model
 	//! Get primary key fields of this model
 	/**
 	 * @param $fields_info Set @b true to request fields info otherwise only names.
-	 * @return - associative array with fields and their info or
-	 *  - array with field names.  
+	 * @return
+	 *  - @b associative @b array with fields and their info or
+	 *  - @b array with field names.  
 	 */
 	public function pk_fields($fields_info = false)
 	{
@@ -197,8 +202,9 @@ class DB_Model
 	//! Get auto_increment key fields of this model
 	/**
 	 * @param $fields_info Set @b true to request fields info otherwise only names.
-	 * @return - associative array with fields and their info or
-	 *  - array with field names.  
+	 * @return
+	 *  - @b associative @b array with fields and their info or
+	 *  - @b array with field names.  
 	 */
 	public function ai_fields($fields_info = false)
 	{
@@ -210,8 +216,9 @@ class DB_Model
 	//! Get foreign key fields of this model
 	/**
 	 * @param $fields_info Set @b true to request fields info otherwise only names.
-	 * @return - associative array with fields and their info or
-	 *  - array with field names.  
+	 * @return
+	 *  - @b associative @b array with fields and their info or
+	 *  - @b array with field names.  
 	 */
 	public function fk_fields($fields_info = false)
 	{
@@ -223,8 +230,9 @@ class DB_Model
 	//! Find the foreign key that references to a foreign model
 	/**
 	 * @param $model The model that fk references to.
-	 * @param $fields_info Set @b true to request fields info otherwise only names.
-	 * @return - @b associative @b array All the information of the field.
+	 * @param $field_info Set @b true to request field info otherwise only names.
+	 * @return
+	 *  - @b associative @b array All the information of the field.
 	 *  - @b string The name of the field.
 	 *  - @b null If there is no foreign key for this model or on any error.
 	 */
@@ -242,8 +250,9 @@ class DB_Model
 	
 	//! Check if there is a field
 	/**
-	 * @return - @b true if field exist
-	 * - @b false if the name is unknown.
+	 * @return
+	 *  - @b true if field exist
+	 *  - @b false if the name is unknown.
 	 */
 	public function has_field($name)
 	{
@@ -286,7 +295,7 @@ class DB_Model
 	/**
 	 * @param $field_name The name of the field that data belongs to.
 	 * @param $db_data The data to be casted
-	 * @return The data casted to @i user format based on the @i type of the field.
+	 * @return The data casted to @e user format based on the @e type of the field.
 	 * @throws InvalidArgumentException if $field_name is not valid
 	 */
 	public function user_field_data($field_name, $db_data)
@@ -302,7 +311,10 @@ class DB_Model
 		if ($field['type'] === 'serialized')
 			return unserialize($db_data);
 		else if ($field['type'] === 'datetime')
-			return date_create($db_data, new DateTimeZone('UTC'))->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+		{
+		    $utc_time = new DateTime($db_data, new DateTimeZone(self::$database_time_zone));
+			return $utc_time->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+        }
 
 		// Unknown type return same
 		return $db_data;
@@ -311,8 +323,8 @@ class DB_Model
 	//! Cast data user -> db 
 	/**
 	 * @param $field_name The name of the field that data belongs to.
-	 * @param $db_data The data to be casted
-	 * @return The data casted to @i db format based on the @i type of the field.
+	 * @param $user_data The data to be casted
+	 * @return The data casted to @e db format based on the @e type of the field.
 	 * @throws InvalidArgumentException if $field_name is not valid
 	 */
 	public function db_field_data($field_name, $user_data)
@@ -327,7 +339,7 @@ class DB_Model
 		if ($field['type'] === 'serialized')
 			return serialize($user_data);
 		else if ($field['type'] === 'datetime')
-			return $user_data->setTimeZone(new DateTimeZone('UTC'))->format(DATE_ISO8601);
+			return $user_data->setTimeZone(new DateTimeZone(self::$database_time_zone))->format(DATE_ISO8601);
 		else if ($field['type'] === 'relationship')
 			return $description;
 		return (string) $user_data;

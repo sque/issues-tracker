@@ -15,7 +15,7 @@ function view_user($user)
     if ($p = UserProfile::open($user))
     {
         Layout::open('default')->get_document()->title = $p->fullname;
-        etag('h1', $p->fullname);
+        etag('h1 class="user"', $p->fullname);
         etag('dl',
             tag('dt', 'Nickname:',
               tag('dd', $p->username)),
@@ -28,9 +28,11 @@ function view_user($user)
     
     // Open assigned issues List
     $issues = Issue::open_query()
+        ->where_in('status', array('new', 'accepted'))
+        ->order_by('status = ?', 'DECS')
         ->where('assignee = ?')
         ->order_by('created', 'DESC')
-        ->execute( $user);
+        ->execute($user, 'accepted');
     if (!empty($issues))
     {
         etag('h2', 'Open assigned issues');

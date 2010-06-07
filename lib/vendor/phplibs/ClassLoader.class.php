@@ -66,7 +66,7 @@ class ClassLoader
     
     //! Set the file extension of files
     /**
-     * @param The extension of file with the leading dot.\n
+     * @param $extension The extension of file with the leading dot.\n
      *  e.g. '.php' , '.class.php'
      */
     public function set_file_extension($extension)

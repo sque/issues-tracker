@@ -30,8 +30,21 @@ class Authn_Backend_LDAP implements Authn_Backend
 
     //! Get the options of this instance.
     public function get_options()
-    {   return $this->options;  }
+    {
+        return $this->options;
+    }
 
+    //! Create an instance of ldap backend
+    /**
+     * @param $options An associative array of options.
+     *  - @b url [@b *] The url to connect on server.
+     *  - @b baseDN [@b *] The baseDN to search for users.
+     *  - @b id_attribute [Default: userprincipalname] The attribute of user object that represents its unique id.
+     *  - @b force_protocol_version [Default: null] Force a specfic version of communication protocol.
+     *  - @b default_domain [Default: null] A domain to be postfixed in username before validating username.
+     *  [@b *] mandatory field.
+     * @throws InvalidArgumentException If one of the mandatory fields is missing.
+     */
     public function __construct($options = array())
     {
         if (! isset(

@@ -32,11 +32,22 @@ class Cache_File extends Cache
 	private $file_prefix;
 
 	private function filename_by_key($key)
-	{	return $this->directory . '/' . $this->file_prefix . md5($key);
+	{
+	    return $this->directory . '/' . $this->file_prefix . md5($key);
 	}
 	
+	//! Construct a new file-based cache engine
+	/**
+	 * @param $directory
+	 *  - A valid directory path to store cached objects.
+	 *  - @b null If you want to use system's temporary directory.
+	 *  .
+	 * @param $file_prefix
+	 *  A string to prefix all filenames to avoid colision with existing files.
+	 */
 	public function __construct($directory = NULL, $file_prefix = 'cache_file_')
-	{	$this->file_prefix = $file_prefix;
+	{
+	    $this->file_prefix = $file_prefix;
 		$this->directory = $directory;
 		if ($this->directory  === NULL)
 			$this->directory = sys_get_temp_dir();

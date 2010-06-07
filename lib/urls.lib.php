@@ -3,13 +3,14 @@
 UrlFactory::$force_host = Config::get('site.public_host');
 UrlFactory::register('issue.view', '$issue', '/p/{$issue->project->name}/+issue/{$issue->id}');
 UrlFactory::register('issue.edit', '$issue', '/p/{$issue->project->name}/+issue/{$issue->id}/+edit');
-UrlFactory::register('issue.create', '$project', '/p/{$project->name}/+createissue');
+UrlFactory::register('issue.create', '', '/issue/+create');
 UrlFactory::register('issueaction.view', '$action',
     '/p/{$action->issue->project->name}/+issue/{$action->issue->id}#comment_{$action->id}');
 UrlFactory::register('project.view', '$project', '/p/{$project->name}');
 UrlFactory::register('project.edit', '$project', '/p/{$project->name}/+edit');
 UrlFactory::register('project.create', '', '/p/+create');
 UrlFactory::register('project.tag', '$project, $tag_name', '/p/{$project->name}/+tag/{$tag_name}');
+UrlFactory::register('project.post-issue', '$project', '/p/{$project->name}/+createissue');
 UrlFactory::register('projects', '', '/p');
 UrlFactory::register('attachment.view', '$a', '/file/{$a->id}/{$a->filename}');
 UrlFactory::register('user.view', '$name', '/~{$name}');
@@ -31,7 +32,7 @@ function tag_user($username, $extra_classes = array(), $dot_name = true)
         }
     }
     
-    $a = tag('a class="user"', $display_name, 
+    $a = tag('a class="user" html_escape_off', str_replace(' ', '&nbsp;', esc_html($display_name)), 
         array('href' => UrlFactory::craft('user.view', $username))
     );
     

@@ -28,8 +28,11 @@ class Cache_Apc extends Cache
 	private $apc_key_prefix;
 	
 	/**
+	 * @param $apc_key_prefix Because APC is by designed shared memory inside all
+	 *  executed scripts of apache, you can prefix the key values with a unique string.
 	 * @param $serialize_data A flag to serialize/unserialize data before
 	 * pushing/fetching them from apc sma.
+
      */
 	public function __construct($apc_key_prefix = '', $serialize_data = false)
 	{	$this->apc_key_prefix = $apc_key_prefix;
@@ -62,8 +65,6 @@ class Cache_Apc extends Cache
 		else
 			return apc_fetch($this->apc_key_prefix . $key, $succeded);
 	}
-	
-	public function get_delayed($key, $callback){}
 	
 	public function get_multi($keys)
 	{	$result = array();

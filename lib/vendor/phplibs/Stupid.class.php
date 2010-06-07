@@ -72,7 +72,7 @@ require_once(dirname(__FILE__) . '/Stupid/Condition.class.php');
  *  <i> Condition evaluator for checks on the path part of the uri. It suppots
  *  full path, PATH_INFO for "index.php/example" routing schema etc </i>
  * - AuthenticationCondition\n
- *  <i> Condition evaluator for checks on WAAS and Group<i>
+ *  <i> Condition evaluator for checks on WAAS and Group</i>
  * .
  * 
  * @author sque

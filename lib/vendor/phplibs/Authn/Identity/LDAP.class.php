@@ -22,12 +22,20 @@
 
 require_once( dirname(__FILE__) . '/../Identity.class.php');
 
+//! Implementation of Authn_Identity for Authn_Backend_LDAP
 class Authn_Identity_LDAP implements Authn_Identity
 {
+    //! An associative array with all user attributes
     private $user_attribs;
 
+    //! The name of the attribute that will be used as idenity's id.
     private $id_attribute;
     
+    //! The object is constructed by Authn_Backend_LDAP
+    /**
+     * @param $user_attribs Associative array with all attributes of user in LDAP catalog.
+     * @param $id_attribute The name of the attribute that will be used as idenity's id.
+     */
     public function __construct($user_attribs, $id_attribute)
     {
         $this->user_attribs = $user_attribs;
@@ -38,21 +46,31 @@ class Authn_Identity_LDAP implements Authn_Identity
             throw new RuntimeException("There is no attirubute with name \"{$this->id_attribute}\"!");
     }
 
+    //! Get the Distinguished Name of this identity
     public function dn()
     {   
         return $this->get_attribute('distinguishedname');
     }
 
+    //! Get the principalName of this identity
     public function principalName()
     {   
         return $this->get_attribute('userprincipalname');
     }
     
+    //! Get the SAM Account Name of this identity
     public function sam_account_name()
     {
         return $this->get_attribute('samaccountname');
     }
     
+    //! Get an attribute from users attributes
+    /**
+     * @param $name The name of the attribute
+     * @return
+     *  - The value of attribute.
+     *  - @b false on any kind of error.
+     */
     public function get_attribute($name)
     {
         if (!isset($this->user_attribs[$name]))
@@ -62,7 +80,6 @@ class Authn_Identity_LDAP implements Authn_Identity
         return $this->user_attribs[$name][0];
     }
     
-    //! Returns the DN of the user
     public function id()
     {
         return $this->get_attribute($this->id_attribute);

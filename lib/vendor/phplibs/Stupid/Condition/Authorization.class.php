@@ -70,7 +70,7 @@ class Stupid_Condition_Authorization extends Stupid_Condition
                     'Stupid_Condition[Authz] there is no backref with index key "' . $options['backref_instance'] . '"!');
                     
             $options['instance'] = $previous_backrefs[$options['backref_instance']];
-        }   $depth;
+        }
         return Authz::is_allowed(array($options['resource'], $options['instance']), $options['action']);
 	}
 }

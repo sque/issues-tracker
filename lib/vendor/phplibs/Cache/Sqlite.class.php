@@ -25,10 +25,16 @@ require_once(dirname(__FILE__) . '/../Cache.class.php');
 //! Implementation for SQLite caching
 class Cache_Sqlite extends Cache
 {
+    //! The sqlite connection handle
 	public $dbhandle;
 	
+	//! Construct a new sqlite based caching engine
+	/**
+	 * @param $db The file name of the database to open/create.
+	 */
 	public function __construct($db)
-	{	$new_db = false;
+	{
+	    $new_db = false;
 		if (!file_exists($db))
 			$new_db = true;
 		

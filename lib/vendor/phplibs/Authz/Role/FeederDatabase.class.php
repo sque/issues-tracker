@@ -62,6 +62,7 @@ class Authz_Role_FeederDatabase implements Authz_Role_Feeder
             throw new InvalidArgumentException('Missing mandatory option "role_name_field".');
     }
     
+    //! Get the options of this instance.
     public function get_options()
     {
         return $this->options;

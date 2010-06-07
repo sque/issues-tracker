@@ -45,10 +45,9 @@ class Authn_Backend_DB implements Authn_Backend
     //! Create an instance of this backend
     /**
      * @param $options An associative array of options.
-     *  - @b model_user [@b *] The name of the already created model for users.
+     *  - @b query_user [@b *] A DB_RecordModelQuery prepared to select records based on username.
      *  - @b field_username [@b *] The field that is the username.
      *  - @b field_password [@b *] The field that is the password.
-     *  - @b where_condtions Array of extra conditions on select.
      *  - @b hash_function The hash function to be used on password, or NULL for plain.
      *  .
      *  [@b *] mandatory field.
@@ -57,30 +56,21 @@ class Authn_Backend_DB implements Authn_Backend
     public function __construct($options = array())
     {
         if (! isset(
-            $options['model_user'],
+            $options['query_user'],
             $options['field_username'],
             $options['field_password'])
         )   throw new InvalidArgumentException('Missing mandatory options for Authn_DB_Backend!');
-
+        
         // Merge with default options and save
         $this->options = array_merge(array(
-            'where_conditions' => array(),
             'hash_function' => NULL),
             $options);
-        
-        // Create model query
-        $this->model_query = DB_Record::open_query($this->options['model_user'], 'open_query')
-            ->where($options['field_username'] . ' = ?');
-
-        // Append where conditions
-        foreach($this->options['where_conditions'] as $condition)
-            $this->model_query->where($condition);
     }
     
     public function authenticate($username, $password)
     {
         // Get user
-        $records = $this->model_query->execute($username);
+        $records = $this->options['query_user']->execute($username);
         if (count($records) !== 1)
             return false;
 
@@ -106,9 +96,7 @@ class Authn_Backend_DB implements Authn_Backend
      */
     public function reset_password($id, $new_password)
     {   
-        $records = DB_Record::open_query($this->options['model_user'], 'open_query')
-            ->where($this->options['field_username'] . ' = ?')
-            ->execute($id);
+        $records = $this->options['query_user']->execute($id);
             
         if ((!$records) || (count($records) !== 1))
             return false;

@@ -28,8 +28,14 @@ class Cache_Memcached extends Cache
 	//! Memcached object
 	public $memc;
 	
+	//! Construct a new memcached caching engine.
+	/**
+	 * @param $host The ip/dns of memcached server.
+	 * @param $port The listening port of server.
+	 */	 
 	public function __construct($host, $port = 11211)
-	{	$this->memc = new Memcached();
+	{
+	    $this->memc = new Memcached();
 		if ($this->memc->addServer($host, $port) === FALSE)
 			throw new RuntimeException("Cannot connect to memcached server $host:$port");	
 	}

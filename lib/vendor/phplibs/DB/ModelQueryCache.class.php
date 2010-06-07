@@ -94,8 +94,8 @@ class DB_ModelQueryCache
 	
 	//! Set model specific query cache ttl
 	/**
-	 * You can override global query cache ttk per model.
-	 * @param $cache Use one of the following options
+	 * You can override global query cache ttl per model.
+	 * @param $ttl Use one of the following options
 	 * 	- @b NULL Don't override options, use the global one.
 	 *  - @b INT A new ttl that will be used for this model.
 	 *  .
@@ -103,11 +103,12 @@ class DB_ModelQueryCache
 	public function set_query_cache_ttl($ttl)
 	{	$this->model_query_cache_ttl = $ttl;	}
 	
-		//! Calculate and return the effective cache for this model
+	//! Calculate and return the effective cache for this model
 	/**
-	 * @return - @b NULL if cache is disabled
-	 * 	- @b Cache object that is set to be used for this model
-	 * .
+	 * @return
+	 *  - @b NULL if cache is disabled
+	 *  - @b Cache object that is set to be used for this model
+	 *  .
 	 */
 	public function get_effective_cache()
 	{	$this->recalculate_effective_cache();

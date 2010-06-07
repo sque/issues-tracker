@@ -124,11 +124,11 @@ class DB_Record
 	 * Events are announced through an EventDispatcher object per model.
 	 * The following events are valid:
 	 *  - @b op.pre.open: Filter before execution of open().
-	 *  - @b op.post.open: Notify after executeion of open().
+	 *  - @b op.post.open: Notify after execution of open().
 	 *  - @b op.pre.create: Filter before execution of create().
-	 *  - @b op.post.create: Notify after executeion of create().
+	 *  - @b op.post.create: Notify after execution of create().
 	 *  - @b op.pre.delete: Filter before execution of delete().
-	 *  - @b op.post.delete: Notify after executeion of delete().
+	 *  - @b op.post.delete: Notify after execution of delete().
 	 *  - @b op.pre.save: Filter before execution of save().
 	 *  - @b op.post.save: Notify after executeion of save().
 	 * .
@@ -373,9 +373,9 @@ class DB_Record
 		// Prepare query
 		$q = self::raw_query($model_name)
 			->insert(array_keys($values))
-			->values_array(array_fill(0, count($values), NULL));
+			->values_array($insert_args);
 		
-		if (($ret = call_user_func_array(array($q, 'execute'),$insert_args)) === FALSE)
+		if (($ret = $q->execute()) === FALSE)
 			return false;
 	
 		// Fill autoincrement fields

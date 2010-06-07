@@ -188,7 +188,7 @@ class EventDispatcher
     
     //! Connect on event
     /** 
-     * @param $event_name The name of the event or @b NULL for @i any event.
+     * @param $event_name The name of the event or @b NULL for @e any event.
      * @param $callable The callable object to be called when the event is raised.
      * @return @b true if it was connected succesfully or @b false on any error.
      */
@@ -216,7 +216,7 @@ class EventDispatcher
 
     //! Disconnect from event
     /** 
-     * @param $event_name The name of the event or @b NULL for @i any event.
+     * @param $event_name The name of the event or @b NULL for @e any event.
      * @param $callable The callable object that was passed on connection.
      * @return @b true if it was disconnected succesfully or @b false on any error.
      */

@@ -45,8 +45,10 @@ class Net_HTTP_RequestParam
 	//! Safe check that a parameter is equal with a value
 	/**
 	 * @param $name The name of the parameter.
+	 * @param $check_value The value to check that the param is equal to.
 	 * @param $param_type The type of this parameter. Accepted values are 'get', 'post' or 'both'.
-	 * @return - @b false If the parameter is not set or the parameter is not equal.
+	 * @return
+	 *  - @b false If the parameter is not set or the parameter is not equal.
 	 *  - @b true If the parameter is set and is equal to $check_value
 	 *  .
 	 */			
@@ -65,11 +67,12 @@ class Net_HTTP_RequestParam
 	
 	//! Read the value of a parameter
 	/**
-	 * @param $name The name of the value
+	 * @param $name The name of the parameter.
      * @param $param_type The type of this parameter. Accepted values are 'get', 'post' or 'both'.
-	 * @return - The value of the parameter.
+	 * @return
+	 *  - The value of the parameter.
 	 *  - @b NULL If the value is not set at all.
-	 *	.
+	 *  .
 	 */
 	function get($name, $param_type = 'both')
 	{
@@ -85,8 +88,10 @@ class Net_HTTP_RequestParam
 	
 	//! Check if a parameter is set
 	/**
+	 * @param $name The name of the parameter
      * @param $param_type The type of this parameter. Accepted values are 'get', 'post' or 'both'.
-     * @return - @b true If this parameter is set
+     * @return
+     *  - @b true If this parameter is set
      *  - @b false If the parameter is not set
      *  .
 	 */
@@ -104,10 +109,12 @@ class Net_HTTP_RequestParam
 	
     //! Check if a parameter is set and is numeric type
 	/**
+	 * @param $name The name of the parameter
      * @param $param_type The type of this parameter. Accepted values are 'get', 'post' or 'both'.
-     * @return - @b true If this parameter is set and is numeric
+     * @return
+     *  - @b true If this parameter is set and is numeric
      *  - @b false If the parameter is not set or it is not numeric
-     * .
+     *  .
 	 */
 	function is_numeric($name, $param_type = 'both')
 	{

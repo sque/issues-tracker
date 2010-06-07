@@ -85,11 +85,8 @@ class DB_Conn
     * @param $user The user to use for authentication.
     * @param $pass The password that will be used for authentication.
     * @param $schema The schema to use as default for this connection.
-    * @param $error_handler A callback function to call when an error is raised
-    * 		by any of the functions of DB_Conn. The function will get one parameter
-    * 		with the detailed message.
-    * 	@param $delayed_preparation A flag if delayed preparation should be used to
-    * 		improve performance.
+    * @param $delayed_preparation A flag if delayed preparation should be used to
+    *   improve performance.
     */
     static public function connect($server, $user, $pass, $schema, $delayed_preparation = true)
     {   
@@ -275,7 +272,7 @@ class DB_Conn
 
     //! Release a prepared statement
     /**
-    * @pararm $key The unique name that was used on prepare().
+    * @param $key The unique name that was used on prepare().
     * @return - @b true If the statement was found released.
     * - @b false on any error
     * @throws NotConnectedException if DB_Conn is not connected
