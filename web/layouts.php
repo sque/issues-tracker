@@ -42,8 +42,14 @@ etag('div id="main"',
 );
 etag('script html_escape_off',
 "
-     $(document).ready(function(){
+    $(document).ready(function(){
         $('.ui-login input:visible:first').focus();
+        
+        $('.ui-form-error').offset({left: 
+            $('.ui-login').offset().left + $('.ui-login').outerWidth()+ 25
+        ,top: 
+            $('input[name=login-user]').offset().top
+        });
     });
 ");
 $dl->set_default_container($def_content);
