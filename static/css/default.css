@@ -304,8 +304,9 @@ div.ui-form dt {
 
 div.ui-form label {
 	display: block;
-	font-size: 11pt;
+	font-size: 10pt;
 	margin: 5px 0px;
+	color: #515151;
 }
 
 div.ui-form dt input, div.ui-form dt textarea {
@@ -353,6 +354,12 @@ div.ui-form .ui-form-hint {
     border-bottom: 1px solid #e1e1e1;
     padding-bottom: 2px;
     color: #75b05d;
+}
+
+.ui-form-more-attachments{
+    cursor: pointer;
+    font-size: 10pt;
+    margin-left: 0px;
 }
 /* Dictionary list */
 dl{
