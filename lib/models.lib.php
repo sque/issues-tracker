@@ -393,4 +393,5 @@ Project::one_to_many('ProjectTagCount', 'project', 'tag_counters');
 Issue::one_to_many('IssueAction', 'issue', 'actions');
 Issue::one_to_many('IssueTag', 'issue', 'tags');
 IssueActionComment::one_to_many('Attachment', 'action', 'attachments');
+IssueTag::model();
 ?>

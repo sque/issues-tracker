@@ -74,7 +74,7 @@ class UI_IssueCreateForm extends Output_HTML_Form
         }
         
         // Add tags
-        $tags = array_filter(array_unique(explode(' ', $values['tags'])),
+        $tags = array_filter(array_unique(explode(' ', strtolower($values['tags']))),
             function($el){  if (!empty($el))    return true;    });
             
         foreach($tags as $t)

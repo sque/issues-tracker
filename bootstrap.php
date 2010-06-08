@@ -71,15 +71,6 @@ DB_ModelQueryCache::set_global_query_cache($dbcache);
 // PHP TimeZone
 date_default_timezone_set(Config::get('site.timezone'));
 
-// PHP Session
-session_start();
-if (!isset($_SESSION['initialized']))
-{
-    // Prevent session fixation with invalid ids
-    $_SESSION['initialized'] = true;
-    session_regenerate_id();
-}
-
 // Mailer
 Mailer::set_mail_instance(Mail::factory((Config::get('mail.enabled')?'mail':'mock')));
 Mailer::set_default_headers(array('From' => Config::get('mail.default_from')));
@@ -88,7 +79,7 @@ Mailer::set_default_headers(array('From' => Config::get('mail.default_from')));
 if (Config::get('site.authn.type') == 'db')
 {
     $auth = new Authn_Backend_DB(array(
-        'model_user' => 'User',
+        'query_user' => User::open_query()->where('username = ?'),
         'field_username' => 'username',
         'field_password' => 'password',
         'hash_function' => 'sha1',
@@ -126,6 +117,8 @@ else if (Config::get('site.authn.type') == 'ldap')
     ));
 }
 Authn_Realm::set_backend($auth);
+$cookie = new Net_HTTP_Cookie('issues_token', '', time()+60*60*24*30, '/', '', false, true);
+Authn_Realm::set_session(new Authn_Session_Cache(new Cache_Apc('sessions'), $cookie));
 
 // Setup authorization
 Authz::set_resource_list($list = new Authz_ResourceList());

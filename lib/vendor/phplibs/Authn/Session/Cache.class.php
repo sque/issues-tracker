@@ -82,7 +82,7 @@ class Authn_Session_Cache implements Authn_Session
     public function get_identity()
     {
         if ($this->session_id === null)
-        return false;
+            return false;
 
         $identity = $this->cache->get($this->session_id, $succ);
         if (!$succ)
@@ -95,7 +95,8 @@ class Authn_Session_Cache implements Authn_Session
     }
 
     public function clear_identity()
-    {   // Remove data from cache
+    {   
+        // Remove data from cache
         if ($this->session_id)
             $this->cache->delete($this->session_id);
 

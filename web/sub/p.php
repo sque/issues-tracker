@@ -76,9 +76,7 @@ function show_project($name, $tagname = null)
 
     $sb = get_submenu();
     $sb->create_link('Report issue', UrlFactory::craft('project.post-issue', $p), null, array('class' => 'action-issue'));
-    
     $sb->create_link('Edit project', UrlFactory::craft('project.edit', $p), null, array('class' => 'action-edit'));
-
 
     $bc = project_breadcrumb($p);
     if ($tagname)
@@ -196,7 +194,8 @@ function show_issue($p_name, $issue_id)
         tag('h1', $i->title),
         project_breadcrumb($p, $i)->render(),
         tag('div class="header"',
-            tag('span class="description" nl_escape_on', $i->description),
+            tag('span class="description" html_escape_off',
+                linkify_url(linkify_issues(Output_HTMLTag::nl2br(esc_html($i->description), true)))),
             tag('span class="date"', date_exformat($i->created)->human_diff()),
             tag_user($i->poster, 'poster'),
             (!empty($tags->childs)?$tags:'')
@@ -211,10 +210,7 @@ function show_issue($p_name, $issue_id)
             tag('dd class="poster"', date_exformat($i->created)->human_diff()),
             tag('dt', 'Assigned to:'),
             tag('dd class="assignee"', ($i->assignee?tag_user($i->assignee):'Unassigned'))
-
         ));
-
-
 
     // Actions
     $action_count = 0;
@@ -228,7 +224,9 @@ function show_issue($p_name, $issue_id)
 
         if ($action->type == 'comment')
         {   $comments = $action->get_details();
-            tag('span class="post"', $comments->post)->appendTo($li);
+            tag('span class="post" html_escape_off',
+                linkify_url(linkify_issues(Output_HTMLTag::nl2br(esc_html($comments->post), true)))
+            )->appendTo($li);
             
             $attachments = $comments->attachments->all();
             $ul_attachs = tag('ul class="attachments"');

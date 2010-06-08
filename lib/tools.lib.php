@@ -34,4 +34,29 @@ function surl($relative)
     return (dirname($_SERVER['SCRIPT_NAME']) != '/'? dirname($_SERVER['SCRIPT_NAME']):'') . $relative;
 }
 
+//! Linkify issues
+function linkify_issues($text)
+{
+    return preg_replace_callback('/\bissue\s+#(?P<id>\d+)\b/',
+    function($matches)
+    {
+        if (!($i = Issue::open($matches['id'])))
+            return $matches[0]; // Unknown issue;
+        return (string)UrlFactory::craft('issue.view', $i)->anchor($matches[0])
+            ->attr('title', $i->title);
+    }
+    ,$text);
+}
+
+//! Linkify url
+function linkify_url($text)
+{
+    return preg_replace_callback('/\b(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@$?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/i',
+    function($matches)
+    {
+        return tag('a target="_blank"', $matches[0])->attr('href', $matches[0]);
+    }
+    ,$text);
+}
+
 ?>

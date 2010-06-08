@@ -353,7 +353,6 @@ div.ui-form .ui-form-hint {
     background: transparent url('images/spindown-open.gif') no-repeat left center;
     border-bottom: 1px solid #e1e1e1;
     padding-bottom: 2px;
-    color: #75b05d;
 }
 
 .ui-form-more-attachments{
@@ -460,6 +459,7 @@ dl dd{
 	padding: 15px 15px 23px 15px;
 	font-family: "Courier New";
 	min-height: 59px;
+	word-wrap: break-word;
 }
 
 .issue-view .header .poster, .issue-view  .header .date{
@@ -515,6 +515,7 @@ ul.actions > li{
 	width: 700px;
 	padding: 15px;
 	position: relative;
+	word-wrap: break-word;
 }
 
 ul.actions > li.comment{

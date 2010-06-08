@@ -45,7 +45,7 @@ class UI_IssueEditForm extends Output_HTML_Form
     public function on_valid($values)
     {
         // Calculate tags
-        $tags = array_filter(array_unique(explode(' ', $values['tags'])),
+        $tags = array_filter(array_unique(explode(' ', strtolower($values['tags']))),
             function($el){  if (!empty($el))    return true;    });
         $added_tags = array_diff($tags, $this->issue->tag_names());
         $removed_tags = array_diff($this->issue->tag_names(), $tags);
