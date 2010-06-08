@@ -47,10 +47,20 @@ class UI_LoginForm extends Output_HTML_Form
         {
             // Create profile
             if (!UserProfile::open($iden->id()))
+            {   
+                $fullname = $iden->id();
+                $email = '';
+                if ($iden instanceof Authn_Identity_LDAP)
+                {
+                    $fullname = $iden->get_attribute('givenname') . ' ' . $iden->get_attribute('sn');
+                    $email = $iden->get_attribute('mail');
+                }
                 UserProfile::create(array(
                     'username' => $iden->id(),
-                    'fullname' => $iden->get_attribute('givenname') . ' ' . $iden->get_attribute('sn'),
-                    'email' => $iden->get_attribute('mail')));
+                    'fullname' => $fullname,
+                    'email' => $email
+                ));
+            }
             Net_HTTP_Response::redirect($this->redirect_url);
         }
         else
