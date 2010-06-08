@@ -43,11 +43,13 @@ DEFAULT CHARSET='UTF8';
 -- Attachments
 CREATE TABLE `attachments` (
     `id` integer auto_increment,
+    `issue_action_id` integer not null,
     `filename` varchar(255),
     `filesize` integer,
     `mime` varchar(255),
     `path` varchar(512),
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`id`),
+    INDEX (`issue_action_id`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';
 
@@ -127,7 +129,6 @@ DEFAULT CHARSET='UTF8';
 CREATE TABLE `issue_action_comments` (
     `id` integer not null,
     `post` TEXT not null,
-    `attachment_id` INTEGER,
     PRIMARY KEY(`id`)
 )ENGINE=InnoDB
 DEFAULT CHARSET='UTF8';

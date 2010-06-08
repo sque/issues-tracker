@@ -4,7 +4,7 @@ class UI_ProjectsGrid extends Output_HTML_Grid
 {
     protected $projects;
     
-    public function __construct($projects, $omit_fields = array())
+    public function __construct($projects, $omit_fields = array('created'))
     {   $this->projects = $projects;
 
         $fields = array(

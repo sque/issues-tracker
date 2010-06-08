@@ -1,5 +1,5 @@
 <?php
-// File generated with install.php
+// File generated with /install
 
 Config::set('db.host', 'localhost');
 
@@ -9,7 +9,7 @@ Config::set('db.pass', 'root');
 
 Config::set('db.schema', 'issue-tracker');
 
-Config::set('site.public_host', '192.168.59.99');
+Config::set('site.public_host', 'localhost');
 
 Config::set('site.title', 'Issues Tracker');
 
@@ -35,8 +35,8 @@ Config::set('issue.default_status', 'new');
 
 Config::set('issue.upload_folder', '/home/sque/workspace/issues-tracker/uploads');
 
-Config::set('mail.default_from', 'issues@dev.kmfa.net');
+Config::set('mail.default_from', 'issue@kmfa.net');
 
-Config::set('mail.enabled', '0');
+Config::set('mail.enabled', '');
 
 ?>

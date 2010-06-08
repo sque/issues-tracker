@@ -466,10 +466,15 @@ dl dd{
 }
 
 ul.tags{
-    margin: 15px 0px 0px 15px;
-    padding: 0px;
+    margin: 15px 0px 0px 0px;
+    padding: 5px 12px;
     list-style: none;
     display: block;
+    background-color: #EFEFE1;
+    border: 1px solid #B6B6B6;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
 }
 
 ul.tags li{
@@ -489,7 +494,7 @@ ul.actions{
 }
 
 /* Actions */
-ul.actions li{
+ul.actions > li{
     display: block;
     margin: 15px 0px; padding: 0px;
     border: 1px solid #dedede;
@@ -505,16 +510,18 @@ ul.actions li{
 	position: relative;
 }
 
-ul.actions li.comment{
+ul.actions > li.comment{
    background-color: white;
 }
 
-ul.actions li:target{
+ul.actions > li:target{
     -moz-box-shadow: #72a4d2 0px 0px 5px 2px;
+    -webkit-box-shadow: #72a4d2 0px 0px 5px 2px;
+    box-shadow: #72a4d2 0px 0px 5px 2px;
     border-color: #629ed7;
 }
 
-ul.actions li .anchor{
+ul.actions > li .anchor{
     display: block;
     font-size: 13pt;
     padding: 0px 0px 5px 0px;
@@ -523,31 +530,24 @@ ul.actions li .anchor{
     text-align: right;
 }
 
-ul.actions li .actor{
+ul.actions > li .actor{
     position: absolute;
     left: 15px;
     top: 15px;
 }
 
-ul.actions li .date{
+ul.actions > li .date{
     position: absolute;
     right: 55px;
     top: 17px;
     font-size: 10pt;
 }
 /* Comments */
-ul.actions li .post{
+ul.actions > li .post{
 	font-family: "Courier New";
 }
 
-ul.actions li .attachment{
-    display: block;
-    margin-top: 10px;
-    background: transparent url('images/download-16.png') no-repeat left center;
-    padding-left: 18px;
-}
-
-ul.actions li .title{
+ul.actions > li .title{
     margin: 5px 0px 5px 0px;
     display: block;
     font-weight: bold;
@@ -555,28 +555,46 @@ ul.actions li .title{
     color: #646464;
 }
 
+ul.actions ul.attachments{
+    display: block;
+    margin: 10px 0px 2px 3px;
+    padding: 0px;
+    list-style-type: none;
+    font-size: 10pt;
+}
+
+ul.actions ul.attachments > li{
+    margin-top: 3px;
+}
+
+ul.actions ul.attachments > li em{
+    font-size: 10pt;
+    color: #9a9a9a;
+    margin-left: 8px;
+}
+
 /* Details changes */
-ul.actions li.details_change .title{
+ul.actions > li.details_change .title{
 
 }
-ul.actions li.details_change .diff{
+ul.actions > li.details_change .diff{
     font-size: 9pt;
     margin-left: 18px;
 }
 
-ul.actions li.details_change .tags{
+ul.actions > li.details_change .tags{
     margin-left: 18px;
 }
 
-ul.actions li.details_change .old{
+ul.actions > li.details_change .old{
     margin-left: 18px;
 }
 
 /* Status change */
-ul.actions li.status_change .status{
+ul.actions > li.status_change .status{
     text-transform: capitalize;
 }
-ul.actions li.status_change .old{
+ul.actions > li.status_change .old{
     padding-left: 30px;
 }
 
@@ -612,6 +630,11 @@ h1.user{
 .issue{
     background: transparent url('images/issue-16.png') no-repeat left center;
     padding-left: 18px !important;
+}
+
+.attachment{
+    background: transparent url('images/download-16.png') no-repeat left center;
+    padding-left: 18px;
 }
 
 .project{

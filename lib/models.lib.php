@@ -124,13 +124,14 @@ class Attachment extends DB_Record
     
     public static $fields = array(
         'id' => array('pk' => true, 'ai' => true),
+        'issue_action_id' => array('fk' => 'IssueActionComment'),
         'filename',
         'filesize',
         'mime',
         'path'
     );
     
-    public static function create_from_file($fname, $data, $save_folder)
+    public static function create_from_file($action_id, $fname, $data, $save_folder)
     {
         // Get mime type
         $finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -147,6 +148,7 @@ class Attachment extends DB_Record
         
         // Save entry
         $a = Attachment::create(array(
+            'issue_action_id' => $action_id,
             'filename' => $fname,
             'filesize' => strlen($data),
             'path' => $path,
@@ -247,26 +249,17 @@ class Issue extends DB_Record
         return $action;
     }
 
-    public function action_comment($actor, $date, $post, $attachment)
+    public function action_comment($actor, $date, $post)
     {
-        if ($attachment)
-        {
-            if (!($a = Attachment::create_from_file($attachment['orig_name'], 
-                    $attachment['data'], Config::get('issue.upload_folder'))))
-                throw new RuntimeException('Error saving attachment.');
-            $attachment_id = $a->id;
-        }
-        else
-            $attachment_id = null;
-        
-        $create_args = array(
+        $action = IssueAction::create(array(
             'actor' => $actor,
             'date' => $date,
             'issue_id' => $this->id,
-            'type' => 'comment');
-
-        $action = IssueAction::create($create_args);
-        DB_Record::create(array('id' => $action->id, 'post' => $post, 'attachment_id' => $attachment_id), 'IssueActionComment');
+            'type' => 'comment'));
+        $action = IssueActionComment::create(array(
+            'id' => $action->id,
+            'post' => $post
+        ));
         return $action;
     }
     
@@ -330,13 +323,30 @@ class IssueActionComment extends DB_Record
 
     public static $fields = array(
         'id' => array('pk' => true),
-        'post',
-        'attachment_id' => array('fk' => 'Attachment')
+        'post'
     );
 
     public function get_action()
     {
         return IssueAction::open($this->id);
+    }
+    
+    public function save_attachment($attachment)
+    {
+        if (!$attachment)
+            return;
+
+        // Save attachment
+        $a = Attachment::create_from_file(
+            $this->id,
+            $attachment['orig_name'], 
+            $attachment['data'],
+            Config::get('issue.upload_folder')
+        );
+        
+        if (!$a)
+            throw new RuntimeException('Error saving attachment.');
+        return $a;
     }
 }
 
@@ -382,5 +392,5 @@ Project::one_to_many('Issue', 'project', 'issues');
 Project::one_to_many('ProjectTagCount', 'project', 'tag_counters');
 Issue::one_to_many('IssueAction', 'issue', 'actions');
 Issue::one_to_many('IssueTag', 'issue', 'tags');
-Attachment::one_to_many('IssueActionComment', 'attachment', 'issues');
+IssueActionComment::one_to_many('Attachment', 'action', 'attachments');
 ?>

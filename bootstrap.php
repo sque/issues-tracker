@@ -62,12 +62,12 @@ DB_Conn::events()->connect('error',function($e)
     error_log( $e->arguments['message']); 
 });
 
-
+/*
 $dbcache = new Cache_Apc('issue-tracker');
 //$dbcache->delete_all();
 DB_Model::set_model_cache($dbcache);
 DB_ModelQueryCache::set_global_query_cache($dbcache);
-
+*/
 // PHP TimeZone
 date_default_timezone_set(Config::get('site.timezone'));
 

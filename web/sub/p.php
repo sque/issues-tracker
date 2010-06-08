@@ -183,6 +183,13 @@ function show_issue($p_name, $issue_id)
     if (Authz::is_allowed(array('issue', $issue_id), 'comment'))
         $post_frm = new UI_IssuePostCommentForm($i);
 
+    // Tags
+    $tags = tag('ul class="tags"');
+    foreach($i->tags->all() as $t)
+        tag('li class="tag"', 
+            UrlFactory::craft('project.tag', $p, $t->tag)->anchor($t->tag)
+        )->appendTo($tags);
+        
     // Render issue
     Layout::open('default')->get_document()->title = "Issue #{$i->id} in {$p->title} | {$i->title}";
     etag('div class="issue-view"',
@@ -190,9 +197,9 @@ function show_issue($p_name, $issue_id)
         project_breadcrumb($p, $i)->render(),
         tag('div class="header"',
             tag('span class="description" nl_escape_on', $i->description),
-            tag('span class="date"', date_exformat($i->created)->smart_details()),
+            tag('span class="date"', date_exformat($i->created)->human_diff()),
             tag_user($i->poster, 'poster'),
-            $ul_tags = tag('ul class="tags"')
+            (!empty($tags->childs)?$tags:'')
         ),
         $ul_actions = tag('ul class="actions"')
     );
@@ -201,17 +208,13 @@ function show_issue($p_name, $issue_id)
             tag('dt', 'Status:'),
             tag('dd class="status"', $i->status)->add_class($i->status),
             tag('dt', 'Posted at:'),
-            tag('dd class="poster"', date_exformat($i->created)->smart_details()),
+            tag('dd class="poster"', date_exformat($i->created)->human_diff()),
             tag('dt', 'Assigned to:'),
             tag('dd class="assignee"', ($i->assignee?tag_user($i->assignee):'Unassigned'))
 
         ));
 
-    // Tags
-    foreach($i->tags->all() as $t)
-        tag('li class="tag"', 
-            UrlFactory::craft('project.tag', $p, $t->tag)->anchor($t->tag)
-        )->appendTo($ul_tags);
+
 
     // Actions
     $action_count = 0;
@@ -220,17 +223,27 @@ function show_issue($p_name, $issue_id)
         $li = tag('li',
             tag('a class="anchor"', '#' . ($action_count +=1))->attr('href', '#comment_' . $action->id),
             tag_user($action->actor, 'actor'),
-            tag('span class="date"', date_exformat($action->date)->smart_details())
+            tag('span class="date"', date_exformat($action->date)->human_diff())
         )->attr('id', 'comment_' . $action->id)->appendTo($ul_actions)->add_class($action->type);
 
         if ($action->type == 'comment')
         {   $comments = $action->get_details();
             tag('span class="post"', $comments->post)->appendTo($li);
-            if ($comments->attachment)
-                tag('a class="attachment"',
-                    $comments->attachment->filename,
-                    array('href' => UrlFactory::craft('attachment.view', $comments->attachment))
-                )->appendTo($li);
+            
+            $attachments = $comments->attachments->all();
+            $ul_attachs = tag('ul class="attachments"');
+            foreach($attachments as $attach)
+            {
+                tag('li',
+                    tag('a class="attachment"',
+                        $attach->filename,
+                        array('href' => UrlFactory::craft('attachment.view', $attach))
+                    ),
+                    tag('em class="size"', html_human_fsize($attach->filesize))
+                )->appendTo($ul_attachs);
+            }
+            if (!empty($attachments))
+                $ul_attachs->appendTo($li);
         }
         else if ($action->type == 'status_change')
         {   

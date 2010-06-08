@@ -27,7 +27,7 @@ class UI_LoginForm extends Output_HTML_Form
         $this->redirect_url = $redirect_url;
 
         parent::__construct(array(
-			'login-user' => array('display' => 'Username'),
+			'login-user' => array('display' => 'Username', 'htmlattribs' => array('autocomplete' => "off")),
 			'login-pass' => array('display' => 'Password', 'type' => 'password'),
         ),
         array('title' => 'Issues Tracker',

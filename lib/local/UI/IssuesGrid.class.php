@@ -40,7 +40,7 @@ class UI_IssuesGrid extends Output_HTML_Grid
                 ->limit(1)
                 ->execute();
             if (count($last_action) == 1)
-                return date_exformat($last_action[0]->date)->smart_details();
+                return date_exformat($last_action[0]->date)->human_diff();
             else
                 return '---';
         }
@@ -61,7 +61,7 @@ class UI_IssuesGrid extends Output_HTML_Grid
         if ($col_id == 'status')
             return tag('span class="status"', $data)->add_class($data);
         if ($col_id == 'created')
-            return date_exformat($data)->smart_details();
+            return date_exformat($data)->human_diff();
 
     }
 

@@ -41,29 +41,23 @@ function view_user($user)
     }
     
     // Show all related issues
+    /* Disabled
     $issues = Issue::open_query()
         ->where('poster = ?')
         ->where('assignee = ?', 'OR')
-        ->order_by('created', 'DESC')
-        ->execute($user, $user);
-
-    $issues = array_merge($issues, 
-        Issue::open_query()
         ->left_join('IssueAction', 'id', 'issue_id')
-        ->where('l.actor = ?')
-        ->execute($user));
+        ->where('l.actor = ?', 'OR')
+        ->group_by('p.id')
+        ->order_by('created', 'DESC')
+        ->execute($user, $user, $user);
 
-    $f_issues = array();
-    foreach($issues as $i)
-        $f_issues[$i->id] = $i;
-    $f_issues = array_values($f_issues);
-
-    if (!empty($f_issues))
+    if (!empty($issues))
     {
         etag('h2', 'Watch list');
-        $grid = new UI_IssuesGrid($f_issues);
+        $grid = new UI_IssuesGrid($issues);
         etag('div', $grid->render());
     }
+    */
 }
 
 ?>

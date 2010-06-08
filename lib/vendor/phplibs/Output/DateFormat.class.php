@@ -43,13 +43,16 @@ class Output_DateFormat
     * @return A string with lectical time representation that
     *  depending on $html may be encapsulated in a html \<span\> tag.
     */
-    function human_diff($rel_time, $html = true)
+    function human_diff($rel_time = null, $html = true)
     {	
+        if ($rel_time === null)
+            $rel_time = date_create();
         $full_date = $this->date_obj->format('D, j M, Y \a\t H:i:s');
-        $sec_diff = abs($this->date_obj->format('U') - $rel_time);
+        $sec_diff = abs($this->date_obj->format('U') - $rel_time->format('U'));
 
-        $ret = '<span title="' . $full_date . '">';
+        $span = tag('span', array('title' =>  $full_date));
     
+        $ret = '';
         if ($sec_diff <= 60)	// Same minute
             $ret .= 'some moments ago';
         else if ($sec_diff <= 3600)	// Same hour
@@ -60,16 +63,18 @@ class Output_DateFormat
         	$ret .= $dt->format('M j') . '(' . floor($sec_diff / 86400) . ' days ago)';*/
         {	
             $cur_date = getdate();
-            $that_date = getdate($dt->format('U'));
+            $that_date = getdate($this->date_obj->format('U'));
     
             if ($cur_date['year'] == $that_date['year'])
-                $ret .=$dt->format('M d, H:i');
+                $ret .= $this->date_obj->format('M d, H:i');
             else
-                $ret .= $dt->format('d/m/Y');
+                $ret .= $this->date_obj->format('d/m/Y');
         }
     
-        $ret .= '</span>';
-        return $ret;
+        if ($html)
+            return $span->append($ret);
+        else
+            return $ret;
     }
 
     //! Return as less as possible details about time
@@ -84,7 +89,7 @@ class Output_DateFormat
         $currentTimeDay = date('d m Y', $currentTime);
         $ndateDay = $this->date_obj->format('d m Y');
         if ($currentTimeDay == $ndateDay)
-            return 'Today '. $this->date_obj->format('h:i a');
+            return $this->date_obj->format('h:i a');
         if (date('Y', $currentTime) == $this->date_obj->format('Y'))
             return substr($this->date_obj->format('F'), 0, 3) . $this->date_obj->format(' d,  h:i a');
 
