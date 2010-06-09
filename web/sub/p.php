@@ -194,8 +194,7 @@ function show_issue($p_name, $issue_id)
         tag('h1', $i->title),
         project_breadcrumb($p, $i)->render(),
         tag('div class="header"',
-            tag('span class="description" html_escape_off',
-                linkify_url(linkify_issues(Output_HTMLTag::nl2br(esc_html($i->description), true)))),
+            tag('span class="description" html_escape_off', esc_issue_block($i->description)),
             tag('span class="date"', date_exformat($i->created)->human_diff()),
             tag_user($i->poster, 'poster'),
             (!empty($tags->childs)?$tags:'')
@@ -225,7 +224,7 @@ function show_issue($p_name, $issue_id)
         if ($action->type == 'comment')
         {   $comments = $action->get_details();
             tag('span class="post" html_escape_off',
-                linkify_url(linkify_issues(Output_HTMLTag::nl2br(esc_html($comments->post), true)))
+                esc_issue_block($comments->post)
             )->appendTo($li);
             
             $attachments = $comments->attachments->all();

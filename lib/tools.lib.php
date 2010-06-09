@@ -59,4 +59,17 @@ function linkify_url($text)
     ,$text);
 }
 
+//! Escape issue description text blocks()
+function esc_issue_block($text)
+{
+    $text =  linkify_url(linkify_issues(Output_HTMLTag::nl2br(esc_html($text), true)));
+    
+    return preg_replace_callback('#>[^<]+|^([^<]+)+#',function($matches)
+    {
+        return str_replace(' ', '&nbsp;', $matches[0]);
+        return $matches[0];
+    }
+    ,$text);
+}
+
 ?>
