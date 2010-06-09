@@ -24,7 +24,18 @@ class UI_IssueCreateForm extends Output_HTML_Form
             'tags' => array('display' => 'Tags',
                 'regcheck' => '/^([\w\-]+(?:(?:\s(?!$))?))*$/',
                 'onerror' => 'Tags must be seperated with a space',
-                'hint' => 'Add tags seperated by a space')
+                'hint' => 'Add tags seperated by a space'),
+            'attachment1' => array('display' => 'Attachment', 'type' => 'file',
+                'htmlattribs' => array('class' => 'ui-form-attachments-start')),
+            'attachment2' => array('display' => '', 'type' => 'file'),
+            'attachment3' => array('display' => '', 'type' => 'file'),
+            'attachment4' => array('display' => '', 'type' => 'file'),
+            'attachment5' => array('display' => '', 'type' => 'file'),
+            'attachment6' => array('display' => '', 'type' => 'file'),
+            'attachment7' => array('display' => '', 'type' => 'file'),
+            'attachment8' => array('display' => '', 'type' => 'file'),
+            'attachment9' => array('display' => '', 'type' => 'file'),
+            'attachment10' => array('display' => '', 'type' => 'file'),
         );
         if ($project === null)
         {
@@ -80,6 +91,22 @@ class UI_IssueCreateForm extends Output_HTML_Form
         foreach($tags as $t)
             IssueTag::create(array('issue_id' => $i->id, 'tag' => $t));
             
+        // Add attachments
+        $valid_attachments = array();
+        for($k = 1;$k <= 10;$k++)
+            if ($values["attachment{$k}"])
+                $valid_attachments["attachment{$k}"] = $values["attachment{$k}"];
+
+        if (!empty($valid_attachments))
+        {   // Create a new empty comment to add attachments on
+           $action = $i->action_comment(
+                Authn_Realm::get_identity()->id(),
+                new DateTime(),
+                ''
+            );
+            foreach($valid_attachments as $attach)
+                $action->save_attachment($attach);
+        }
         // Send mail
         $mail = new MailerIssue($i,
             UserProfile::open($values['poster'])->fullname . " posted a new issue...\n" .
