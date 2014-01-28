@@ -59,6 +59,7 @@ class Authn_Backend_LDAP implements Authn_Backend
             'id_attribute' => 'userprincipalname',
             'force_protocol_version' => null,
             'default_domain' => null),
+            'follow_referrals' => false),
         $options);
     }
 
@@ -71,15 +72,23 @@ class Authn_Backend_LDAP implements Authn_Backend
         if ($this->options['default_domain'])
             if (strpos($username, '@') === false)
                 $username .= '@' . $this->options['default_domain'];
-            
+
+	// LDAP options            
         if ($this->options['force_protocol_version'])
             if (!ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, $this->options['force_protocol_version']))
                 return false;
 
+        if ($this->options['force_referrals'])
+            ldap_set_option($conn, LDAP_OPT_REFERRALS, 1);
+        else
+            ldap_set_option($conn, LDAP_OPT_REFERRALS, 0);
+
+
+	// Bind
         if (! @ldap_bind($conn, $username, $password))
             return false;
             
-        //! Fetch the user object
+        // Fetch the user object
         if (!($search = ldap_search($conn, $this->options['baseDN'], '(userPrincipalName=' . $username . ')')))
             return false;
 
